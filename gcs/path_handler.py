@@ -12,7 +12,12 @@ paths_file_path = current_script_directory / 'paths.yaml'
 with open(paths_file_path, 'r') as file:
     paths = yaml.safe_load(file)
 
-        
+
+def GC_orbits(MWpotential, GCname):
+    assert(isinstance(GCname, str))
+    assert(isinstance(MWpotential, str))
+    return _GC_orbits(MWpotential) + GCname + "-orbits.hdf5"
+  
 def ParticleDistribution(GCname,Distribution_Name,NP,montecarlokey):
     assert(isinstance(GCname, str))
     assert(isinstance(NP, int))
@@ -23,21 +28,25 @@ def ParticleDistribution(GCname,Distribution_Name,NP,montecarlokey):
     filename = "{:s}_{:s}_{:s}_{:s}.hdf5".format(GCname, Distribution_Name, str(NP), montecarlokey)
     return os.path.join(outdir, filename)
 
-def _ParticleDistribution():
-    outpath = paths['simulations'] + "ParticleDistribution/"
-    os.makedirs(outpath,exist_ok=True)
-    return outpath
 
 def MonteCarloObservables(GCname:str):
     assert(isinstance(GCname, str))
     return _MonteCarloObservables() + GCname + "-observables.hdf5"
 
+def _ParticleDistribution():
+    outpath = paths['simulations'] + "ParticleDistribution/"
+    os.makedirs(outpath,exist_ok=True)
+    return outpath
         
 def _MonteCarloObservables():
     outpath = paths['simulations'] + "MonteCarloObservables/"
     os.makedirs(outpath,exist_ok=True)
     return outpath
 
+def _GC_orbits(MWpotential):
+    mydir=paths['simulations'] + "Orbits/"+ MWpotential +"/"
+    os.makedirs(mydir,exist_ok=True)
+    return mydir
 
 def _temporary_gc_orbits(MWpotential):
     mydir=paths['temporary'] + "gc_orbits/" + MWpotential

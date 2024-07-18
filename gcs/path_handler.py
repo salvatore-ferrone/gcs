@@ -1,15 +1,17 @@
-import os 
-import yaml 
+import os
+import yaml
+from pathlib import Path
 
-basepaths = "/paths.yaml"
-current_path = os.path.dirname(os.path.abspath(__file__))
+# Get the directory of the current script
+current_script_directory = Path(__file__).parent
 
-with open(current_path+basepaths, 'r') as stream:
-    try:
-        paths = yaml.safe_load(stream)
-    except yaml.YAMLError as exc:
-        print(exc)
-        
+# Specify the path to `paths.yaml` within the gcs package directory
+paths_file_path = current_script_directory / 'paths.yaml'
+
+# Now you can use `paths_file_path` to open and read `paths.yaml`
+with open(paths_file_path, 'r') as file:
+    paths = yaml.safe_load(file)
+
         
 def ParticleDistribution(GCname,Distribution_Name,NP,montecarlokey):
     assert(isinstance(GCname, str))

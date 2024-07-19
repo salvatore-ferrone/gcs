@@ -9,8 +9,7 @@ import numpy as np
 import datetime
 import sys 
 import os 
-sys.path.append('../')
-import path_handler as ph
+from gcs import path_handler as ph
 import h5py
 
 

@@ -3,12 +3,12 @@ import h5py
 import datetime 
 import os 
 import sys 
-sys.path.append("../")
-import path_handler as ph
 import multiprocessing as mp
+from gcs import path_handler as ph
 
 
 potential_name = "isotropic_plummer"
+
 def main(GCname, NP, ncpu = 10):
     
     
@@ -79,6 +79,8 @@ def write_to_file(outname,x,y,z,vx,vy,vz,Mass,rh_m,attrs):
         
         
 if __name__=="__main__":
-    GCname = sys.argv[1]
-    NP  = int(sys.argv[2])
+    # GCname = sys.argv[1]
+    # NP  = int(sys.argv[2])
+    GCname = "Pal5"
+    NP=int(1e5)
     main(GCname, NP)

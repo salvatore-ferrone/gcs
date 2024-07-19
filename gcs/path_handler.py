@@ -29,9 +29,19 @@ def ParticleDistribution(GCname,Distribution_Name,NP,montecarlokey):
     return os.path.join(outdir, filename)
 
 
+
 def MonteCarloObservables(GCname:str):
     assert(isinstance(GCname, str))
     return _MonteCarloObservables() + GCname + "-observables.hdf5"
+
+def ParticleInitialConditions(GCname:str):
+    assert(isinstance(GCname, str))
+    return _ParticleInitialConditions(GCname) + GCname + "-ParticleInitialConditions.hdf5"
+
+def _ParticleInitialConditions(GCname):
+    outpath = paths['simulations'] + "ParticleInitialConditions/"
+    os.makedirs(outpath,exist_ok=True)
+    return outpath
 
 def _ParticleDistribution():
     outpath = paths['simulations'] + "ParticleDistribution/"

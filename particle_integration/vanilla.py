@@ -24,7 +24,7 @@ def load_arguments(GCname,montecarlokey,internal_dynamics,GCorbits_potential,MWp
     xHost,yHost,zHost,vxHost,vyHost,vzHost        =   gcs.misc.interpolate_finer_grid(tnew,tH,xH,yH,zH,vxH,vyH,vzH)
     
     ## load the host mass and size
-    Mass,rh_m,_a,_,_,_,_,_=gcs.extractors.MonteCarloObservables.extract_all_GC_observables([GCname],montecarlokey)
+    Mass,rh_m,_,_,_,_,_,_=gcs.extractors.MonteCarloObservables.extract_all_GC_observables([GCname],montecarlokey)
     rplummer=gcs.misc.half_mass_to_plummer(rh_m[0]).value
     mass_host = Mass[0].value
     

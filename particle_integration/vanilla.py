@@ -5,45 +5,6 @@ import numpy as np
 import astropy.units as u
 
 
-
-
-def initialize_vanilla_integrator(staticgalaxy,integrationparameters,initialkinematics,inithostperturber):
-    integrator = tstrippy.integrator
-    integrator.setstaticgalaxy(*staticgalaxy)
-    integrator.setintegrationparameters(*integrationparameters)
-    integrator.setinitialkinematics(*initialkinematics)
-    integrator.inithostperturber(*inithostperturber)
-    return integrator
-
-def write_snapshots(integrator,NSKIP,GCname,temporary_directory):
-    assert type(NSKIP) == int
-    assert type(GCname) == str
-    assert type(temporary_directory) == str
-    
-    integrator.initwritestream(NSKIP,GCname,temporary_directory)
-    
-    return integrator
-    
-
-def leapfrogtofinalpositions(integrator):
-    
-    integrator.leapfrogtofinalpositions()
-    # integrate the particle
-    xf  = integrator.xf
-    yf  = integrator.yf
-    zf  = integrator.zf
-    vxf = integrator.vxf
-    vyf = integrator.vyf
-    vzf = integrator.vzf
-    tesc= integrator.tesc
-    phase_space = np.array([xf,yf,zf,vxf,vyf,vzf])
-    integrator.deallocate()
-    return phase_space,tesc
-
-
-
-
-
 def load_arguments(GCname,montecarlokey,internal_dynamics,GCorbits_potential,MWpotential,NP,T,dt):
     
     
@@ -57,7 +18,7 @@ def load_arguments(GCname,montecarlokey,internal_dynamics,GCorbits_potential,MWp
     assert(dt.unit == u.yr)
     
     # the time stuff
-    T,dt,Nstep,tsampling =gcs.misc.get_time_sampling_from_years_to_integration_units(dt)
+    T,dt,Nstep,tsampling =gcs.misc.get_time_sampling_from_years_to_integration_units(T=T,dt=dt)
 
     
     # load the particle positions
@@ -85,18 +46,70 @@ def load_arguments(GCname,montecarlokey,internal_dynamics,GCorbits_potential,MWp
     inithostperturber = (tsampling,xHost,yHost,zHost,vxHost,vyHost,vzHost,mass_host,rplummer)
     
     return staticgalaxy,integrationparameters,initialkinematics,inithostperturber
+
+
+
+def initialize_vanilla_integrator(staticgalaxy,integrationparameters,initialkinematics,inithostperturber):
+    integrator = tstrippy.integrator
+    integrator.setstaticgalaxy(*staticgalaxy)
+    integrator.setintegrationparameters(*integrationparameters)
+    integrator.setinitialkinematics(*initialkinematics)
+    integrator.inithostperturber(*inithostperturber)
+    return integrator
+
+
+
+def initialize_write_snapshots(integrator,NSKIP,GCname,temporary_directory):
+    assert type(NSKIP) == int
+    assert type(GCname) == str
+    assert type(temporary_directory) == str
+    
+    integrator.initwritestream(NSKIP,GCname,temporary_directory)
+    
+    return integrator
     
 
 
-
+def leapfrogtofinalpositions(integrator):
+    
+    integrator.leapfrogtofinalpositions()
+    # integrate the particle
+    xf  = integrator.xf
+    yf  = integrator.yf
+    zf  = integrator.zf
+    vxf = integrator.vxf
+    vyf = integrator.vyf
+    vzf = integrator.vzf
+    tesc= integrator.tesc
+    phase_space = np.array([xf,yf,zf,vxf,vyf,vzf])
+    integrator.deallocate()
+    return phase_space,tesc
 
 
 
 
 if __name__ == "__main__" : 
     GCname              =   "NGC104"
-    montecarlokey       =   "monte-carlo-000"
+    montecarlokey       =   "monte-carlo-002"
     internal_dynamics   =   "isotropic-plummer"
     GCorbits_potential  =   "pouliasis2017pii"
     MWpotential         =   "pouliasis2017pii"
-    NP                  =   int(1e2)    
+    NP                  =   int(1e2)
+    T                   =   5e9*u.yr
+    dt                  =   1e4*u.yr
+    NSKIP               =   int(1)
+    
+    tempdir=ph._StreamSnapShots(MWpotential,GCname,NP,internal_dynamics,montecarlokey)
+
+    staticgalaxy,integrationparameters,initialkinematics,inithostperturber = load_arguments(GCname,montecarlokey,internal_dynamics,GCorbits_potential,MWpotential,NP,T,dt)    
+    
+    print(integrationparameters)
+    integrator=initialize_vanilla_integrator(staticgalaxy,integrationparameters,initialkinematics,inithostperturber)
+    
+    integrator=write_snapshots(integrator,NSKIP,GCname,tempdir)
+    
+    phase_space,tesc = leapfrogtofinalpositions(integrator)
+
+    
+    gcs.writers.Stream.stream
+    

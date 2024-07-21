@@ -23,6 +23,10 @@ def _Stream(GCname,NP,potential_env,internal_dynamics):
     os.makedirs(outpath,exist_ok=True)
     return outpath
 
+def _StreamSnapShots(MWpotential,GCname,NP,internal_dynamics,montecarlokey):
+    outpath = paths['temporary'] + "StreamSnapShots/" + MWpotential + "/" + GCname + "/" + str(NP) + "/" + internal_dynamics + "/" + montecarlokey + "/"
+    os.makedirs(outpath,exist_ok=True)
+    return outpath
 
 def GC_orbits(MWpotential, GCname):
     assert(isinstance(GCname, str))

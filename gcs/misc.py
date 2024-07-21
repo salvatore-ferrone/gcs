@@ -18,13 +18,12 @@ def interpolate_finer_grid(tnew,t,x,y,z,vx,vy,vz):
     return xx,yy,zz,vxx,vyy,vzz
 
 
-def dt_in_years_to_integration_units(dt, T = 5e9*u.yr, unitT = (u.s * u.kpc / u.km)):
-    assert(isinstance(dt,u.Quantity))
-    assert(isinstance(T,u.Quantity))
-
-    dt = dt.to(u.yr)
-    T = T.to(u.yr)
-    NSTEP = int((T/dt).value)
-    T = T.to(unitT)
-    return np.linspace(0,T.value,NSTEP)
-    
+def get_time_sampling_from_years_to_integration_units(T=5e9*u.yr,dt=1e4*u.yr):
+    unitT               =   u.s * u.kpc / u.km
+    tsampling           =   np.arange(0,T.value+dt.value,dt.value)*u.yr
+    tsampling           =   tsampling - T
+    tsampling           =   tsampling.to(unitT).value
+    Nstep               =   len(tsampling) -1 
+    T                   =   T.to(unitT)
+    dt                  =   dt.to(unitT)    
+    return T,dt,Nstep,tsampling

@@ -31,11 +31,20 @@ def perform_integration_to_final_positions(staticgalaxy,integrationparameters,in
 
 
 
-def load_arguments(GCname,montecarlokey,internal_dynamics,GCorbits_potential,MWpotential,NP):
+def load_arguments(GCname,montecarlokey,internal_dynamics,GCorbits_potential,MWpotential,NP,T,dt):
     
+    
+    assert(type(GCname) == str)
+    assert(type(montecarlokey) == str)
+    assert(type(internal_dynamics) == str)
+    assert(type(GCorbits_potential) == str)
+    assert(type(MWpotential) == str)
+    assert(type(NP) == int)
+    assert(type(dt) == u.quantity.Quantity)
+    assert(dt.unit == u.yr)
     
     # the time stuff
-    T,dt,Nstep,tnew=get_time_sampling_from_years_to_integration_units()
+    T,dt,Nstep,tsampling =gcs.misc.get_time_sampling_from_years_to_integration_units(dt)
 
     
     # load the particle positions
@@ -46,7 +55,7 @@ def load_arguments(GCname,montecarlokey,internal_dynamics,GCorbits_potential,MWp
     orbit_file_name             =   ph.GC_orbits(GCorbits_potential,GCname)
     tH,xH,yH,zH,vxH,vyH,vzH     =   gcs.extractors.GCOrbits.extract_whole_orbit(orbit_file_name,montecarlokey)
     # interpolate the host orbit to the time resolution of the particle
-    xHost,yHost,zHost,vxHost,vyHost,vzHost        =   gcs.misc.interpolate_finer_grid(tnew,tH,xH,yH,zH,vxH,vyH,vzH)
+    xHost,yHost,zHost,vxHost,vyHost,vzHost        =   gcs.misc.interpolate_finer_grid(tsampling,tH,xH,yH,zH,vxH,vyH,vzH)
     
     ## load the host mass and size
     Mass,rh_m,_,_,_,_,_,_=gcs.extractors.MonteCarloObservables.extract_all_GC_observables([GCname],montecarlokey)
@@ -60,7 +69,7 @@ def load_arguments(GCname,montecarlokey,internal_dynamics,GCorbits_potential,MWp
     staticgalaxy = (MWpotential,MWparams)
     integrationparameters = (T.value,dt.value,Nstep)
     initialkinematics = (x+xHost[0],y+yHost[0],z+zHost[0],vx+vxHost[0],vy+vyHost[0],vz+vzHost[0])
-    inithostperturber = (tnew,xHost,yHost,zHost,vxHost,vyHost,vzHost,mass_host,rplummer)
+    inithostperturber = (tsampling,xHost,yHost,zHost,vxHost,vyHost,vzHost,mass_host,rplummer)
     
     return staticgalaxy,integrationparameters,initialkinematics,inithostperturber
     
@@ -69,16 +78,6 @@ def load_arguments(GCname,montecarlokey,internal_dynamics,GCorbits_potential,MWp
 
 
 
-
-def get_time_sampling_from_years_to_integration_units(T=5e9*u.yr,dt=1e4*u.yr):
-    unitT               =   u.s * u.kpc / u.km
-    tnew                =   np.arange(0,T.value+dt.value,dt.value)*u.yr
-    tnew                =   tnew - T
-    tnew                =   tnew.to(unitT).value
-    Nstep               =   len(tnew) -1 
-    T                   =   T.to(unitT)
-    dt                  =   dt.to(unitT)    
-    return T,dt,Nstep,tnew
 
 
 if __name__ == "__main__" : 

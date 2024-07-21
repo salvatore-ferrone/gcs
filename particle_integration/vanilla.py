@@ -7,15 +7,28 @@ import astropy.units as u
 
 
 
-def perform_integration_to_final_positions(staticgalaxy,integrationparameters,initialkinematics,inithostperturber):
-    
-    # integrate the particle
+def initialize_vanilla_integrator(staticgalaxy,integrationparameters,initialkinematics,inithostperturber):
     integrator = tstrippy.integrator
     integrator.setstaticgalaxy(*staticgalaxy)
     integrator.setintegrationparameters(*integrationparameters)
     integrator.setinitialkinematics(*initialkinematics)
     integrator.inithostperturber(*inithostperturber)
+    return integrator
+
+def write_snapshots(integrator,NSKIP,GCname,temporary_directory):
+    assert type(NSKIP) == int
+    assert type(GCname) == str
+    assert type(temporary_directory) == str
+    
+    integrator.initwritestream(NSKIP,GCname,temporary_directory)
+    
+    return integrator
+    
+
+def leapfrogtofinalpositions(integrator):
+    
     integrator.leapfrogtofinalpositions()
+    # integrate the particle
     xf  = integrator.xf
     yf  = integrator.yf
     zf  = integrator.zf

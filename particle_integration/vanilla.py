@@ -5,6 +5,32 @@ import numpy as np
 import astropy.units as u
 
 
+
+
+def perform_integration_to_final_positions(staticgalaxy,integrationparameters,initialkinematics,inithostperturber):
+    
+    # integrate the particle
+    integrator = tstrippy.integrator
+    integrator.setstaticgalaxy(*staticgalaxy)
+    integrator.setintegrationparameters(*integrationparameters)
+    integrator.setinitialkinematics(*initialkinematics)
+    integrator.inithostperturber(*inithostperturber)
+    integrator.leapfrogtofinalpositions()
+    xf  = integrator.xf
+    yf  = integrator.yf
+    zf  = integrator.zf
+    vxf = integrator.vxf
+    vyf = integrator.vyf
+    vzf = integrator.vzf
+    tesc= integrator.tesc
+    phase_space = np.array([xf,yf,zf,vxf,vyf,vzf])
+    integrator.deallocate()
+    return phase_space,tesc
+
+
+
+
+
 def load_arguments(GCname,montecarlokey,internal_dynamics,GCorbits_potential,MWpotential,NP):
     
     
@@ -38,6 +64,8 @@ def load_arguments(GCname,montecarlokey,internal_dynamics,GCorbits_potential,MWp
     
     return staticgalaxy,integrationparameters,initialkinematics,inithostperturber
     
+
+
 
 
 

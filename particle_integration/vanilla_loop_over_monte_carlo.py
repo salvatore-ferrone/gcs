@@ -2,12 +2,7 @@ import vanilla
 import tstrippy
 import sys 
 
-def perform_integration(GCname,montecarlokey,internal_dynamics,GCorbits_potential,MWpotential,NP):
-
-
-    staticgalaxy,integrationparameters,initialkinematics,inithostperturber = \
-        vanilla.load_arguments(GCname,montecarlokey,internal_dynamics,GCorbits_potential,MWpotential,NP)
-        
+def perform_integration_to_final_positions(staticgalaxy,integrationparameters,initialkinematics,inithostperturber):
     
     # integrate the particle
     integrator = tstrippy.integrator

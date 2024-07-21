@@ -13,11 +13,23 @@ with open(paths_file_path, 'r') as file:
     paths = yaml.safe_load(file)
 
 
+def Stream(GCname,NP,potential_env,internal_dynamics,montecarlokey):
+    outname = GCname + "-stream-" + montecarlokey + ".hdf5"
+    return _Stream(GCname,NP,potential_env,internal_dynamics) + outname
+
+
+def _Stream(GCname,NP,potential_env,internal_dynamics):
+    outpath = paths['simulations'] + "Stream/" + potential_env + "/" + GCname + "/" + str(NP) + "/" +internal_dynamics + "/"
+    os.makedirs(outpath,exist_ok=True)
+    return outpath
+
+
 def GC_orbits(MWpotential, GCname):
     assert(isinstance(GCname, str))
     assert(isinstance(MWpotential, str))
     return _GC_orbits(MWpotential) + GCname + "-orbits.hdf5"
-  
+
+
 def ParticleDistribution(GCname,Distribution_Name,NP,montecarlokey):
     assert(isinstance(GCname, str))
     assert(isinstance(NP, int))
@@ -29,34 +41,39 @@ def ParticleDistribution(GCname,Distribution_Name,NP,montecarlokey):
     return os.path.join(outdir, filename)
 
 
-
 def MonteCarloObservables(GCname:str):
     assert(isinstance(GCname, str))
     return _MonteCarloObservables() + GCname + "-observables.hdf5"
 
+
 def ParticleInitialConditions(GCname:str):
     assert(isinstance(GCname, str))
     return _ParticleInitialConditions(GCname) + GCname + "-ParticleInitialConditions.hdf5"
+
 
 def _ParticleInitialConditions(GCname):
     outpath = paths['simulations'] + "ParticleInitialConditions/"
     os.makedirs(outpath,exist_ok=True)
     return outpath
 
+
 def _ParticleDistribution():
     outpath = paths['simulations'] + "ParticleDistribution/"
     os.makedirs(outpath,exist_ok=True)
     return outpath
         
+
 def _MonteCarloObservables():
     outpath = paths['simulations'] + "MonteCarloObservables/"
     os.makedirs(outpath,exist_ok=True)
     return outpath
 
+
 def _GC_orbits(MWpotential):
     mydir=paths['simulations'] + "Orbits/"+ MWpotential +"/"
     os.makedirs(mydir,exist_ok=True)
     return mydir
+
 
 def _temporary_gc_orbits(MWpotential):
     mydir=paths['temporary'] + "gc_orbits/" + MWpotential

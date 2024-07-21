@@ -14,8 +14,8 @@ def perform_integration(GCname,montecarlokey,internal_dynamics,GCorbits_potentia
     integrator.setstaticgalaxy(*staticgalaxy)
     integrator.setintegrationparameters(*integrationparameters)
     integrator.setinitialkinematics(*initialkinematics)
-    integrator.setinithostperturber(*inithostperturber)
-    integrator.integrate()
+    integrator.inithostperturber(*inithostperturber)
+    integrator.leapfrogtofinalpositions()
     xf= integrator.xf
     yf= integrator.yf
     zf= integrator.zf

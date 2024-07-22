@@ -18,15 +18,12 @@ def Stream(GCname,NP,potential_env,internal_dynamics,montecarlokey):
     return _Stream(GCname,NP,potential_env,internal_dynamics) + outname
 
 
-def _Stream(GCname,NP,potential_env,internal_dynamics):
-    outpath = paths['simulations'] + "Stream/" + potential_env + "/" + GCname + "/" + str(NP) + "/" +internal_dynamics + "/"
-    os.makedirs(outpath,exist_ok=True)
-    return outpath
+def StreamSnapShots(GCname,NP,potential_env,internal_dynamics,montecarlokey):
+    outname = GCname + "-streamSnapShots-" + montecarlokey + ".hdf5"
+    return _StreamSnapShots(GCname,NP,potential_env,internal_dynamics) + outname
 
-def _StreamSnapShots(MWpotential,GCname,NP,internal_dynamics,montecarlokey):
-    outpath = paths['temporary'] + "StreamSnapShots/" + MWpotential + "/" + GCname + "/" + str(NP) + "/" + internal_dynamics + "/" + montecarlokey + "/"
-    os.makedirs(outpath,exist_ok=True)
-    return outpath
+
+
 
 def GC_orbits(MWpotential, GCname):
     assert(isinstance(GCname, str))
@@ -54,6 +51,21 @@ def ParticleInitialConditions(GCname:str):
     assert(isinstance(GCname, str))
     return _ParticleInitialConditions(GCname) + GCname + "-ParticleInitialConditions.hdf5"
 
+
+def _Stream(GCname,NP,potential_env,internal_dynamics):
+    outpath = paths['simulations'] + "Stream/" + potential_env + "/" + GCname + "/" + str(NP) + "/" +internal_dynamics + "/"
+    os.makedirs(outpath,exist_ok=True)
+    return outpath
+
+def _StreamSnapShots(GCname,NP,potential_env,internal_dynamics):
+    outpath = paths['simulations'] + "StreamSnapShots/" + potential_env + "/" + GCname + "/" + str(NP) + "/" +internal_dynamics + "/"
+    os.makedirs(outpath,exist_ok=True)
+    return outpath
+
+def _TemporaryStreamSnapShots(MWpotential,GCname,NP,internal_dynamics,montecarlokey):
+    outpath = paths['temporary'] + "StreamSnapShots/" + MWpotential + "/" + GCname + "/" + str(NP) + "/" + internal_dynamics + "/" + montecarlokey + "/"
+    os.makedirs(outpath,exist_ok=True)
+    return outpath
 
 def _ParticleInitialConditions(GCname):
     outpath = paths['simulations'] + "ParticleInitialConditions/"

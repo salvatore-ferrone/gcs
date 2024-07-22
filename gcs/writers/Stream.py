@@ -41,7 +41,7 @@ def get_temp_snapshot_filenames(tempdir):
     indexes = np.array([int(file.split("-")[1].split(".bin")[0]) for file in myfiles])
     sortdexes=np.argsort(indexes)
     orderedindexes = indexes[sortdexes]
-    myfiles = myfiles[sortdexes]
+    myfiles = myfiles[sortdexes]    
     return myfiles,orderedindexes
 
 
@@ -50,6 +50,9 @@ def StreamSnapShots(outfilename,t_sampling,attributes,inputdir):
     This function assembles the stream snapshots into a single file
     """
     filenames,indexes=get_temp_snapshot_filenames(inputdir)
+    if len(filenames) == 0 :
+        raise ValueError("No files found in ", inputdir)
+    
     with h5py.File(outfilename, 'w') as outfile:
         outfile.create_dataset("time_stamps",data=t_sampling)
         outfile.create_group("StreamSnapShots")

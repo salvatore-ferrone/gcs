@@ -15,7 +15,7 @@ def stream(filename,phase_space,tesc,attributes):
     """
     This function writes the stream to a file
     """
-    assert stream.shape[1] == int(attributes["NP"])
+    assert phase_space.shape[1] == int(attributes["NP"])
     
 
     
@@ -44,6 +44,21 @@ def get_temp_snapshot_filenames(tempdir):
     myfiles = myfiles[sortdexes]
     return myfiles,orderedindexes
 
+
+def StreamSnapShots(outfilename,t_sampling,attributes,inputdir):
+    """
+    This function assembles the stream snapshots into a single file
+    """
+    filenames,indexes=get_temp_snapshot_filenames(inputdir)
+    with h5py.File(outfilename, 'w') as outfile:
+        outfile.create_dataset("time_stamps",data=t_sampling)
+        outfile.create_group("StreamSnapShots")
+        for i in range(len(filenames)):
+            phase_space = read_fortran_stream_binary_file(inputdir+filenames[i])
+            outfile["StreamSnapShots"].create_dataset(str(indexes[i]),data=phase_space)
+        for attr in attributes:
+            outfile.attrs[attr] = attributes[attr]        
+    return None
 
 def read_fortran_stream_binary_file(filename):
     """The format of the files is first a 4-byte integer that gives the length of the size record.
@@ -86,19 +101,5 @@ def read_fortran_stream_binary_file(filename):
     return phase_space
 
 
-def assemble_StreamSnapShots(outfilename,t_sampling,attributes,inputdir):
-    """
-    This function assembles the stream snapshots into a single file
-    """
-    filenames,indexes=get_temp_snapshot_filenames(inputdir)
-    with h5py.File(outfilename, 'w') as outfile:
-        outfile.create_dataset("time_stamps",data=t_sampling)
-        outfile.create_group("StreamSnapShots")
-        for i in range(len(filenames)):
-            phase_space = read_fortran_stream_binary_file(inputdir+filenames[i])
-            outfile["StreamSnapShots"].create_dataset(str(indexes[i]),data=phase_space)
-        for attr in attributes:
-            outfile.attrs[attr] = attributes[attr]
-            
-    return None
+
     

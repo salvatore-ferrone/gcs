@@ -14,12 +14,12 @@ with open(paths_file_path, 'r') as file:
 
 
 def Stream(GCname,NP,potential_env,internal_dynamics,montecarlokey):
-    outname = GCname + "-stream-" + montecarlokey + ".hdf5"
+    outname = GCname + "-Stream-" + montecarlokey + ".hdf5"
     return _Stream(GCname,NP,potential_env,internal_dynamics) + outname
 
 
 def StreamSnapShots(GCname,NP,potential_env,internal_dynamics,montecarlokey):
-    outname = GCname + "-streamSnapShots-" + montecarlokey + ".hdf5"
+    outname = GCname + "-StreamSnapShots-" + montecarlokey + ".hdf5"
     return _StreamSnapShots(GCname,NP,potential_env,internal_dynamics) + outname
 
 

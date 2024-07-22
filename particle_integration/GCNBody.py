@@ -1,6 +1,5 @@
 import gcs 
 import tstrippy
-import vanilla
 
 def load_GCnames_except_for_the_target(GCname):
     GCnames =list(tstrippy.Parsers.baumgardtMWGCs().data['Cluster'][:])

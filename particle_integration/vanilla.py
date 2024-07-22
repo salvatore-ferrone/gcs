@@ -96,7 +96,7 @@ if __name__ == "__main__" :
     internal_dynamics   =   "isotropic-plummer"
     GCorbits_potential  =   "pouliasis2017pii"
     MWpotential         =   "pouliasis2017pii"
-    NP                  =   int(1e2)
+    NP                  =   int(1e3)
     T                   =   5e9*u.yr
     dt                  =   1e5*u.yr
     NSKIP               =   int(100)

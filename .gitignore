@@ -5,7 +5,9 @@ __pycache__/
 
 $paths.yaml
 *scrap.ipynb
-
+*.slurm
+*.out
+*.err
 # C extensions
 *.so
 

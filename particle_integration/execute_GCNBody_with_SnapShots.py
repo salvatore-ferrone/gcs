@@ -9,14 +9,14 @@ import datetime
 if __name__ == "__main__" : 
     import sys 
     import os
-    GCname              =   "NGC104"
-    montecarlokey       =   "monte-carlo-000"
+    GCname              =   "Pal5"
+    montecarlokey       =   "monte-carlo-"+str(int(sys.argv[1])).zfill(3)
     internal_dynamics   =   "isotropic-plummer"
     GCorbits_potential  =   "pouliasis2017pii-GCNBody"
     MWpotential         =   "pouliasis2017pii"
-    NP                  =   int(1e2)
+    NP                  =   int(1e5)
     T                   =   5e9*u.yr
-    dt                  =   1e5*u.yr
+    dt                  =   1e4*u.yr
     NSKIP               =   int(100)
     
     attributes = {

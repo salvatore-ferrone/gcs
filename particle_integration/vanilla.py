@@ -89,27 +89,46 @@ def leapfrogtofinalpositions(integrator):
 
 
 if __name__ == "__main__" : 
+    import sys 
+    import os
     GCname              =   "NGC104"
-    montecarlokey       =   "monte-carlo-002"
+    montecarlokey       =   "monte-carlo-000"
     internal_dynamics   =   "isotropic-plummer"
     GCorbits_potential  =   "pouliasis2017pii"
     MWpotential         =   "pouliasis2017pii"
     NP                  =   int(1e2)
     T                   =   5e9*u.yr
-    dt                  =   1e4*u.yr
-    NSKIP               =   int(1)
+    dt                  =   1e5*u.yr
+    NSKIP               =   int(100)
+    
+    attributes = {
+        "NP":NP,
+        "T":T,
+        "dt":dt,
+        "NSKIP":NSKIP,
+        "GCname":GCname,
+        "montecarlokey":montecarlokey,
+        "internal_dynamics":internal_dynamics,
+        "GCorbits_potential":GCorbits_potential,
+        "MWpotential":MWpotential
+    }
     
     tempdir=ph._StreamSnapShots(MWpotential,GCname,NP,internal_dynamics,montecarlokey)
+    filename=ph.Stream(GCname,NP,MWpotential,internal_dynamics,montecarlokey)
+    
+    if os.path.exists(filename):
+        print(filename, "Already exists. \n Skipping!")
+        sys.exit(0)
 
-    staticgalaxy,integrationparameters,initialkinematics,inithostperturber = load_arguments(GCname,montecarlokey,internal_dynamics,GCorbits_potential,MWpotential,NP,T,dt)    
+    staticgalaxy,integrationparameters,initialkinematics,inithostperturber = load_arguments(GCname,montecarlokey,internal_dynamics,GCorbits_potential,MWpotential,NP,T,dt) 
     
     print(integrationparameters)
     integrator=initialize_vanilla_integrator(staticgalaxy,integrationparameters,initialkinematics,inithostperturber)
     
-    integrator=write_snapshots(integrator,NSKIP,GCname,tempdir)
+    integrator=initialize_write_snapshots(integrator,NSKIP,GCname,tempdir)
     
     phase_space,tesc = leapfrogtofinalpositions(integrator)
 
     
-    gcs.writers.Stream.stream
+    gcs.writers.Stream.stream(filename,phase_space,tesc,attributes)
     

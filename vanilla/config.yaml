@@ -1,6 +1,0 @@
-GCname: ["Pal5","NGC3201"]
-montecarlokey: "monte-carlo-000"
-MWpotential: "pouliasis2017pii"
-timestep: 1e4 yr
-forwardtime: 1e9 yr
-backwardtime: 5e9 yr

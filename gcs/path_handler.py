@@ -8,6 +8,15 @@ current_script_directory = Path(__file__).parent
 # Specify the path to `paths.yaml` within the gcs package directory
 paths_file_path = current_script_directory / 'paths.yaml'
 
+if not paths_file_path.exists():
+    errmessage = f"File not found: {paths_file_path}\n \
+    Create a YAML file with a place to store the simulation results and the temporary files. \n \
+    For example, the file should look like this: \n \
+        simulations: /home/sferrone/tychoOUTPUTS/
+        temporary: /home/sferrone/temp/"
+    
+    raise FileNotFoundError(f"File not found: {paths_file_path}")
+
 # Now you can use `paths_file_path` to open and read `paths.yaml`
 with open(paths_file_path, 'r') as file:
     paths = yaml.safe_load(file)

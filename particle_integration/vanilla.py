@@ -113,22 +113,35 @@ if __name__ == "__main__" :
         "MWpotential":MWpotential
     }
     
-    tempdir=ph._StreamSnapShots(MWpotential,GCname,NP,internal_dynamics,montecarlokey)
+    tempdir=ph._TemporaryStreamSnapShots(MWpotential,GCname,NP,internal_dynamics,montecarlokey)
     filename=ph.Stream(GCname,NP,MWpotential,internal_dynamics,montecarlokey)
     
     if os.path.exists(filename):
         print(filename, "Already exists. \n Skipping!")
         sys.exit(0)
 
-    staticgalaxy,integrationparameters,initialkinematics,inithostperturber = load_arguments(GCname,montecarlokey,internal_dynamics,GCorbits_potential,MWpotential,NP,T,dt) 
-    
-    print(integrationparameters)
+    staticgalaxy,integrationparameters,initialkinematics,inithostperturber = \
+        load_arguments(GCname,montecarlokey,internal_dynamics,GCorbits_potential,MWpotential,NP,T,dt) 
+
+
+    ###############################################
+    ########### INITIALIZE THE INTEGRATOR #########
+    ################################
     integrator=initialize_vanilla_integrator(staticgalaxy,integrationparameters,initialkinematics,inithostperturber)
-    
     integrator=initialize_write_snapshots(integrator,NSKIP,GCname,tempdir)
     
+    ###############################################
+    ########### PERFORM THE INTEGRATION ###########
+    ###############################################
     phase_space,tesc = leapfrogtofinalpositions(integrator)
-
-    
+    ##### SAVE THE FINAL SNAP SHOT 
     gcs.writers.Stream.stream(filename,phase_space,tesc,attributes)
+    print(filename, "saved")
+    
+    ### ASSEMBLE THE INTERMEDIATE SNAPSHOTS INTO ONE FILE
+    T,dt,Nstep,tsampling=gcs.misc.get_time_sampling_from_years_to_integration_units(T=T,dt=dt)
+    snapshottimesampling = tsampling[::NSKIP]
+    outfilename = ph.StreamSnapShots(GCname,NP,MWpotential,internal_dynamics,montecarlokey)
+    gcs.writers.Stream.StreamSnapShots(outfilename,snapshottimesampling,attributes,tempdir)
+    print(outfilename, "saved")
     

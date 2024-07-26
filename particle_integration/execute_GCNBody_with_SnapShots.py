@@ -1,6 +1,6 @@
 import gcs
 from gcs import path_handler as ph
-import GCNBody
+import GCNBody # type: ignore
 import vanilla
 from astropy import units as u
 import datetime

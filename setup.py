@@ -6,7 +6,7 @@ setup(
     packages=find_packages(),
     description='A simple package for data extraction and path handling in GCS projects',
     author='Salvatore Ferrone',
-    author_email='salvatore.ferrnoe@uniroma1.it',
+    author_email='salvatore.ferrone@uniroma1.it',
     keywords='gcs data extraction path handling',
     install_requires=[
         "numpy"

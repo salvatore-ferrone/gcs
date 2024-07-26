@@ -32,6 +32,27 @@ def StreamSnapShots(GCname,NP,potential_env,internal_dynamics,montecarlokey):
     return _StreamSnapShots(GCname,NP,potential_env,internal_dynamics) + outname
 
 
+def old_streams(MWpotential,GCname,montecarlokey,NP):
+    """This is before the new data storage system was introduced as of july 2024. It is kept for compatibility reasons.
+
+    Parameters
+    ----------
+    MWpotential : str
+        name of the MW potential
+    GCname : STR
+        name of the globular cluster
+    montecarlokey : str
+        the index of the sampling of the initial
+    NP : integer
+        number of particles
+
+    Returns
+    -------
+    str
+        path to data file
+    """
+    fname = GCname + "-stream-" + montecarlokey + ".hdf5"
+    return paths['simulations'] + "Streams/" + MWpotential + "/" + GCname + "/" + str(NP) + "/" + fname
 
 
 def GC_orbits(MWpotential, GCname):

@@ -3,7 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-$./gcs/paths.yaml
+*paths.yaml
 *scrap.ipynb
 *.slurm
 *.out

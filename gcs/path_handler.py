@@ -81,6 +81,18 @@ def ParticleInitialConditions(GCname:str):
     assert(isinstance(GCname, str))
     return _ParticleInitialConditions(GCname) + GCname + "-ParticleInitialConditions.hdf5"
 
+def ForceOnOrbit(GCname:str,MWpotential:str,montecarlokey:str):
+    assert(isinstance(GCname, str))
+    assert(isinstance(MWpotential, str))
+    assert(isinstance(montecarlokey, str))
+    return _ForceOnOrbit(GCname,MWpotential) + GCname + "-" + montecarlokey + ".hdf5"
+
+def _ForceOnOrbit(GCname:str,MWpotential:str):
+    assert(isinstance(GCname, str))
+    assert(isinstance(MWpotential, str))
+    outpath = paths['simulations'] + "ForceOnOrbit/" + MWpotential + "/" + GCname + "/"
+    os.makedirs(outpath,exist_ok=True)
+    return outpath
 
 def _Stream(GCname,NP,potential_env,internal_dynamics):
     outpath = paths['simulations'] + "Stream/" + potential_env + "/" + GCname + "/" + str(NP) + "/" +internal_dynamics + "/"

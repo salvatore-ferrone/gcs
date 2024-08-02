@@ -25,3 +25,85 @@ def get_time_sampling_from_years_to_integration_units(T=5e9*u.yr,dt=1e4*u.yr):
     T                   =   T.to(unitT)
     dt                  =   dt.to(unitT)    
     return T,dt,Nstep,tsampling
+
+
+def unwrap_angles(theta):
+    unwrapped_theta = theta.copy()
+    correction = 0
+    for i in range(1, len(theta)):
+        delta = theta[i] - theta[i-1]
+        if delta < -np.pi:
+            correction += 2*np.pi
+        elif delta > np.pi:
+            correction -= 2*np.pi
+        unwrapped_theta[i] = theta[i] + correction
+    return unwrapped_theta
+
+
+
+
+def cartesian_to_spherical(x, y, z, vx, vy, vz):
+    # Convert position from Cartesian to spherical coordinates
+    r = np.sqrt(x**2 + y**2 + z**2)
+    theta = np.arccos(z / r) if r != 0 else 0
+    phi = np.arctan2(y, x)
+
+    # Compute the spherical velocity components
+    rdot = (x * vx + y * vy + z * vz) / r
+    
+    if r != 0:
+        thetadot = (x * z * vx + y * z * vy - (x**2 + y**2) * vz) / (r**2 * np.sqrt(x**2 + y**2))
+        phidot = (x * vy - y * vx) / (x**2 + y**2)
+    else:
+        thetadot = 0
+        phidot = 0
+
+    return r, theta, phi, rdot, thetadot, phidot
+
+
+def spherical_to_cartesian(r, theta, phi, rdot, thetadot, phidot):
+    # Convert position from spherical to Cartesian coordinates
+    x = r * np.sin(theta) * np.cos(phi)
+    y = r * np.sin(theta) * np.sin(phi)
+    z = r * np.cos(theta)
+    
+    # Convert velocity from spherical to Cartesian coordinates
+    vx = (rdot * np.sin(theta) * np.cos(phi) +
+          r * thetadot * np.cos(theta) * np.cos(phi) -
+          r * np.sin(theta) * np.sin(phi) * phidot)
+    
+    vy = (rdot * np.sin(theta) * np.sin(phi) +
+          r * thetadot * np.cos(theta) * np.sin(phi) +
+          r * np.sin(theta) * np.cos(phi) * phidot)
+    
+    vz = rdot * np.cos(theta) - r * thetadot * np.sin(theta)
+    
+    return x, y, z, vx, vy, vz
+
+
+def cartesian_to_cylindrical(x, y, z, vx, vy, vz):
+    # Convert position from Cartesian to cylindrical coordinates
+    rho = np.sqrt(x**2 + y**2)
+    phi = np.arctan2(y, x)
+    z_cyl = z
+
+    # Compute the cylindrical velocity components
+    rhodot = (x * vx + y * vy) / rho 
+    phidot = (x * vy - y * vx) / (x**2 + y**2)
+    zdot_cyl = vz
+
+    return rho, phi, z_cyl, rhodot, phidot, zdot_cyl
+
+
+def cylindrical_to_cartesian(rho, phi, z_cyl, rhodot, phidot, zdot_cyl):
+    # Convert position from cylindrical to Cartesian coordinates
+    x = rho * np.cos(phi)
+    y = rho * np.sin(phi)
+    z = z_cyl
+
+    # Convert velocity from cylindrical to Cartesian coordinates
+    vx = rhodot * np.cos(phi) - rho * phidot * np.sin(phi)
+    vy = rhodot * np.sin(phi) + rho * phidot * np.cos(phi)
+    vz = zdot_cyl
+
+    return x, y, z, vx, vy, vz

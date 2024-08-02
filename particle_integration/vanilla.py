@@ -18,12 +18,12 @@ def load_arguments(GCname,montecarlokey,internal_dynamics,GCorbits_potential,MWp
     assert(dt.unit == u.yr)
     
     # the time stuff
-    T,dt,Nstep,tsampling =gcs.misc.get_time_sampling_from_years_to_integration_units(T=T,dt=dt)
+    T,dt,Nstep,tsampling        =   gcs.misc.get_time_sampling_from_years_to_integration_units(T=T,dt=dt)
 
     
     # load the particle positions
-    fname           =   ph.ParticleInitialConditions(GCname)
-    x,y,z,vx,vy,vz  =   gcs.extractors.ParticleInitialConditions.load_particles(fname,internal_dynamics,montecarlokey,NP)
+    fname                       =   ph.ParticleInitialConditions(GCname)
+    x,y,z,vx,vy,vz              =   gcs.extractors.ParticleInitialConditions.load_particles(fname,internal_dynamics,montecarlokey,NP)
     
     # Extract the orbit  
     orbit_file_name             =   ph.GC_orbits(GCorbits_potential,GCname)

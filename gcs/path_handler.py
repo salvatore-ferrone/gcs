@@ -87,6 +87,25 @@ def ForceOnOrbit(GCname:str,MWpotential:str,montecarlokey:str):
     assert(isinstance(montecarlokey, str))
     return _ForceOnOrbit(GCname,MWpotential) + GCname + "-" + montecarlokey + ".hdf5"
 
+def tauDensityMaps(GCname,MWpotential,montecarlokey,NP,internal_dynamics):
+    outfname = GCname+"-"+montecarlokey+"-tauDensityMap.h5"
+    return _tauDensityMaps(GCname,MWpotential,NP,internal_dynamics) + outfname
+
+def PerturberSuspects(GCname,MWpotential,montecarlokey):
+    outfname = GCname + "-" + montecarlokey + "-suspects.csv"
+    return _PerturberSuspects(GCname,MWpotential) + outfname
+
+def _PerturberSuspects(GCname,MWpotential):
+    outdir = paths['simulations'] + "PerturberSuspects/" + MWpotential + "/" + GCname + "/" 
+    os.makedirs(outdir,exist_ok=True)
+    return outdir 
+    
+
+def _tauDensityMaps(GCname,MWpotential,NP,internal_dynamics):
+    outdir=paths['simulations'] + "tauDensityMaps/" + MWpotential + "/" + GCname + "/" + str(NP) + "/" + internal_dynamics+"/"
+    os.makedirs(outdir,exist_ok=True)
+    return outdir
+
 def _ForceOnOrbit(GCname:str,MWpotential:str):
     assert(isinstance(GCname, str))
     assert(isinstance(MWpotential, str))

@@ -45,18 +45,22 @@ def unwrap_angles(theta):
 def cartesian_to_spherical(x, y, z, vx, vy, vz):
     # Convert position from Cartesian to spherical coordinates
     r = np.sqrt(x**2 + y**2 + z**2)
-    theta = np.arccos(z / r) if r != 0 else 0
+
+    iszero = (r == 0)
+    theta= np.zeros_like(r)
+    theta[iszero] = 0
+    theta[~iszero] = np.arccos(z[~iszero] / r[~iszero])
     phi = np.arctan2(y, x)
 
     # Compute the spherical velocity components
     rdot = (x * vx + y * vy + z * vz) / r
     
-    if r != 0:
-        thetadot = (x * z * vx + y * z * vy - (x**2 + y**2) * vz) / (r**2 * np.sqrt(x**2 + y**2))
-        phidot = (x * vy - y * vx) / (x**2 + y**2)
-    else:
-        thetadot = 0
-        phidot = 0
+    thetadot= np.zeros_like(r)
+    thetadot[iszero] = 0
+    thetadot[~iszero] = (x[~iszero] * vx[~iszero] + y[~iszero] * vy[~iszero] - (x[~iszero]**2 + y[~iszero]**2) * vz[~iszero]) / (r[~iszero]**2 * np.sqrt(x[~iszero]**2 + y[~iszero]**2))
+    phidot = (x * vy - y * vx) / (x**2 + y**2)
+
+
 
     return r, theta, phi, rdot, thetadot, phidot
 

@@ -4,6 +4,9 @@ import numpy as np
 
 
 def extract_whole_orbit(filename,montecarlokey):
+    """
+    t,x,y,z,vx,vy,vz=extract_whole_orbit(filename,montecarlokey)
+    """
     with h5py.File(filename,'r') as filehdf5:
         t = filehdf5[montecarlokey]['t'][:]
         x = filehdf5[montecarlokey]['xt'][:]

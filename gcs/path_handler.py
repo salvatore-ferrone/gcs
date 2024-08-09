@@ -95,6 +95,17 @@ def PerturberSuspects(GCname,MWpotential,montecarlokey):
     outfname = GCname + "-" + montecarlokey + "-suspects.csv"
     return _PerturberSuspects(GCname,MWpotential) + outfname
 
+def ImpactGeometry(GCname,MWpotential,montecarlokey,suspect,targetnumber):
+    """ added target number because one GC can impact a stream more than once """
+    outfname = GCname + "-" + montecarlokey + "-" + suspect + "-" + str(targetnumber) + ".hdf5"
+    return _ImpactGeometry(GCname,MWpotential,montecarlokey) + outfname
+
+def _ImpactGeometry(GCname,MWpotential,montecarlokey):
+    outdir = paths['simulations'] + "ImpactGeometry/" + MWpotential + "/" + GCname + "/" + montecarlokey + "/"
+    os.makedirs(outdir,exist_ok=True)
+    return outdir
+
+
 def _PerturberSuspects(GCname,MWpotential):
     outdir = paths['simulations'] + "PerturberSuspects/" + MWpotential + "/" + GCname + "/" 
     os.makedirs(outdir,exist_ok=True)

@@ -1,0 +1,11 @@
+name: gcs
+channels:
+  - conda-forge
+dependencies:
+  - python=3.9
+  - numpy==1.22
+  - setuptools=68.2
+  - astropy==5
+  - pyyaml==6.0.1
+  - h5py==3.11.0
+  - matplotlib==3.5

@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# folder for scrap notebooks
+scrapnotebooks/*
+
 *paths.yaml
 *scrap.ipynb
 *.slurm

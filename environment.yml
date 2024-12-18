@@ -5,6 +5,8 @@ dependencies:
   - python=3.9
   - numpy==1.22
   - setuptools=68.2
+  - gcc==11.2.0
+  - gfortran
   - astropy==5
   - pyyaml==6.0.1
   - h5py==3.11.0

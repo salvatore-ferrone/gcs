@@ -1,14 +1,17 @@
 name: gcs
 channels:
   - conda-forge
+  - defaults
 dependencies:
-  - python=3.9
+  - python=3.9.20
   - numpy==1.22
-  - setuptools=68.2
   - gcc==11.2.0
   - gfortran
-  - astropy==5
+  - setuptools=68.2
+  - astropy==5.0
+  - matplotlib==3.5
+  - jupyterlab==4.2  
   - pyyaml==6.0.1
   - h5py==3.11.0
-  - matplotlib==3.5
   - ipykernel
+  - pip==24.2

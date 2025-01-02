@@ -1,0 +1,4 @@
+name: longmurali
+bar_parameters: [22968000000, 4, 1, 0.5]
+bar_polynomial: [0.4363323129985824, 38]
+note: 'The bar parameters are the MASS, and scale lengths. There are three scale length parameters, a, b, and c, intended to be in decreasing order and in kpc. Mass is in solar masses and scale lengths are in kpc. The barpolynomial values describe the motion of the bar using polynomial, each term is the coefficient. The first term is the bar inclination angle, the second term is the angular velocity and then the angular acceleration. Units are in radians, km / s kpc'

@@ -18,15 +18,6 @@ def interpolate_finer_grid(tnew,t,x,y,z,vx,vy,vz):
     return xx,yy,zz,vxx,vyy,vzz
 
 
-def get_time_sampling_from_years_to_integration_units(T=5e9*u.yr,dt=1e4*u.yr):
-    unitT               =   u.s * u.kpc / u.km
-    Nstep               =   int((T/dt).value)
-    tsampling           =   np.linspace(-T,0,Nstep+1).to(unitT).value
-    T                   =   T.to(unitT)
-    dt                  =   dt.to(unitT)    
-    return T,dt,Nstep,tsampling
-
-
 def unwrap_angles(theta):
     unwrapped_theta = theta.copy()
     correction = 0

@@ -30,11 +30,11 @@ def main(
     barname             =   "longmuralibar",
     barparams           =   [22968000000, 4, 1, 0.5],
     barpoly             =   [0.4363323129985824, 38],
-    NP                  =   int(1e2),
+    NP                  =   int(1e3),
     integrationtime     =   5e9*u.yr,
     dt                  =   1e5*u.yr,
-    NSKIP               =   int(100),
-    temp_base_name      =   "ok"
+    NSKIP               =   int(10),
+    temp_base_name      =   "bar_from_paper_1"
     ):
 
 
@@ -130,6 +130,7 @@ def main(
     # store the host orbit
     hostorbit = np.array([xt,yt,zt,vxt,vyt,vzt])
     # set the attributes of the file
+    initialconditions = [RA,DEC,Rsun,RV,mualpha,mu_delta]
     attributes={
         "GCname":GCname,
         "MWpotential": MWpotential,
@@ -143,7 +144,8 @@ def main(
         "dt": dt,
         "NSKIP": NSKIP,
         "temp_base_name": temp_base_name,
-        "temporary_dir_binary_files": temporary_dir_binary_files
+        "temporary_dir_binary_files": temporary_dir_binary_files,
+        "initialconditions": initialconditions
     }
     attributes["author"] = author
     attributes["author_affiliation"] = author_affiliation
@@ -240,7 +242,43 @@ def get_temp_snapshot_filenames(tempdir):
 
 
 
-if __name__ == "__main__" : 
-    main()
-    print("do it again")
-    main(GCname="NGC104")
+if __name__ == "__main__": 
+    # do this a handful of times 
+    GCname              =   "Pal5"
+    MWpotential         =   "pouliasis2017pii"
+    internal_dynamics   =   "isotropic-plummer"
+    barname             =   "longmuralibar"
+    barparams           =   [22968000000, 4, 1, 0.5]
+    barpoly             =   [0.4363323129985824, 38]
+    NP                  =   int(1e3)
+    integrationtime     =   5e9*u.yr
+    dt                  =   1e5*u.yr
+    NSKIP               =   int(10)
+    temp_base_name      =   "bar_from_ferrone_2023_"
+    import multiprocessing as mp 
+    ncpu=mp.cpu_count()
+    pool=mp.Pool(ncpu)
+    patternspeeds = np.arange(25,60,1)
+    npatternspeeds = len(patternspeeds) 
+    print("Running",npatternspeeds,"simulations")
+    for i in range(0,npatternspeeds):
+        patternspeed=patternspeeds[i]
+        barpoly = [0.4363323129985824, patternspeed]
+        temp_base_name="longmuralibar-"+str(i)+"-patternspeed-"+str(patternspeed)
+        args = (
+            GCname,
+            MWpotential,
+            internal_dynamics,
+            barname,
+            barparams,
+            barpoly,
+            NP,
+            integrationtime,
+            dt,
+            NSKIP,
+            temp_base_name
+        )
+        pool.apply_async(main,args=args)
+    pool.close()
+    pool.join()
+    pool.terminate()

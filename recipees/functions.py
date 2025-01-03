@@ -7,8 +7,7 @@ from gcs import path_handler as ph
 import gcs
 import numpy as np 
 import astropy.units as u
-import sys 
-import os
+from astropy import coordinates as coord
 import copy
 import yaml
 
@@ -137,3 +136,23 @@ def leapfrogtofinalpositions(integrator):
     phase_space = np.array([xf,yf,zf,vxf,vyf,vzf])
     integrator.deallocate()
     return phase_space,tesc
+
+
+def get_random_GC_initial_conditions(GCname):
+    """
+    Sample the initial conditions of a globular cluster from a multivariate normal distribution
+    """
+
+    # get random set of initial conditions 
+    GCdata=tstrippy.Parsers.baumgardtMWGCs()
+    means,cov=GCdata.getGCCovarianceMatrix(GCname)
+    initial_conditions=np.random.multivariate_normal(means,cov,1)
+    RA,DEC,Rsun,RV,mualpha,mu_delta,Mass,rh_m=initial_conditions[0]
+    return RA,DEC,Rsun,RV,mualpha,mu_delta,Mass,rh_m
+
+def sky_to_galactocentric(RA,DEC,Rsun,RV,mualpha,mu_delta):
+    skycoords = coord.SkyCoord(ra=RA*u.deg, dec=DEC*u.deg, distance=Rsun*u.pc, pm_ra_cosdec=mualpha*u.mas/u.yr, pm_dec=mu_delta*u.mas/u.yr, radial_velocity=RV*u.km/u.s)
+    refframe=tstrippy.Parsers.potential_parameters.MWreferenceframe()
+    galcentric=skycoords.transform_to(refframe)
+    x,y,z,vx,vy,vz=galcentric.cartesian.x.to(u.kpc).value,galcentric.cartesian.y.to(u.kpc).value,galcentric.cartesian.z.to(u.kpc).value,galcentric.velocity.d_x.to(u.km/u.s).value,galcentric.velocity.d_y.to(u.km/u.s).value,galcentric.velocity.d_z.to(u.km/u.s).value
+    return x,y,z,vx,vy,vz

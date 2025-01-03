@@ -47,7 +47,6 @@ def main(
     ################################################
     #### 1. ORBIT of the HOST GLOBULAR CLUSTER #####
     ################################################
-
     # LOAD THE STATIC GALAXY
     staticgalaxy_params = tstrippy.Parsers.potential_parameters.pouliasis2017pii()
     staticgalaxy = (MWpotential,staticgalaxy_params)

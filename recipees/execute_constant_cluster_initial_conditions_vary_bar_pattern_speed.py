@@ -14,7 +14,7 @@ import tstrippy
 import sys 
 import multiprocessing as mp 
 
-omega_min, omega_max = 30,66
+omega_min, omega_max = 25,66
 omega_step = 0.25
 bar_pattern_speeds = np.arange(omega_min,omega_max+omega_step,omega_step)
 bar_pattern_speeds_m_kpc_s=np.array(1000*bar_pattern_speeds, dtype=int)
@@ -30,7 +30,7 @@ def main(monte_carlo_index):
     barname             =   "longmuralibar"
     barparams           =   [22968000000, 4, 1, 0.5]
     barpoly_ferrone_2023=   [0.4363323129985824, 38]
-    NP                  =   int(1e2)
+    NP                  =   int(5e3)
     integrationtime     =   5e9*u.yr
     dt                  =   1e5*u.yr
     NSKIP               =   int(10)  

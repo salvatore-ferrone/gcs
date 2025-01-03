@@ -36,7 +36,7 @@ def stream(filename,phase_space,tesc,attributes):
 
 
 def get_temp_snapshot_filenames(tempdir):
-    # sort the files 
+    # sort the by chronological order, not alphanumerical order 
     myfiles = np.array(os.listdir(tempdir))
     indexes = np.array([int(file.split("-")[1].split(".bin")[0]) for file in myfiles])
     sortdexes=np.argsort(indexes)

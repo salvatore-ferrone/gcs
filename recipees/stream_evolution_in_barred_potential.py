@@ -168,7 +168,7 @@ def main(
         # save the stream snapshots
         outfile.create_group("Stream")
         outfile['Stream'].create_dataset("timestamps",data=snapshottimesampling)
-        outfile["Stream"].create_dataset("NSTAMPS",data=NSTEP//NSKIP)
+        outfile["Stream"].create_dataset("NSTAMPS",data=NSTEP//NSKIP + 1 )
         outfile["Stream"].create_dataset("tesc",data=tesc)
         outfile["Stream"].create_group("StreamSnapShots")
         for i in range(len(filenames)):

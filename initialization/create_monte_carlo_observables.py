@@ -13,7 +13,7 @@ from gcs import path_handler as ph
 import h5py
 
 
-def main(n_samples = 50,seed_number = 40):
+def main(n_samples = 100,seed_number = 40):
     
     
     myGCS=tstrippy.Parsers.baumgardtMWGCs()

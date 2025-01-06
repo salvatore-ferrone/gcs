@@ -1,11 +1,11 @@
 #!/bin/sh
 #SBATCH --output=constant_cluster_inital_conditions.out
 #SBATCH --error=constant_cluster_inital_conditions.err
-#SBATCH --job-name=initParticles
+#SBATCH --job-name=constant_cluster_initial_conditions
 #SBATCH --partition=short
 #SBATCH --time=59
 #SBATCH --ntasks=8
-#SBATCH --array=1-3
+#SBATCH --array=1-2
 #SBATCH --mail-user=salvatore.ferrone@obspm.fr
 #SBATCH --mail-type=ALL
 

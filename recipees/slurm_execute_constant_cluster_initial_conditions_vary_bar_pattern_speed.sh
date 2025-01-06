@@ -1,11 +1,9 @@
 #!/bin/sh
-#SBATCH --output=constant_cluster_inital_conditions.out
-#SBATCH --error=constant_cluster_inital_conditions.err
-#SBATCH --job-name=constant_cluster_initial_conditions
-#SBATCH --partition=short
-#SBATCH --time=59
-#SBATCH --mail-user=salvatore.ferrone@obspm.fr
-#SBATCH --mail-type=ALL
+#SBATCH --output=CCIC_5K.out
+#SBATCH --error=CCIC_5K.err
+#SBATCH --job-name=OK_5K_particles
+#SBATCH --partition=medium
+#SBATCH --time=1439
 
 
 # Load modules

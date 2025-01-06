@@ -55,6 +55,7 @@ def single_pattern_speed(monte_carlo_index,bar_pattern_speed_index):
     xp,yp,zp,vxp,vyp,vzp = tstrippy.ergodic.isotropicplummer(G,Mass,rh_m,NP)
     particle_initial_conditions = np.array([xp,yp,zp,vxp,vyp,vzp])
 
+    print("Plummer sphere with {:d} particles created".format(NP))
 
 
 

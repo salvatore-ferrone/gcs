@@ -10,8 +10,10 @@
 ### made the script executable with:
 ###### chmod +x /obs/sferrone/gcs/recipees/slurm_loop_monte_carlo_over_constant_cluster_initial_conditions_vary_bar_pattern_speed.sh
 #### Run the script with this: 
-## nohup ./slurm_loop_monte_carlo_over_constant_cluster_initial_conditions_vary_bar_pattern_speed.sh > slurm_loop_monte_carlo.log 2>&1 &
 
+#################  EXECUTE ################# EXECUTE ################# EXECUTE ################# EXECUTE ################# EXECUTE #################
+## nohup ./slurm_loop_monte_carlo_over_constant_cluster_initial_conditions_vary_bar_pattern_speed.sh > slurm_loop_monte_carlo.log 2>&1 &
+#################  EXECUTE ################# EXECUTE ################# EXECUTE ################# EXECUTE ################# EXECUTE #################
 # Number of iterations over the initial conditions
 OUTER_LOOP=5
 
@@ -25,7 +27,7 @@ INNER_LOOP=165
 
 
 # Loop over the outer loop
-for i in $(seq 5 $((OUTER_LOOP-1)))
+for i in $(seq 0 $((OUTER_LOOP-1)))
 do
     # Submit the inner loop as an array job
     jobid=$(sbatch --array=0-$((INNER_LOOP-1)) --export=ALL,OUTER_INDEX=$i slurm_execute_constant_cluster_initial_conditions_vary_bar_pattern_speed.sh | awk '{print $4}')

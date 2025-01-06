@@ -41,6 +41,8 @@ def inner_loop(GCname,myGCS,n_samples,mcarlokeys,columns,units,seed_number):
     means,cov=myGCS.getGCCovarianceMatrix(GCname)
     np.random.seed(seed_number)
     initial_conditions=np.random.multivariate_normal(means,cov,n_samples)
+    # make the first entry the same as the means 
+    initial_conditions[0]=means
     
     attrs=set_attributes(GCname,myGCS._pathtoclusterdata,seed_number)
     with h5py.File(outfilename,"w") as myfile:

@@ -14,6 +14,12 @@
 #################  EXECUTE ################# EXECUTE ################# EXECUTE ################# EXECUTE ################# EXECUTE #################
 ## nohup ./slurm_loop_monte_carlo_over_constant_cluster_initial_conditions_vary_bar_pattern_speed.sh > slurm_loop_monte_carlo.log 2>&1 &
 #################  EXECUTE ################# EXECUTE ################# EXECUTE ################# EXECUTE ################# EXECUTE #################
+
+
+#### MOVE TO NHAMPI 
+#### scp -r /scratch2/sferrone/simulations/StreamEvolutionInBarredPotential/pouliasis2017pii/longmuralibar/Pal5/5000/ sferrone@nhampi:/home-filer/sferrone/tychoOUTPUTS/StreamEvolutionInBarredPotential/pouliasis2017pii/longmuralibar/Pal5/
+
+
 # Number of iterations over the initial conditions
 OUTER_LOOP=5
 

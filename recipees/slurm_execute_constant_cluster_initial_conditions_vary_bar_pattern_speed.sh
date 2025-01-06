@@ -12,7 +12,7 @@ module load python
 # source /obs/sferrone/py-env-gc/bin/activate
 
 # Activate your conda environment
-source /data/sferrone/miniconda3/etc/profile.d/conda.sh
+source /obs/sferrone/.bashrc
 conda activate gcs
 
 

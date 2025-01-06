@@ -18,6 +18,7 @@
 
 #### MOVE TO NHAMPI 
 #### scp -r /scratch2/sferrone/simulations/StreamEvolutionInBarredPotential/pouliasis2017pii/longmuralibar/Pal5/5000/ sferrone@nhampi:/home-filer/sferrone/tychoOUTPUTS/StreamEvolutionInBarredPotential/pouliasis2017pii/longmuralibar/Pal5/
+#### scp -r /scratch2/sferrone/simulations/StreamEvolutionInBarredPotential/pouliasis2017pii/longmuralibar/NGC3201/5000/ sferrone@nhampi:/home-filer/sferrone/tychoOUTPUTS/StreamEvolutionInBarredPotential/pouliasis2017pii/longmuralibar/NGC3201/
 
 
 # Number of iterations over the initial conditions

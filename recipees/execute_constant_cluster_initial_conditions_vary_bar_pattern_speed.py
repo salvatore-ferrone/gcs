@@ -1,5 +1,5 @@
 """
-Will call the function to execute the constant cluster initial conditions
+execute the constant cluster initial conditions
 from stream_evolution_in_barred_potential.py
 
 """
@@ -30,7 +30,7 @@ def main(monte_carlo_index):
     barname             =   "longmuralibar"
     barparams           =   [22968000000, 4, 1, 0.5]
     barpoly_ferrone_2023=   [0.4363323129985824, 38]
-    NP                  =   int(5e3)
+    NP                  =   int(5e1)
     integrationtime     =   5e9*u.yr
     dt                  =   1e5*u.yr
     NSKIP               =   int(10)  

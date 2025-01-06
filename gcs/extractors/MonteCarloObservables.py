@@ -7,7 +7,7 @@ def extract_GC_observables(filename,montecarloindex):
     assert (isinstance(filename,str)), "filename must be a string"
     assert (isinstance(montecarloindex,int)), "montecarloindex must be an integer"
     with h5py.File(filename,'r') as filehdf5:
-        RA,DEC,rh_m,Mass,Rsun,RV,mualpha,mu_delta=filehdf5['initial_conditions'][montecarloindex]
+        RA,DEC,Rsun,RV,mualpha,mu_delta,Mass,rh_m=filehdf5['initial_conditions'][montecarloindex]
     return  RA,DEC,Rsun,RV,mualpha,mu_delta,Mass,rh_m
 
 def extract_all_GC_observables(GCnames,montecarlokey):

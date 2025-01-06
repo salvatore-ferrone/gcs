@@ -4,8 +4,6 @@
 #SBATCH --job-name=constant_cluster_initial_conditions
 #SBATCH --partition=short
 #SBATCH --time=59
-#SBATCH --ntasks=8
-#SBATCH --array=1-2
 #SBATCH --mail-user=salvatore.ferrone@obspm.fr
 #SBATCH --mail-type=ALL
 
@@ -17,9 +15,8 @@ module load python
 
 # Activate your conda environment
 source /data/sferrone/miniconda3/etc/profile.d/conda.sh
-conda init
 conda activate gcs
 
 
 # Run script
-srun python3 execute_constant_cluster_initial_conditions_vary_bar_pattern_speed.py $SLURM_ARRAY_TASK_ID 
+srun python3 execute_constant_cluster_initial_conditions_vary_bar_pattern_speed.py $OUTER_INDEX $SLURM_ARRAY_TASK_ID 

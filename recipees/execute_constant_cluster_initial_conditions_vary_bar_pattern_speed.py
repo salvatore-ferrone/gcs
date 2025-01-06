@@ -25,7 +25,7 @@ internal_dynamics   =   "isotropic-plummer"
 barname             =   "longmuralibar"
 barparams           =   [22968000000, 4, 1, 0.5]
 barpoly_ferrone_2023=   [0.4363323129985824, 38]
-NP                  =   int(5e1)
+NP                  =   int(5e3)
 integrationtime     =   5e9*u.yr
 dt                  =   1e5*u.yr
 NSKIP               =   int(10)  
@@ -59,7 +59,7 @@ def single_pattern_speed(monte_carlo_index,bar_pattern_speed_index):
 
 
     barpoly = [barpoly_ferrone_2023[0], bar_pattern_speeds[bar_pattern_speed_index]]
-    temp_base_name = "constant_cluster_initial_conditions_bar_pattern_speed_{:d}_m_kpc_s".format(monte_carlo_index,bar_pattern_speeds_m_kpc_s[bar_pattern_speed_index])
+    temp_base_name = "constant_cluster_initial_conditions_bar_pattern_speed_{:d}_m_kpc_s".format(bar_pattern_speeds_m_kpc_s[bar_pattern_speed_index])
     
     starttime = datetime.datetime.now()
     sebp.constant_cluster_initial_conditions(
@@ -182,9 +182,16 @@ if __name__=="__main__":
     if len (sys.argv)==3:
         scriptname = sys.argv[0]
         patternspeedindex=int(sys.argv[2])
+        print("Running with pattern speed index {:d}".format(patternspeedindex))
+        print("Running with script name {:s}".format(scriptname))
+        print("Running with monte carlo index {:d}".format(montecarloindex))
         single_pattern_speed(montecarloindex,patternspeedindex)
     else:
-        if DOMULTIPROCESSING:
-            multiprocessingloop(montecarloindex)
-        else:
-            simpleloop(montecarloindex)
+        print ("NOT ENOUGH ARGUMENTS GIVEN, ")
+        for arg in sys.argv:
+            print(arg)
+
+        # if DOMULTIPROCESSING:
+        #     multiprocessingloop(montecarloindex)
+        # else:
+        #     simpleloop(montecarloindex)

@@ -27,7 +27,7 @@ def constant_cluster_initial_conditions(
         cluster_initial_conditions,
         particle_initial_conditions,
         montecarlokey,  
-        GCname              =   "Pal5",
+        GCname              =   "NGC3201",
         MWpotential         =   "pouliasis2017pii",
         internal_dynamics   =   "isotropic-plummer",
         barname             =   "longmuralibar",

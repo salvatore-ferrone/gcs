@@ -1,7 +1,7 @@
 #!/bin/sh
 #SBATCH --output=CCIC_5K.out
 #SBATCH --error=CCIC_5K.err
-#SBATCH --job-name=OK_5K_particles
+#SBATCH --job-name=NGC3201_5K_particles
 #SBATCH --partition=medium
 #SBATCH --time=1439
 

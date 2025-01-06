@@ -19,7 +19,7 @@ bar_pattern_speeds = np.arange(omega_min,omega_max+omega_step,omega_step)
 bar_pattern_speeds_m_kpc_s=np.array(1000*bar_pattern_speeds, dtype=int)
 
 # The parameters of of the code 
-GCname              =   "Pal5"
+GCname              =   "NGC3201"
 MWpotential         =   "pouliasis2017pii"
 internal_dynamics   =   "isotropic-plummer"
 barname             =   "longmuralibar"

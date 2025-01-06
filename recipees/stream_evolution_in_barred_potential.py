@@ -158,37 +158,39 @@ def constant_cluster_initial_conditions(
     # load in the snap shots 
     
 
+    try: 
+        with h5py.File(outdir+outname, 'w') as outfile:
+            outfile.create_group("HostOrbit")
+            outfile['HostOrbit'].create_dataset("timestamps",data=timesteps)
+            outfile['HostOrbit'].create_dataset("orbit",data=hostorbit)
+            outfile['HostOrbit'].create_dataset("Mass",data=Mass)
+            outfile['HostOrbit'].create_dataset("rh_m",data=rh_m)
 
-    with h5py.File(outdir+outname, 'w') as outfile:
-        outfile.create_group("HostOrbit")
-        outfile['HostOrbit'].create_dataset("timestamps",data=timesteps)
-        outfile['HostOrbit'].create_dataset("orbit",data=hostorbit)
-        outfile['HostOrbit'].create_dataset("Mass",data=Mass)
-        outfile['HostOrbit'].create_dataset("rh_m",data=rh_m)
+            # save the stream snapshots
+            outfile.create_group("Stream")
+            if writestream:
+                snapshottimesampling = timesteps[::NSKIP]
+            else:
+                snapshottimesampling = np.array([timesteps[-1]])
+            NSTAMPS = len(snapshottimesampling)
+            outfile['Stream'].create_dataset("timestamps",data=snapshottimesampling)
+            outfile["Stream"].create_dataset("NSTAMPS",data=NSTAMPS)
+            outfile["Stream"].create_dataset("tesc",data=tesc)
+            outfile["Stream"].create_group("StreamSnapShots")
+            if writestream:
+                filenames,indexes=get_temp_snapshot_filenames(temporary_dir_binary_files)
+                for i in range(len(filenames)):
+                    phase_space = read_fortran_stream_binary_file(temporary_dir_binary_files+filenames[i])
+                    outfile["Stream"]["StreamSnapShots"].create_dataset(str(indexes[i]),data=phase_space)
 
-        # save the stream snapshots
-        outfile.create_group("Stream")
-        if writestream:
-            snapshottimesampling = timesteps[::NSKIP]
-        else:
-            snapshottimesampling = np.array([timesteps[-1]])
-        NSTAMPS = len(snapshottimesampling)
-        outfile['Stream'].create_dataset("timestamps",data=snapshottimesampling)
-        outfile["Stream"].create_dataset("NSTAMPS",data=NSTAMPS)
-        outfile["Stream"].create_dataset("tesc",data=tesc)
-        outfile["Stream"].create_group("StreamSnapShots")
-        if writestream:
-            filenames,indexes=get_temp_snapshot_filenames(temporary_dir_binary_files)
-            for i in range(len(filenames)):
-                phase_space = read_fortran_stream_binary_file(temporary_dir_binary_files+filenames[i])
-                outfile["Stream"]["StreamSnapShots"].create_dataset(str(indexes[i]),data=phase_space)
+            outfile["Stream"]["StreamSnapShots"].create_dataset("final",data=stream_final)
+            for attr in attributes:
+                outfile.attrs[attr] = attributes[attr]
+        print(outdir+outname, "saved")
+    except Exception as e:
+        print(e)
+        print("failed to write",outdir+outname)
 
-        outfile["Stream"]["StreamSnapShots"].create_dataset("final",data=stream_final)
-
-
-        for attr in attributes:
-            outfile.attrs[attr] = attributes[attr]
-    print(outdir+outname, "saved")
 
 
 
@@ -229,6 +231,7 @@ def main(
     T0=0
     integrationparameters = (T0,dt,NSTEP)    
     # load the position of the host cluster
+    Mass,rh_m,RA,DEC,Rsun,RV,mualpha,mu_delta = gcs.extractors.MonteCarloObservables()
     RA,DEC,Rsun,RV,mualpha,mu_delta,Mass,rh_m=functions.get_random_GC_initial_conditions(GCname)
     x,y,z,vx,vy,vz = functions.sky_to_galactocentric(RA,DEC,Rsun,RV,mualpha,mu_delta)
     initialkinematics = (x,y,z,vx,vy,vz) # the velocities are positive because setbackwardorbit() makes them negative intenral to tstrippy

@@ -9,6 +9,7 @@ from astropy import units as u
 import numpy as np 
 import tstrippy
 import sys 
+import gcs
 import multiprocessing as mp 
 import datetime
 
@@ -30,7 +31,7 @@ dt                  =   1e5*u.yr
 NSKIP               =   int(10)  
 description         =   "Integrating star-particles with in a globular cluster in a galaxy with a bar. The cluster initial conditions were passed as an argument, and the particle initial conditions were passed as an argument. Therefore, these results can be compared to others where the bar properties are different."
 writestream         =   False  
-
+DOMULTIPROCESSING   =   False
 
 def single_pattern_speed(monte_carlo_index,bar_pattern_speed_index):
     """
@@ -83,7 +84,6 @@ def single_pattern_speed(monte_carlo_index,bar_pattern_speed_index):
     print("Done with monte carlo index {:d}".format(monte_carlo_index))
     
     return None
-
 
 
 
@@ -174,6 +174,16 @@ def simpleloop(monte_carlo_index):
     print("Elapsed time: ", endtime-starttime)
     return None
 
+
+
 if __name__=="__main__":
-    montecarloindex=sys.argv[1]
-    main(int(montecarloindex))
+    montecarloindex=int(sys.argv[1])
+    if len (sys.argv)==3:
+        scriptname = sys.argv[0]
+        patternspeedindex=int(sys.argv[2])
+        single_pattern_speed(montecarloindex,patternspeedindex)
+    else:
+        if DOMULTIPROCESSING:
+            multiprocessingloop(montecarloindex)
+        else:
+            simpleloop(montecarloindex)

@@ -1,6 +1,6 @@
 #!/bin/sh
-#SBATCH --output=initializeParticles.out
-#SBATCH --error=initializeParticles.err
+#SBATCH --output=constant_cluster_inital_conditions.out
+#SBATCH --error=constant_cluster_inital_conditions.err
 #SBATCH --job-name=initParticles
 #SBATCH --partition=short
 #SBATCH --time=59
@@ -17,6 +17,7 @@ module load python
 
 # Activate your conda environment
 source /data/sferrone/miniconda3/etc/profile.d/conda.sh
+conda init
 conda activate gcs
 
 

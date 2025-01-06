@@ -43,7 +43,7 @@ def single_pattern_speed(monte_carlo_index,bar_pattern_speed_index):
     npatternspeeds=len(bar_pattern_speeds)
     assert bar_pattern_speed_index < npatternspeeds, "bar_pattern_speed_index must be less than the number of pattern speeds,\n {:d} was given and needs to be less than {:d}".format(bar_pattern_speed_index,npatternspeeds)
     
-    
+    montecarlokey = "monte-carlo-"+str(monte_carlo_index).zfill(3)
     ###### GET THE INITIAL CONDITIONS OF THE CLUSTER IN PHASE SPACE ######
     # get the name of the master file of initial conditions
     initial_conditions_file_name = gcs.path_handler.MonteCarloObservables(GCname)
@@ -59,12 +59,13 @@ def single_pattern_speed(monte_carlo_index,bar_pattern_speed_index):
 
 
     barpoly = [barpoly_ferrone_2023[0], bar_pattern_speeds[bar_pattern_speed_index]]
-    temp_base_name = "constant_cluster_initial_conditions_{:d}_bar_pattern_speed_{:d}_m_kpc_s".format(monte_carlo_index,bar_pattern_speeds_m_kpc_s[bar_pattern_speed_index])
+    temp_base_name = "constant_cluster_initial_conditions_bar_pattern_speed_{:d}_m_kpc_s".format(monte_carlo_index,bar_pattern_speeds_m_kpc_s[bar_pattern_speed_index])
     
     starttime = datetime.datetime.now()
     sebp.constant_cluster_initial_conditions(
         cluster_initial_conditions=cluster_initial_conditions,
         particle_initial_conditions=particle_initial_conditions,
+        montecarlokey=montecarlokey,
         GCname=GCname,
         MWpotential=MWpotential,
         internal_dynamics=internal_dynamics,

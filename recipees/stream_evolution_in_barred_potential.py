@@ -26,6 +26,7 @@ description = "Integrating star-particles with in a globular cluster"
 def constant_cluster_initial_conditions(
         cluster_initial_conditions,
         particle_initial_conditions,
+        montecarlokey,  
         GCname              =   "Pal5",
         MWpotential         =   "pouliasis2017pii",
         internal_dynamics   =   "isotropic-plummer",
@@ -41,9 +42,11 @@ def constant_cluster_initial_conditions(
           
 ):
     
+
+
     NP = len(particle_initial_conditions[0]) # rederive since it is an input argument 
     # CURRENT OUTPUT FILE
-    outdir = ph.paths['simulations'] + "StreamEvolutionInBarredPotential/" + MWpotential + "/" + barname + "/" + GCname + "/" + str(NP) + "/"
+    outdir = ph.paths['simulations'] + "StreamEvolutionInBarredPotential/" + MWpotential + "/" + barname + "/" + GCname + "/" + str(NP) + "/" + montecarlokey + "/"
     outname = GCname+"_"+temp_base_name+"-stream.hdf5"
     os.makedirs(outdir,exist_ok=True)
     G=tstrippy.Parsers.potential_parameters.G

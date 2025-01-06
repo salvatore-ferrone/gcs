@@ -13,6 +13,7 @@ import numpy as np
 import tstrippy
 import sys 
 import multiprocessing as mp 
+import datetime
 
 omega_min, omega_max = 25,66
 omega_step = 0.25
@@ -20,7 +21,7 @@ bar_pattern_speeds = np.arange(omega_min,omega_max+omega_step,omega_step)
 bar_pattern_speeds_m_kpc_s=np.array(1000*bar_pattern_speeds, dtype=int)
 
 
-DOMULTIPROCESSING = True
+DOMULTIPROCESSING = False
 def main(monte_carlo_index):
 
     # do this a handful of times 
@@ -55,7 +56,7 @@ def main(monte_carlo_index):
 
 
     # iterate over the bar pattern speeds
-
+    starttime = datetime.datetime.now()
 
     if DOMULTIPROCESSING:
         ncpu = mp.cpu_count()
@@ -64,12 +65,12 @@ def main(monte_carlo_index):
         for index in range(len(bar_pattern_speeds)):
             barpoly = [barpoly_ferrone_2023[0], bar_pattern_speeds[index]]
             temp_base_name = "constant_cluster_initial_conditions_{:d}_bar_pattern_speed_{:d}_m_kpc_s".format(monte_carlo_index,bar_pattern_speeds_m_kpc_s[index])
-            print(barpoly)
             Pool.apply_async(sebp.constant_cluster_initial_conditions, args=(cluster_initial_conditions,particle_initial_conditions,GCname,MWpotential,internal_dynamics,barname,barparams,barpoly,integrationtime,dt,NSKIP,temp_base_name,description,writestream))
         Pool.close()
         Pool.join()
         Pool.terminate()
     else:
+
         for index in range(len(bar_pattern_speeds)):
 
             barpoly = [barpoly_ferrone_2023[0], bar_pattern_speeds[index]]
@@ -91,7 +92,10 @@ def main(monte_carlo_index):
                 description=description,
                 writestream=writestream)
 
+    endtime = datetime.datetime.now()
     print("Done with monte carlo index {:d}".format(monte_carlo_index))
+    print("Elapsed time: ", endtime-starttime)
+    
     return None
 if __name__=="__main__":
     montecarloindex=sys.argv[1]

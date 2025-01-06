@@ -4,9 +4,6 @@ from stream_evolution_in_barred_potential.py
 
 """
 
-
-
-
 import stream_evolution_in_barred_potential as sebp
 from astropy import units as u
 import numpy as np 

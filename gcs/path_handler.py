@@ -55,6 +55,12 @@ def old_streams(MWpotential,GCname,montecarlokey,NP):
     return paths['simulations'] + "Streams/" + MWpotential + "/" + GCname + "/" + str(NP) + "/" + fname
 
 
+def BouldriniDarkmatterSubloes():
+    """
+        for now there is just one 
+    """
+    return "/scratch2/sferrone/simulations/DarkMatterSubhaloes/DMsubhaloMW_data.hdf5"
+
 def GC_orbits(MWpotential, GCname):
     assert(isinstance(GCname, str))
     assert(isinstance(MWpotential, str))

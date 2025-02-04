@@ -16,3 +16,4 @@ dependencies:
   - ipykernel
   - pip==24.2
   - scipy 
+  - datetime

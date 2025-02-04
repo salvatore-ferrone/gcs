@@ -21,6 +21,10 @@ paths_file_path = current_script_directory / 'paths.yaml'
 with open(paths_file_path, 'r') as file:
     paths = yaml.safe_load(file)
 
+def Orbits_DarkMatterSubhalo(PopulationName,MWpotential):
+    outname = PopulationName + "-orbits.hdf5"
+    dirname = _Orbits(MWpotential)
+    return dirname + outname
 
 def Stream(GCname,NP,potential_env,internal_dynamics,montecarlokey):
     outname = GCname + "-Stream-" + montecarlokey + ".hdf5"
@@ -105,6 +109,12 @@ def ImpactGeometry(GCname,MWpotential,montecarlokey,suspect,targetnumber):
     """ added target number because one GC can impact a stream more than once """
     outfname = GCname + "-" + montecarlokey + "-" + suspect + "-" + str(targetnumber) + ".hdf5"
     return _ImpactGeometry(GCname,MWpotential,montecarlokey) + outfname
+
+
+def _Orbits(MWpotential):
+    outdir = paths['simulations'] + "Orbits/" + MWpotential + "/"
+    os.makedirs(outdir,exist_ok=True)
+    return outdir
 
 def _ImpactGeometry(GCname,MWpotential,montecarlokey):
     outdir = paths['simulations'] + "ImpactGeometry/" + MWpotential + "/" + GCname + "/" + montecarlokey + "/"

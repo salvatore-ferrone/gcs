@@ -77,31 +77,24 @@ def main():
         author_email = author_email,
         description = description,
         integration_time = integration_time,
-        dt = dt,
+        dt = timestep,
         NSTEP = NSTEP,
-        unitT = unitT,
-        unitV = unitV,
-        unitM = unitM,
         timestep = timestep,
-        time_stamps = time_stamps,
         Nparticles = Nparticles,
         MWpotential = MWpotential,
-        MWparams = MWparams,
-        mass_profile = mass_profile,
-        MF_params = MF_params
     )
     # save the output
     outname = gcs.path_handler.Orbits_DarkMatterSubhalo(PopulationName,MWpotential)
     with h5py.File(outname, 'w') as f:
-        f.create_dataset("xt", data=xt)
-        f.create_dataset("yt", data=yt)
-        f.create_dataset("zt", data=zt)
-        f.create_dataset("vxt", data=vxt)
-        f.create_dataset("vyt", data=vyt)
-        f.create_dataset("vzt", data=vzt)
-        f.create_dataset("time_stamps", data=time_stamps)
-        f.create_dataset("Mass", data=mh)
-        f.create_dataset("rs", data=rs)
+        f.create_dataset("xt", data=xt,dtype=np.float32)
+        f.create_dataset("yt", data=yt,dtype=np.float32)
+        f.create_dataset("zt", data=zt,dtype=np.float32)
+        f.create_dataset("vxt", data=vxt,dtype=np.float32)
+        f.create_dataset("vyt", data=vyt,dtype=np.float32)
+        f.create_dataset("vzt", data=vzt,dtype=np.float32)
+        f.create_dataset("time_stamps", data=time_stamps,dtype=np.float32)
+        f.create_dataset("Mass", data=mh,dtype=np.float32)
+        f.create_dataset("rs", data=rs,dtype=np.float32)
         for key in attributes:
             f.attrs[key] = attributes[key]
     print("Done with", outname)
@@ -133,3 +126,7 @@ def get_velocities_for_a_dm_halo(mass_profile,MF_params,velocities,positions):
 
 
 
+
+
+if __name__ == "__main__":
+    main()

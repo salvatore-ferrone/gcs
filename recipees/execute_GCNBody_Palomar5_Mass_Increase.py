@@ -43,9 +43,9 @@ if __name__ == "__main__" :
     internal_dynamics   =   "isotropic-plummer_mass_increase"
     GCorbits_potential  =   "pouliasis2017pii-GCNBody"
     MWpotential         =   "pouliasis2017pii"
-    NP                  =   int(1e0)
+    NP                  =   int(1e1)
     T0                  =   -5e9*u.yr
-    integrationtime     =   5e6*u.yr
+    integrationtime     =   5e9*u.yr
     dt                  =   1e4*u.yr
     NSKIP               =   int(100)
     
@@ -146,12 +146,12 @@ if __name__ == "__main__" :
     ############ THE SAVIOR OF THE DATA ############
     ################################################
     attributes["GCnames"]           =   GCnames
+    attributes["computation_time"]  =   (computation_time.seconds)
     gcs.writers.Stream.stream(outfilename,stream_final,tesc,attributes)
     print(outfilename, "saved")
     ################################################
     ############## SAVE THE SNAP SHOTS #############
     ################################################
-    attributes["computation_time"]  =   float(computation_time.seconds)
     snapshottimesampling            =   tsampling[::NSKIP]
     gcs.writers.Stream.StreamSnapShots(snapshotfilename,snapshottimesampling,attributes,tempdir)
     print(snapshotfilename, "saved")

@@ -9,11 +9,8 @@
 # Load modules
 module purge
 module load python
-
 # Activate your conda environment
 source /data/sferrone/miniconda3/etc/profile.d/conda.sh
 conda activate gcs
-
-
 # Run script
 srun python3 subhalo_orbits.py

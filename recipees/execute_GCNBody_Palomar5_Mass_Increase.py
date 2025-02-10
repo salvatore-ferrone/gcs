@@ -117,7 +117,6 @@ if __name__ == "__main__" :
     ###############################################
     ########### INITIALIZE THE INTEGRATOR #########
     ###############################################
-
     integrator = tstrippy.integrator
     integrator.setstaticgalaxy(*staticgalaxy)
     integrator.setintegrationparameters(*integrationparameters)

@@ -43,24 +43,24 @@ if __name__ == "__main__" :
     internal_dynamics   =   "isotropic-plummer_mass_increase"
     GCorbits_potential  =   "pouliasis2017pii-GCNBody"
     MWpotential         =   "pouliasis2017pii"
-    NP                  =   int(1e1)
+    NP                  =   int(1e0)
     T0                  =   -5e9*u.yr
-    integrationtime     =   5e9*u.yr
+    integrationtime     =   5e6*u.yr
     dt                  =   1e4*u.yr
     NSKIP               =   int(100)
     
     attributes = {
         "README":README,
         "NP":NP,
-        "T":T0,
-        "dt":dt,
+        "T":T0.value,
+        "dt":dt.value,
         "NSKIP":NSKIP,
         "GCname":GCname,
         "montecarlokey":montecarlokey,
         "internal_dynamics":internal_dynamics,
         "GCorbits_potential":GCorbits_potential,
         "MWpotential":MWpotential,
-        "MASS":MASS
+        "MASS":MASS.value
     }
     
     ##### i/o files ####
@@ -133,22 +133,26 @@ if __name__ == "__main__" :
     ########### PERFORM THE INTEGRATION ###########
     ###############################################
     starttime=datetime.datetime.now()
-    phase_space,tesc = integrator.leapfrogtofinalpositions()
-    endtime=datetime.datetime.now()
-    computation_time = endtime-starttime
+    integrator.leapfrogtofinalpositions()
+    # extract the data
+    xf,yf,zf            = integrator.xf.copy(),integrator.yf.copy(),integrator.zf.copy()
+    vxf,vyf,vzf         = integrator.vxf.copy(),integrator.vyf.copy(),integrator.vzf.copy()
+    tesc                = integrator.tesc.copy()
+    stream_final        = np.array([xf,yf,zf,vxf,vyf,vzf])
+    endtime             = datetime.datetime.now()
+    computation_time    = endtime-starttime
     print("Integration took",endtime-starttime)
     ################################################
     ############ THE SAVIOR OF THE DATA ############
     ################################################
-    attributes["GCnames"]=GCnames
-    gcs.writers.Stream.stream(outfilename,phase_space,tesc,attributes)
+    attributes["GCnames"]           =   GCnames
+    gcs.writers.Stream.stream(outfilename,stream_final,tesc,attributes)
     print(outfilename, "saved")
     ################################################
     ############## SAVE THE SNAP SHOTS #############
     ################################################
-    attributes["computation_time"]=computation_time
-    T,dt,Nstep,tsampling=gcs.misc.get_time_sampling_from_years_to_integration_units(T=T,dt=dt)
-    snapshottimesampling = tsampling[::NSKIP]
+    attributes["computation_time"]  =   float(computation_time.seconds)
+    snapshottimesampling            =   tsampling[::NSKIP]
     gcs.writers.Stream.StreamSnapShots(snapshotfilename,snapshottimesampling,attributes,tempdir)
     print(snapshotfilename, "saved")
     

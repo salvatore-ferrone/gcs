@@ -15,12 +15,13 @@ def load_GCnames_except_for_the_target(GCname):
     return GCnames
 
 
-def load_perturbers(GCnames,GCorbits_potential,montecarlokey):
+def load_perturbers(GCnames,GCorbits_potential,montecarloindex):
     assert isinstance(GCnames,list)
+    montecarlokey = "monte-carlo-"+str(montecarloindex).zfill(3)
     ts,xs,ys,zs,_,_,_=gcs.extractors.GCOrbits.extract_orbits_from_all_GCS(GCnames,GCorbits_potential,montecarlokey)
-    Masses,rh_mes,_,_,_,_,_,_=gcs.extractors.MonteCarloObservables.extract_all_GC_observables(GCnames,montecarlokey)
-    r_plums = [gcs.misc.half_mass_to_plummer(rh_m).value for rh_m in rh_mes]
-    Masses = [Mass.value for Mass in Masses]
+    Masses,rh_mes,_,_,_,_,_,_=gcs.extractors.MonteCarloObservables.extract_all_GC_observables(GCnames,montecarloindex)
+    r_plums = [gcs.misc.half_mass_to_plummer(rh_m) for rh_m in rh_mes]
+    Masses = [Mass for Mass in Masses]
     perturbers=ts,xs,ys,zs,Masses,r_plums
     return perturbers
 
@@ -33,9 +34,12 @@ def initperturbers(integrator,perturberargs):
 
 
 if __name__ == "__main__" : 
+    # montecarloindex = int(sys.argv[1])
+    montecarloindex = 1
+
     MASS                =   1e5*u.Msun
     GCname              =   "Pal5"
-    montecarlokey       =   "monte-carlo-"+str(int(sys.argv[1])).zfill(3)
+    montecarlokey       =   "monte-carlo-"+str(montecarloindex).zfill(3)
     internal_dynamics   =   "isotropic-plummer_mass_increase"
     GCorbits_potential  =   "pouliasis2017pii-GCNBody"
     MWpotential         =   "pouliasis2017pii"
@@ -77,7 +81,7 @@ if __name__ == "__main__" :
     unitV = u.km/u.s
     unitL = u.kpc
     unitT = unitL/unitV
-    NSTEP = int((T0.to(u.yr).value)/dt.to(u.yr).value)
+    NSTEP = int((integrationtime.to(u.yr).value)/dt.to(u.yr).value)
     T0=T0.to(unitT)
     integrationtime = integrationtime.to(unitT)
     dt = dt.to(unitT)
@@ -98,21 +102,21 @@ if __name__ == "__main__" :
     # sample the new plummer distribution
     G = MWparams[0]
     ## make a new sampling of the plummer sphere for the new mass
-    _,rh_m,_,_,_,_,_,_=gcs.extractors.MonteCarloObservables.extract_all_GC_observables([GCname],montecarlokey)
-    xp,yp,zp,vxp,vyp,vzp = tstrippy.ergodic.isotropicplummer(G,MASS,rh_m[0],NP)
-    rplummer= gcs.misc.half_mass_to_plummer(rh_m[0]).value
+    _,rh_m,_,_,_,_,_,_=gcs.extractors.MonteCarloObservables.extract_all_GC_observables([GCname],montecarloindex)
+    xp,yp,zp,vxp,vyp,vzp = tstrippy.ergodic.isotropicplummer(G,MASS.value,rh_m[0],NP)
+    rplummer= gcs.misc.half_mass_to_plummer(rh_m[0])
 
     # Extract the orbit  
     orbit_file_name                             =   ph.GC_orbits(GCorbits_potential,GCname)
     tH,xH,yH,zH,vxH,vyH,vzH                     =   gcs.extractors.GCOrbits.extract_whole_orbit(orbit_file_name,montecarlokey)    
     xHost,yHost,zHost,vxHost,vyHost,vzHost      =   gcs.misc.interpolate_finer_grid(tsampling,tH,xH,yH,zH,vxH,vyH,vzH)
-    inithostperturber = (tsampling,xHost,yHost,zHost,vxHost,vyHost,vzHost,MASS,rplummer)
+    inithostperturber = (tsampling,xHost,yHost,zHost,vxHost,vyHost,vzHost,MASS.value,rplummer)
     # place the particle positions 
     initialkinematics = (xp+xHost[0],yp+yHost[0],zp+zHost[0],vxp+vxHost[0],vyp+vyHost[0],vzp+vzHost[0])
     
     # get the perturbers 
     GCnames     = load_GCnames_except_for_the_target(GCname)
-    perturbers  = load_perturbers(GCnames,GCorbits_potential,montecarlokey)
+    perturbers  = load_perturbers(GCnames,GCorbits_potential,montecarloindex)
     
     ###############################################
     ########### INITIALIZE THE INTEGRATOR #########
@@ -129,8 +133,9 @@ if __name__ == "__main__" :
     ########### PERFORM THE INTEGRATION ###########
     ###############################################
     starttime=datetime.datetime.now()
-    phase_space,tesc = integrator.leapfrogtofinalpositions(integrator)
+    phase_space,tesc = integrator.leapfrogtofinalpositions()
     endtime=datetime.datetime.now()
+    computation_time = endtime-starttime
     print("Integration took",endtime-starttime)
     ################################################
     ############ THE SAVIOR OF THE DATA ############
@@ -141,6 +146,7 @@ if __name__ == "__main__" :
     ################################################
     ############## SAVE THE SNAP SHOTS #############
     ################################################
+    attributes["computation_time"]=computation_time
     T,dt,Nstep,tsampling=gcs.misc.get_time_sampling_from_years_to_integration_units(T=T,dt=dt)
     snapshottimesampling = tsampling[::NSKIP]
     gcs.writers.Stream.StreamSnapShots(snapshotfilename,snapshottimesampling,attributes,tempdir)

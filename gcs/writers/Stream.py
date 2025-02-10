@@ -60,7 +60,11 @@ def StreamSnapShots(outfilename,t_sampling,attributes,inputdir):
             phase_space = read_fortran_stream_binary_file(inputdir+filenames[i])
             outfile["StreamSnapShots"].create_dataset(str(indexes[i]),data=phase_space)
         for attr in attributes:
-            outfile.attrs[attr] = attributes[attr]        
+            try:
+                outfile.attrs[attr] = attributes[attr]
+            except TypeError as e:
+                print(f"Error writing attribute {attr}: {attributes[attr]}")
+                raise e
     return None
 
 def read_fortran_stream_binary_file(filename):

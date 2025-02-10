@@ -5,6 +5,7 @@ import datetime
 import sys 
 import os
 import tstrippy
+import csv
 import numpy as np 
 README = "The reviewer wanted a more massive Palomar 5. This script is the answer to that request. The script is a copy of the one in recipees/execute_GCNBody_Palomar5.py with the only difference being the mass of the Palomar 5 cluster. The mass of the Palomar 5 cluster is set to XXX Msun."
 
@@ -31,7 +32,14 @@ def initperturbers(integrator,perturberargs):
     integrator.initperturbers(*perturberargs)
     return integrator
 
-
+def load_targetted_gcs(GCname,MWpotential,montecarlokey):
+    path_suspects = gcs.path_handler.PerturberSuspects(GCname,MWpotential,montecarlokey)
+    suspects=[]
+    with open(path_suspects, mode='r') as file:
+        csv_reader = csv.DictReader(file)
+        for row in csv_reader:
+            suspects.append(row['suspects']) 
+    return suspects
 
 if __name__ == "__main__" : 
     # montecarloindex = int(sys.argv[1])
@@ -114,8 +122,9 @@ if __name__ == "__main__" :
     # place the particle positions 
     initialkinematics = (xp+xHost[0],yp+yHost[0],zp+zHost[0],vxp+vxHost[0],vyp+vyHost[0],vzp+vzHost[0])
     
-    # get the perturbers 
-    GCnames     = load_GCnames_except_for_the_target(GCname)
+    # get the perturbers, only those that have close encounters
+    # GCnames     = load_GCnames_except_for_the_target(GCname)
+    GCnames    = load_targetted_gcs(GCname,MWpotential,montecarlokey)
     perturbers  = load_perturbers(GCnames,GCorbits_potential,montecarloindex)
     
     ###############################################

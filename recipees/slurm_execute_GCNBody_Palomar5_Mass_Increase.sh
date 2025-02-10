@@ -2,8 +2,8 @@
 #SBATCH --output=pal5_increase_mass.out
 #SBATCH --error=pal5_increase_mass.err
 #SBATCH --job-name=pal5_increase_mass
-#SBATCH --partition=short
-#SBATCH --time=29
+#SBATCH --partition=medium
+#SBATCH --time=1439
 #SBATCH --array=1-10
 
 # Load modules

@@ -43,8 +43,7 @@ def load_targetted_gcs(GCname,MWpotential,montecarlokey):
     return suspects
 
 if __name__ == "__main__" : 
-    # montecarloindex = int(sys.argv[1])
-    montecarloindex = 0
+    montecarloindex = int(sys.argv[1])
 
     MASS                =   1e5*u.Msun
     GCname              =   "Pal5"

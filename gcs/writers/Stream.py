@@ -4,7 +4,7 @@ import datetime
 import numpy as np 
 
 author = "Salvatore Ferrone"
-author_affiliation = "Sapienza University of Rome"
+author_affiliation = "Sapienza University of Rome AND the Paris Observatory"
 author_email = "salvatore.ferrone@uniroma1.it"
 description = "Integrating star-particles with in a globular cluster"
 

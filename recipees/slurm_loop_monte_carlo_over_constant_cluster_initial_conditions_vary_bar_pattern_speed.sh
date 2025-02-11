@@ -1,5 +1,6 @@
 #!/bin/bash
-
+#SBATCH --partition=medium
+#SBATCH --time=1339
 
 
 ##### This scrip submits multiple jobs to the slurm queue with dependencies.
@@ -22,7 +23,7 @@
 
 
 # Number of iterations over the initial conditions
-OUTER_LOOP=5
+OUTER_LOOP=2
 
 # Number of bar pattern speeds. THIS IS NOT arbitrary but has to be consistent with what's inside the python script: `execute_constant_cluster_initial_conditions_vary_bar_pattern_speed.py`
 #   This is consistent with the number of pattern speeds from 

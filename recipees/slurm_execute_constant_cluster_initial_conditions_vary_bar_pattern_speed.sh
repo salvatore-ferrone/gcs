@@ -3,7 +3,7 @@
 #SBATCH --error=CCIC_5K.err
 #SBATCH --job-name=NGC6397_5_particles
 #SBATCH --partition=medium
-#SBATCH --time=1439
+#SBATCH --time=1339
 
 
 # Load modules

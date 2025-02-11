@@ -143,7 +143,7 @@ if __name__ == "__main__" :
     ###############################################
     starttime=datetime.datetime.now()
     integrator.leapfrogtofinalpositions()
-    # extract the data
+    ########### extract the data ##################
     xf,yf,zf            = integrator.xf.copy(),integrator.yf.copy(),integrator.zf.copy()
     vxf,vyf,vzf         = integrator.vxf.copy(),integrator.vyf.copy(),integrator.vzf.copy()
     tesc                = integrator.tesc.copy()

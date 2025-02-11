@@ -32,6 +32,7 @@ def initperturbers(integrator,perturberargs):
     integrator.initperturbers(*perturberargs)
     return integrator
 
+
 def load_targetted_gcs(GCname,MWpotential,montecarlokey):
     path_suspects = gcs.path_handler.PerturberSuspects(GCname,MWpotential,montecarlokey)
     suspects=[]
@@ -51,7 +52,7 @@ if __name__ == "__main__" :
     internal_dynamics   =   "isotropic-plummer_mass_increase"
     GCorbits_potential  =   "pouliasis2017pii-GCNBody"
     MWpotential         =   "pouliasis2017pii"
-    NP                  =   int(1e3)
+    NP                  =   int(1e1)
     T0                  =   -5e9*u.yr
     integrationtime     =   5e9*u.yr
     dt                  =   1e4*u.yr

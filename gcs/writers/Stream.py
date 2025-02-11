@@ -45,7 +45,7 @@ def get_temp_snapshot_filenames(tempdir):
     return myfiles,orderedindexes
 
 
-def StreamSnapShots(outfilename,t_sampling,attributes,inputdir):
+def StreamSnapShots(outfilename,t_sampling,tesc,attributes,inputdir):
     """
     This function assembles the stream snapshots into a single file
     """
@@ -65,6 +65,8 @@ def StreamSnapShots(outfilename,t_sampling,attributes,inputdir):
             except TypeError as e:
                 print(f"Error writing attribute {attr}: {attributes[attr]}")
                 raise e
+        # add the escape time
+        outfile.create_dataset("tesc",data=tesc)
     return None
 
 def read_fortran_stream_binary_file(filename):

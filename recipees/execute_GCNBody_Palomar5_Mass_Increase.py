@@ -55,7 +55,7 @@ if __name__ == "__main__" :
     T0                  =   -5e9*u.yr
     integrationtime     =   5e9*u.yr
     dt                  =   1e4*u.yr
-    NSKIP               =   int(100)
+    NSKIP               =   int(10000)
     
     attributes = {
         "README":README,

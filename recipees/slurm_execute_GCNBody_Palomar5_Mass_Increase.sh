@@ -1,10 +1,11 @@
 #!/bin/sh
-#SBATCH --output=10000P.out
-#SBATCH --error=10000P.err
-#SBATCH --job-name=10000P
+#SBATCH --output=10000P-small_io.out
+#SBATCH --error=10000P-small_io.err
+#SBATCH --job-name=10000P-small_io
 #SBATCH --partition=medium
 #SBATCH --time=1339
-#SBATCH --array=[0,2,5,9,19,27,35]
+##### OK NAH SBATCH --array=[0,2,5,9,19,27,35]
+#SBATCH --array=[7,22,24,32,33,42,48,49]
 
 # Load modules
 module purge

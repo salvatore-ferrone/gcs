@@ -32,6 +32,7 @@ def initperturbers(integrator,perturberargs):
     integrator.initperturbers(*perturberargs)
     return integrator
 
+
 def load_targetted_gcs(GCname,MWpotential,montecarlokey):
     path_suspects = gcs.path_handler.PerturberSuspects(GCname,MWpotential,montecarlokey)
     suspects=[]
@@ -42,8 +43,7 @@ def load_targetted_gcs(GCname,MWpotential,montecarlokey):
     return suspects
 
 if __name__ == "__main__" : 
-    # montecarloindex = int(sys.argv[1])
-    montecarloindex = 1
+    montecarloindex = int(sys.argv[1])
 
     MASS                =   1e5*u.Msun
     GCname              =   "Pal5"
@@ -51,11 +51,11 @@ if __name__ == "__main__" :
     internal_dynamics   =   "isotropic-plummer_mass_increase"
     GCorbits_potential  =   "pouliasis2017pii-GCNBody"
     MWpotential         =   "pouliasis2017pii"
-    NP                  =   int(1e1)
+    NP                  =   int(1e4)
     T0                  =   -5e9*u.yr
     integrationtime     =   5e9*u.yr
     dt                  =   1e4*u.yr
-    NSKIP               =   int(100)
+    NSKIP               =   int(10000)
     
     attributes = {
         "README":README,
@@ -110,7 +110,7 @@ if __name__ == "__main__" :
     # sample the new plummer distribution
     G = MWparams[0]
     ## make a new sampling of the plummer sphere for the new mass
-    _,rh_m,_,_,_,_,_,_=gcs.extractors.MonteCarloObservables.extract_all_GC_observables([GCname],montecarloindex)
+    _,_,_,_,_,_,_,rh_m=gcs.extractors.MonteCarloObservables.extract_all_GC_observablesPre2025([GCname],montecarloindex)
     xp,yp,zp,vxp,vyp,vzp = tstrippy.ergodic.isotropicplummer(G,MASS.value,rh_m[0],NP)
     rplummer= gcs.misc.half_mass_to_plummer(rh_m[0])
 
@@ -143,7 +143,7 @@ if __name__ == "__main__" :
     ###############################################
     starttime=datetime.datetime.now()
     integrator.leapfrogtofinalpositions()
-    # extract the data
+    ########### extract the data ##################
     xf,yf,zf            = integrator.xf.copy(),integrator.yf.copy(),integrator.zf.copy()
     vxf,vyf,vzf         = integrator.vxf.copy(),integrator.vyf.copy(),integrator.vzf.copy()
     tesc                = integrator.tesc.copy()

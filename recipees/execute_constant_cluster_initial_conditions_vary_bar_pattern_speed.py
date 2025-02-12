@@ -19,13 +19,13 @@ bar_pattern_speeds = np.arange(omega_min,omega_max+omega_step,omega_step)
 bar_pattern_speeds_m_kpc_s=np.array(1000*bar_pattern_speeds, dtype=int)
 
 # The parameters of of the code 
-GCname              =   "NGC4590"
+GCname              =   "NGC6397"
 MWpotential         =   "pouliasis2017pii"
 internal_dynamics   =   "isotropic-plummer"
 barname             =   "longmuralibar"
 barparams           =   [22968000000, 4, 1, 0.5]
 barpoly_ferrone_2023=   [0.4363323129985824, 38]
-NP                  =   int(5e3)
+NP                  =   int(1e5)
 integrationtime     =   5e9*u.yr
 dt                  =   1e5*u.yr
 NSKIP               =   int(10)  

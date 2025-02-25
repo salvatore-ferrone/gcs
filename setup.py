@@ -13,8 +13,6 @@ setup(
     ],
     package_data={
         # If any package contains *.yaml files, include them:
-        'gcs': ['*.yaml'],
-        # And if you need to be more specific, you can specify the package name:
-        # 'gcs': ['paths.yaml'],
+        'gcs': ['*.yaml', 'data/*.yaml'],
     },
 )

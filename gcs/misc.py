@@ -1,5 +1,33 @@
 import numpy as np
 from astropy import units as u
+import yaml 
+from pkg_resources import resource_filename
+
+# from pathlib import Path
+
+# Get the directory of the current script
+# current_script_directory = Path(__file__).parent
+
+# Construct the path to the data file relative to the current script
+# path_to_data = current_script_directory / ".." / "data" 
+
+
+def MWreferenceframe():
+    from astropy import coordinates
+    from astropy import units as u
+    path_to_frame = resource_filename('gcs', 'data/MWrefframe001.yaml')
+    with open(path_to_frame, 'r') as frame:
+        try:
+            frame_data = yaml.safe_load(frame)
+        except yaml.YAMLError as exc:
+            print(exc)
+        galcen_distance=frame_data['value']['galcen_distance']*u.Unit(frame_data['unit']['galcen_distance'])
+        z_sun   =   frame_data['value']['z_sun']    *   u.Unit(frame_data['unit']['z_sun'])
+        vSun    =   frame_data['value']['vSun']     *   u.Unit(frame_data['unit']['vSun'])
+        vLSR    =   frame_data['value']['vLSR']     *   u.Unit(frame_data['unit']['vLSR'])
+    return coordinates.Galactocentric(galcen_distance = galcen_distance, galcen_v_sun=vLSR+vSun, z_sun=z_sun)
+
+
 
 def half_mass_to_plummer(half_mass):
     """Convert half-mass radius to Plummer radius."""

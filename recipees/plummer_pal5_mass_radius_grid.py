@@ -59,16 +59,23 @@ def load_targetted_gcs(GCname,MWpotential,montecarlokey):
 
 
 # MASS GRID AND RADIUS GRID
-N_MASS_SAMPLING = 5
-N_RADIUS_SAMPLING = 5
+SIZE_GRID = 5
+N_MASS_SAMPLING = SIZE_GRID
+N_RADIUS_SAMPLING = SIZE_GRID # square grid
 MASS_GRID = np.logspace(4,5.2,N_MASS_SAMPLING) # in Msun
 RADIUS_GRID = np.linspace(5,30,N_RADIUS_SAMPLING)/1000 # in kpc
 DONTCOMPUTE=True
 if __name__ == "__main__" : 
-    montecarloindex = int(sys.argv[1])
-    MASS_INDEX = int(sys.argv[2])
-    RADIUS_INDEX = int(sys.argv[3])
+    # MASS_INDEX = int(sys.argv[2])
+    # RADIUS_INDEX = int(sys.argv[3])
+    linear_index = int(sys.argv[1])
+    montecarloindex = int(9)
+    # iterate over the masses and then the radii
+    MASS_INDEX = linear_index//SIZE_GRID
+    RADIUS_INDEX = linear_index%SIZE_GRID
 
+    assert len(sys.argv) == 2, "Usage: python3 plummer_pal5_mass_radius_grid.py linear_index"
+    assert linear_index < N_MASS_SAMPLING*N_RADIUS_SAMPLING, "linear_index must be less than {:d}".format(N_MASS_SAMPLING*N_RADIUS_SAMPLING)
     assert MASS_INDEX < N_MASS_SAMPLING, "MASS_INDEX must be less than {:d}".format(N_MASS_SAMPLING)
     assert RADIUS_INDEX < N_RADIUS_SAMPLING, "RADIUS_INDEX must be less than {:d}".format(N_RADIUS_SAMPLING)
 
@@ -81,7 +88,7 @@ if __name__ == "__main__" :
     internal_dynamics   =   "isotropic-plummer_mass_radius_grid"
     GCorbits_potential  =   "pouliasis2017pii-GCNBody"
     MWpotential         =   "pouliasis2017pii"
-    NP                  =   int(1e2)
+    NP                  =   int(5)
     T0                  =   -5e9*u.yr
     integrationtime     =   5e9*u.yr
     dt                  =   1e4*u.yr

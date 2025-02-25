@@ -21,6 +21,20 @@ paths_file_path = current_script_directory / 'paths.yaml'
 with open(paths_file_path, 'r') as file:
     paths = yaml.safe_load(file)
 
+def StreamMassRadius(GCname,NP,potential_env,internal_dynamics,montecarlokey,Mass,radius):
+    assert isinstance(Mass,int)
+    assert isinstance(radius,int)
+    # RADIUS IN PC and MASS IN MSUN
+    outname = GCname + "-Stream-" + montecarlokey + "_mass_{:2d}_radius_{:2d}.hdf5".format(Mass,radius)
+    return _Stream(GCname,NP,potential_env,internal_dynamics) + outname
+
+def StreamShapShotsMassRadius(GCname,NP,potential_env,internal_dynamics,montecarlokey,Mass,radius):
+    assert isinstance(Mass,int)
+    assert isinstance(radius,int)
+    # RADIUS IN PC and MASS IN MSUN
+    outname = GCname + "-StreamSnapShots-" + montecarlokey + "_mass_{:2d}_radius_{:2d}.hdf5".format(Mass,radius)
+    return _StreamSnapShots(GCname,NP,potential_env,internal_dynamics) + outname
+
 def Orbits_DarkMatterSubhalo(PopulationName,MWpotential):
     outname = PopulationName + "-orbits.hdf5"
     dirname = _Orbits(MWpotential)

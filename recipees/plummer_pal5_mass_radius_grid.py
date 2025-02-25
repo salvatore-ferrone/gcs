@@ -64,7 +64,7 @@ N_MASS_SAMPLING = SIZE_GRID
 N_RADIUS_SAMPLING = SIZE_GRID # square grid
 MASS_GRID = np.logspace(4,5.2,N_MASS_SAMPLING) # in Msun
 RADIUS_GRID = np.linspace(5,30,N_RADIUS_SAMPLING)/1000 # in kpc
-DONTCOMPUTE=True
+DONTCOMPUTE=False
 if __name__ == "__main__" : 
     # MASS_INDEX = int(sys.argv[2])
     # RADIUS_INDEX = int(sys.argv[3])
@@ -212,7 +212,7 @@ if __name__ == "__main__" :
         ############## SAVE THE SNAP SHOTS #############
         ################################################
         snapshottimesampling            =   tsampling[::NSKIP]
-        gcs.writers.Stream.StreamSnapShots(snapshotfilename,snapshottimesampling,attributes,tempdir)
+        gcs.writers.Stream.StreamSnapShots(snapshotfilename,snapshottimesampling,tesc,attributes,tempdir)
         print(snapshotfilename, "saved")
     
         

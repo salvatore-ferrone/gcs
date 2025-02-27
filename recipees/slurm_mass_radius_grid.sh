@@ -2,8 +2,8 @@
 #SBATCH --output=mass_radius_grid.out
 #SBATCH --error=mass_radius_grid.err
 #SBATCH --job-name=mass_radius_grid
-#SBATCH --partition=short
-#SBATCH --time=10
+#SBATCH --partition=verylong
+#SBATCH --time=21000
 #SBATCH --array=[0-24]
 
 # Load modules

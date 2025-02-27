@@ -88,7 +88,7 @@ if __name__ == "__main__" :
     internal_dynamics   =   "isotropic-plummer_mass_radius_grid"
     GCorbits_potential  =   "pouliasis2017pii-GCNBody"
     MWpotential         =   "pouliasis2017pii"
-    NP                  =   int(100)
+    NP                  =   int(1e5)
     T0                  =   -5e9*u.yr
     integrationtime     =   5e9*u.yr
     dt                  =   1e4*u.yr

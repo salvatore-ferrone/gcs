@@ -90,7 +90,7 @@ if __name__ == "__main__" :
     MWpotential         =   "pouliasis2017pii"
     NP                  =   int(5)
     T0                  =   -5e9*u.yr
-    integrationtime     =   5e9*u.yr
+    integrationtime     =   5e6*u.yr
     dt                  =   1e4*u.yr
     NSKIP               =   int(10000)
     
@@ -126,7 +126,7 @@ if __name__ == "__main__" :
         cond = True
     if cond:
         sys.exit(0)
-    tempdir=ph._TemporaryStreamSnapShots(GCorbits_potential,GCname,NP,internal_dynamics,montecarlokey)
+    tempdir=ph._TemporaryStreamSnapShotsMassRadiusGrid(GCorbits_potential,GCname,NP,internal_dynamics,montecarlokey,MASS_INDEX,RADIUS_INDEX)
 
     if DONTCOMPUTE == True:
         print("DONTCOMPUTE is set to True. Exiting")

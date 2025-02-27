@@ -168,6 +168,14 @@ def _StreamSnapShots(GCname,NP,potential_env,internal_dynamics):
     os.makedirs(outpath,exist_ok=True)
     return outpath
 
+def _TemporaryStreamSnapShotsMassRadiusGrid(MWpotential,GCname,NP,internal_dynamics,montecarlokey,MassIndex,radiusIndex):
+    assert(isinstance(MassIndex,int))
+    assert(isinstance(radiusIndex,int))
+    mass_radius = "mass_{:s}_radius_{:s}".format(str(MassIndex).zfill(3),str(radiusIndex).zfill(3))
+    outpath = paths['temporary'] + "StreamSnapShots/" + MWpotential + "/" + GCname + "/" + str(NP) + "/" + internal_dynamics + "/" + montecarlokey + "/" + mass_radius + "/"
+    os.makedirs(outpath,exist_ok=True)
+    return outpath
+
 def _TemporaryStreamSnapShots(MWpotential,GCname,NP,internal_dynamics,montecarlokey):
     outpath = paths['temporary'] + "StreamSnapShots/" + MWpotential + "/" + GCname + "/" + str(NP) + "/" + internal_dynamics + "/" + montecarlokey + "/"
     os.makedirs(outpath,exist_ok=True)

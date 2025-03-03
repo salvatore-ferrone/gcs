@@ -1,9 +1,9 @@
 #!/bin/sh
-#SBATCH --output=LONG_mass_radius_grid.out
-#SBATCH --error=LONG_mass_radius_grid.err
-#SBATCH --job-name=LONG_mass_radius_grid
+#SBATCH --output=10k_mass_radius_grid.out
+#SBATCH --error=10k_mass_radius_grid.err
+#SBATCH --job-name=10k_mass_radius_grid
 #SBATCH --partition=long
-#SBATCH --time=7200
+#SBATCH --time=7100
 #SBATCH --array=[0-5]
 
 # Load modules

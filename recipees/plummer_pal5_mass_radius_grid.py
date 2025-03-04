@@ -214,7 +214,7 @@ if __name__ == "__main__" :
     assert len(sys.argv) == 4, "Usage: python3 plummer_pal5_mass_radius_grid.py MASS HALF_MASS_RADIUS NP"
     montecarloindex=9
     main(NP,MASS_INDEX,RADIUS_INDEX,montecarloindex)
-    print("Done with",MASS,HALF_MASS_RADIUS,NP)
+    print("Done with",MASS_INDEX,RADIUS_INDEX,NP)
 
 
 

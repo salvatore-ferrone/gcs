@@ -13,9 +13,9 @@ RADIUS_GRID = np.linspace(5,30,N_RADIUS_SAMPLING)/1000 # in kpc
 
 
 # WE ARE ALSO ITERATING OVER THE PARTICLES
-start = 90
-stop = 99
-step = 1
+start = 9000
+stop = 9900
+step = 100
 mysequence = np.arange(start,stop+step,step,dtype=int)
 mysequence[0]=mysequence[0]//2
 

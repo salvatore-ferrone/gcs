@@ -1,10 +1,10 @@
 #!/bin/sh
-#SBATCH --output=10k_mass_radius_grid.out
-#SBATCH --error=10k_mass_radius_grid.err
-#SBATCH --job-name=10k_mass_radius_grid
-#SBATCH --partition=long
-#SBATCH --time=7100
-#SBATCH --array=[0-5]
+#SBATCH --output=mass_radius_grid.out
+#SBATCH --error=mass_radius_grid.err
+#SBATCH --job-name=mass_radius_grid
+#SBATCH --partition=medium
+#SBATCH --time=1300
+#SBATCH --array=[1-250]
 
 # Load modules
 module purge
@@ -16,5 +16,12 @@ conda init
 conda activate gcs
 
 
+paramfile="mass_radius_grid_params.txt"
+paramline=$(sed -n "$((SLURM_ARRAY_TASK_ID))p" $paramfile)
+mass=$(echo $paramline | awk '{print $1}')
+radius=$(echo $paramline | awk '{print $2}')
+particles=$(echo $paramline | awk '{print $3}')
+
+
 # Run script
-srun python3 plummer_pal5_mass_radius_grid.py $SLURM_ARRAY_TASK_ID
+srun python3 plummer_pal5_mass_radius_grid.py $mass $radius $particles

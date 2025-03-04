@@ -13,16 +13,16 @@ RADIUS_GRID = np.linspace(5,30,N_RADIUS_SAMPLING)/1000 # in kpc
 
 
 # WE ARE ALSO ITERATING OVER THE PARTICLES
-start = 9000
-stop = 9900
-step = 100
+start = 90
+stop = 99
+step = 1
 mysequence = np.arange(start,stop+step,step,dtype=int)
 mysequence[0]=mysequence[0]//2
 
 # OUTPUT FILE
 output_file = "mass_radius_grid_params.txt"
-for mass in MASS_GRID:
-    for radius in RADIUS_GRID:
+for i in range(SIZE_GRID):
+    for j in range(SIZE_GRID):
         for n_particles in mysequence:
             with open(output_file,"a") as f:
-                f.write(f"{mass} {radius} {n_particles}\n")
+                f.write(f"{i} {j} {n_particles}\n")

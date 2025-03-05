@@ -8,13 +8,13 @@ import numpy as np
 SIZE_GRID = 5
 N_MASS_SAMPLING = SIZE_GRID
 N_RADIUS_SAMPLING = SIZE_GRID # square grid
-MASS_GRID = np.logspace(4,5.2,N_MASS_SAMPLING) # in Msun
-RADIUS_GRID = np.linspace(5,30,N_RADIUS_SAMPLING)/1000 # in kpc
+MASS_GRID = np.linspace(10**4,10**5.2,N_MASS_SAMPLING) # in Msun
+RADIUS_GRID = np.linspace(2,30,N_RADIUS_SAMPLING)/1000 # in kpc
 
 
 # WE ARE ALSO ITERATING OVER THE PARTICLES
 start = 9000
-stop = 9900
+stop = 10000
 step = 100
 mysequence = np.arange(start,stop+step,step,dtype=int)
 mysequence[0]=mysequence[0]//2

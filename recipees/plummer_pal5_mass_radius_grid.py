@@ -29,7 +29,7 @@ SIZE_GRID = 5
 N_MASS_SAMPLING = SIZE_GRID
 N_RADIUS_SAMPLING = SIZE_GRID # square grid
 MASS_GRID = np.logspace(4,5.2,N_MASS_SAMPLING) # in Msun
-RADIUS_GRID = np.linspace(5,30,N_RADIUS_SAMPLING)/1000 # in kpc
+RADIUS_GRID = np.logspace(np.log10(2),np.log10(30),N_RADIUS_SAMPLING)/1000 # in kpc
 DONTCOMPUTE=False
 
 def main(NP,MASS,HALF_MASS_RADIUS,montecarloindex):

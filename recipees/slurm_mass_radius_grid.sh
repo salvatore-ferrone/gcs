@@ -4,7 +4,7 @@
 #SBATCH --job-name=mass_radius_grid
 #SBATCH --partition=medium
 #SBATCH --time=1300
-#SBATCH --array=[1-250]
+#SBATCH --array=[1-275]
 
 # Load modules
 module purge

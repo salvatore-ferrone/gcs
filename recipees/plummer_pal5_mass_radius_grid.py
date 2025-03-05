@@ -158,10 +158,10 @@ def main(NP,MASS,HALF_MASS_RADIUS,montecarloindex):
         ################################################
         ############ THE SAVIOR OF THE DATA ############
         ################################################
-        attributes["GCnames"]           =   GCnames
-        attributes["computation_time"]  =   (computation_time.seconds)
-        attributes['perturber_masses']  =   perturbers[4]
-        attributes['peturber_sizes']    =   perturbers[5]
+        attributes["GCnames"]                   =   GCnames
+        attributes["computation_time"]          =   (computation_time.seconds)
+        attributes['perturber_masses']          =   perturbers[4]
+        attributes['peturber_plummer_radii']    =   perturbers[5]
         gcs.writers.Stream.stream(outfilename,stream_final,tesc,attributes)
         print(outfilename, "saved")
         ################################################

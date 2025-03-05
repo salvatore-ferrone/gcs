@@ -160,6 +160,8 @@ def main(NP,MASS,HALF_MASS_RADIUS,montecarloindex):
         ################################################
         attributes["GCnames"]           =   GCnames
         attributes["computation_time"]  =   (computation_time.seconds)
+        attributes['perturber_masses']  =   perturbers[4]
+        attributes['peturber_sizes']    =   perturbers[5]
         gcs.writers.Stream.stream(outfilename,stream_final,tesc,attributes)
         print(outfilename, "saved")
         ################################################
@@ -181,7 +183,7 @@ def load_perturbers(GCnames,GCorbits_potential,montecarloindex):
     assert isinstance(GCnames,list)
     montecarlokey = "monte-carlo-"+str(montecarloindex).zfill(3)
     ts,xs,ys,zs,_,_,_=gcs.extractors.GCOrbits.extract_orbits_from_all_GCS(GCnames,GCorbits_potential,montecarlokey)
-    Masses,rh_mes,_,_,_,_,_,_=gcs.extractors.MonteCarloObservables.extract_all_GC_observables(GCnames,montecarloindex)
+    _,_,_,_,_,_,_,_Masses,rh_mes=gcs.extractors.MonteCarloObservables.extract_all_GC_observablesPre2025(GCnames,montecarloindex)
     r_plums = [gcs.misc.half_mass_to_plummer(rh_m) for rh_m in rh_mes]
     Masses = [Mass for Mass in Masses]
     perturbers=ts,xs,ys,zs,Masses,r_plums

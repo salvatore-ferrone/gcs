@@ -32,6 +32,7 @@ if N_SIMULATIONS > MAX_SIMULATION_CALL:
     print("Please reduce the number of simulations")
     exit()
 print("We will run {:d} simulations".format(N_SIMULATIONS))
+print("Up date the sbatch array with the number of simulations")
 
 for monte_carlo_index in monte_carlo_indices:
     for j in range(N_bar_pattern_speeds):

@@ -12,7 +12,6 @@ fname = "arguments_for_constant_cluster_initial_conditions_vary_bar_pattern_spee
 with open(fname,"w") as f:
     f.write("")
 
-# the pattern speeds to explore
 # this needs to be consistent with what is in the script execute_constant_cluster_initial_conditions_vary_bar_pattern_speed.py
 import execute_constant_cluster_initial_conditions_vary_bar_pattern_speed as ECCICVBPS
 N_bar_pattern_speeds = ECCICVBPS.bar_pattern_speeds.shape[0]
@@ -24,7 +23,7 @@ step = 1
 monte_carlo_indices = np.arange(N_min_monte_carlo_indices,N_max_monte_carlo_indices+1,step)
 
 # we pick the particle count we want to explore
-N_particles = [int(32e3), int(33e3),int(35e3)] # i'm afraid to hit 1e5 particles, so I divide it into a few batches
+N_particles = [int(49e0), int(51e0)] # i'm afraid to hit 1e5 particles, so I divide it into a few batches
 
 N_SIMULATIONS = N_bar_pattern_speeds*len(monte_carlo_indices)*len(N_particles)
 

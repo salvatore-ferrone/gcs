@@ -12,10 +12,12 @@ from gcs import path_handler as ph
 import gcs
 import numpy as np 
 import astropy.units as u
+from astropy import coordinates as coord
 import sys 
 import os
 import datetime
 import h5py
+import copy
 
 author = "Salvatore Ferrone"
 author_affiliation = "Sapienza University of Rome"

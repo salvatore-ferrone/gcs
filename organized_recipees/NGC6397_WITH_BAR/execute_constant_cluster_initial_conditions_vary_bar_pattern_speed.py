@@ -25,7 +25,7 @@ internal_dynamics   =   "isotropic-plummer"
 barname             =   "longmuralibar"
 barparams           =   [22968000000, 4, 1, 0.5]
 barpoly_ferrone_2023=   [0.4363323129985824, 38]
-NP                  =   int(1e5)
+# NP                  =   int(1e5)
 integrationtime     =   5e9*u.yr
 dt                  =   1e5*u.yr
 NSKIP               =   int(10)  
@@ -33,7 +33,7 @@ description         =   "Integrating star-particles with in a globular cluster i
 writestream         =   False  
 DOMULTIPROCESSING   =   False
 
-def single_pattern_speed(monte_carlo_index,bar_pattern_speed_index):
+def single_pattern_speed(monte_carlo_index,bar_pattern_speed_index, NP):
     """
         Intended through parallelization with a slrum and the slurm job array
     """
@@ -89,6 +89,8 @@ def single_pattern_speed(monte_carlo_index,bar_pattern_speed_index):
 
 
 
+
+### THESE TWO FUNCTIONS WERE USED FOR DEVELOPMENT ON HAMPI
 def multiprocessingloop(monte_carlo_index):
     """
         This is for multiprocessing, intended mainly for parallelization on nhampi. 
@@ -125,8 +127,6 @@ def multiprocessingloop(monte_carlo_index):
     print("Done with monte carlo index {:d}".format(monte_carlo_index))
     print("Elapsed time: ", endtime-starttime)
     return None
-
-
 
 
 def simpleloop(monte_carlo_index):
@@ -180,13 +180,15 @@ def simpleloop(monte_carlo_index):
 
 if __name__=="__main__":
     montecarloindex=int(sys.argv[1])
-    if len (sys.argv)==3:
+    if len (sys.argv)==4:
         scriptname = sys.argv[0]
         patternspeedindex=int(sys.argv[2])
+        NP = int(sys.argv[3])
         print("Running with pattern speed index {:d}".format(patternspeedindex))
         print("Running with script name {:s}".format(scriptname))
         print("Running with monte carlo index {:d}".format(montecarloindex))
-        single_pattern_speed(montecarloindex,patternspeedindex)
+        print("Running with NP {:d}".format(NP))
+        single_pattern_speed(montecarloindex,patternspeedindex, NP)
     else:
         print ("NOT ENOUGH ARGUMENTS GIVEN, ")
         for arg in sys.argv:

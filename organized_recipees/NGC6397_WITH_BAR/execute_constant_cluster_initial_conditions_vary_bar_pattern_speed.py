@@ -179,16 +179,17 @@ def simpleloop(monte_carlo_index):
 
 
 if __name__=="__main__":
-    montecarloindex=int(sys.argv[1])
+    print(len(sys.argv), sys.argv, "arguments given")
     if len (sys.argv)==4:
         scriptname = sys.argv[0]
+        montecarloindex=int(sys.argv[1])
         patternspeedindex=int(sys.argv[2])
         NP = int(sys.argv[3])
-        print("Running with pattern speed index {:d}".format(patternspeedindex))
         print("Running with script name {:s}".format(scriptname))
         print("Running with monte carlo index {:d}".format(montecarloindex))
+        print("Running with pattern speed index {:d}".format(patternspeedindex))
         print("Running with NP {:d}".format(NP))
-        single_pattern_speed(montecarloindex,patternspeedindex, NP)
+        single_pattern_speed(montecarloindex,patternspeedindex,NP)
     else:
         print ("NOT ENOUGH ARGUMENTS GIVEN, ")
         for arg in sys.argv:

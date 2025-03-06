@@ -44,10 +44,11 @@ When I work on `tycho`, the cluster at the paris observatory, I place `temporary
 
 
 ### Step 2
-Install the current environment which handles the proper python version packages. This step is key because unfortunately newer versions of numpy stopped supporting f2py. I haven't figured out how to work around this to still use the fortran code and may never do so. Therefore, it is crucial to have numpy==1.22 installed. 
+Install the current environment which handles the proper python version packages. This step is key because unfortunately newer versions of numpy stopped supporting f2py. I haven't figured out how to work around this to still use the fortran code and may never do so. Therefore, it is crucial to have numpy==1.22 installed. Go into the gcs/ root folder and install the environment. This takes a few minutes. 
 
 ```
-conda env create environment.yml
+cd etidal/gcs/
+conda env create -f environment.yml
 conda activate gcs
 ```
 This will properly install the dependencies and the two python packages that I created, `tstrippy` and `gcs`. when working in the `gcs` environment, you will be able to import both `tstrippy` and `gcs` in python. 

@@ -63,7 +63,7 @@ def single_pattern_speed(monte_carlo_index,bar_pattern_speed_index, NP):
     temp_base_name = "constant_cluster_initial_conditions_bar_pattern_speed_{:d}_m_kpc_s".format(bar_pattern_speeds_m_kpc_s[bar_pattern_speed_index])
     
     starttime = datetime.datetime.now()
-    sebp.constant_cluster_initial_conditions(
+    sebp.main(
         cluster_initial_conditions=cluster_initial_conditions,
         particle_initial_conditions=particle_initial_conditions,
         montecarlokey=montecarlokey,
@@ -118,7 +118,7 @@ def multiprocessingloop(monte_carlo_index):
     for index in range(len(bar_pattern_speeds)):
         barpoly = [barpoly_ferrone_2023[0], bar_pattern_speeds[index]]
         temp_base_name = "constant_cluster_initial_conditions_{:d}_bar_pattern_speed_{:d}_m_kpc_s".format(monte_carlo_index,bar_pattern_speeds_m_kpc_s[index])
-        Pool.apply_async(sebp.constant_cluster_initial_conditions, args=(cluster_initial_conditions,particle_initial_conditions,GCname,MWpotential,internal_dynamics,barname,barparams,barpoly,integrationtime,dt,NSKIP,temp_base_name,description,writestream))
+        Pool.apply_async(sebp.main, args=(cluster_initial_conditions,particle_initial_conditions,GCname,MWpotential,internal_dynamics,barname,barparams,barpoly,integrationtime,dt,NSKIP,temp_base_name,description,writestream))
     Pool.close()
     Pool.join()
     Pool.terminate()
@@ -155,7 +155,7 @@ def simpleloop(monte_carlo_index):
     for index in range(len(bar_pattern_speeds)):
         barpoly = [barpoly_ferrone_2023[0], bar_pattern_speeds[index]]
         temp_base_name = "constant_cluster_initial_conditions_{:d}_bar_pattern_speed_{:d}_m_kpc_s".format(monte_carlo_index,bar_pattern_speeds_m_kpc_s[index])
-        sebp.constant_cluster_initial_conditions(
+        sebp.main(
             cluster_initial_conditions=cluster_initial_conditions,
             particle_initial_conditions=particle_initial_conditions,
             GCname=GCname,

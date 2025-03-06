@@ -24,7 +24,19 @@ author_affiliation = "Sapienza University of Rome"
 author_email = "salvatore.ferrone@uniroma1.it"
 description = "Integrating star-particles with in a globular cluster"
 
-def constant_cluster_initial_conditions(
+
+### THERE WILL BE THREE MAIN EXPERIMENT FOLDERS
+### 1. VARY PATTERN SPEED
+### 2. VARY BAR MASS
+### 4. VARY BAR LENGTH
+### 3. VARY INITIAL ANGLE 
+
+# I will keep the bar axis ratio fixed and used a prolate ellipsoid instead of a triaxial shape model the bar
+
+outfname = "{:s}_barMass_{:d}_barLength_{:d}_barAngle_{:d}_barPatternSpeed_{:d}.hdf5"
+valid_variable_folder_names = ["vary_pattern_speed","vary_bar_mass","vary_bar_length","vary_initial_angle"]
+
+def main(
         cluster_initial_conditions,
         particle_initial_conditions,
         montecarlokey,  
@@ -32,23 +44,31 @@ def constant_cluster_initial_conditions(
         MWpotential         =   "pouliasis2017pii",
         internal_dynamics   =   "isotropic-plummer",
         barname             =   "longmuralibar",
-        barparams           =   [22968000000, 4, 1, 0.5],
+        barparams           =   [22968000000, 4, 1, 1],
         barpoly             =   [0.4363323129985824, 38],
         integrationtime     =   5e9*u.yr,
         dt                  =   1e5*u.yr,
         NSKIP               =   int(10),
         temp_base_name      =   "constant_cluster_initial_conditions",
         description         =   "Integrating star-particles with in a globular cluster in a galaxy with a bar. The cluster initial conditions were passed as an argument, and the particle initial conditions were passed as an argument. Therefore, these results can be compared to others where the bar properties are different.",
-        writestream         =   True
+        writestream         =   True,
+        variable_folder_name= "vary_pattern_speed"
           
 ):
-    
+    if variable_folder_name not in valid_variable_folder_names:
+        raise ValueError("variable_folder_name must be one of the following: "+str(valid_variable_folder_names))
+
 
 
     NP = len(particle_initial_conditions[0]) # rederive since it is an input argument 
     # CURRENT OUTPUT FILE
-    outdir = ph.paths['simulations'] + "StreamEvolutionInBarredPotential/" + MWpotential + "/" + barname + "/" + GCname + "/" + str(NP) + "/" + montecarlokey + "/"
-    outname = GCname+"_"+temp_base_name+"-stream.hdf5"
+    outdir = ph.paths['simulations'] + "StreamEvolutionInBarredPotential/" + MWpotential + "/" + barname + "/" + GCname + "/" + str(NP) + "/" + montecarlokey + "/" + variable_folder_name + "/"
+    
+    barAngle = int(np.floor(1000*barpoly[0] * (180/np.pi)))
+    barPatternSpeed = int(np.floor(1000*barpoly[1]))
+    barMass = int(barparams[0])
+    barLength = int(np.floor(1000*barparams[1]))
+    outname = outfname.format(GCname,barMass,barLength,barAngle,barPatternSpeed)
     os.makedirs(outdir,exist_ok=True)
     G=tstrippy.Parsers.potential_parameters.G
     barparams_with_G = [G]+barparams

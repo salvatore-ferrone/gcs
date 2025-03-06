@@ -1,4 +1,4 @@
-name: gcs
+name: gcsTEST
 channels:
   - conda-forge
   - defaults
@@ -16,3 +16,7 @@ dependencies:
   - ipykernel
   - pip==24.2
   - scipy 
+  - pip:
+    - -e ../tstrippy/
+    - -e .
+

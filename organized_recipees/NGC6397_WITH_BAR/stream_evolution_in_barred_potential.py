@@ -26,14 +26,15 @@ description = "Integrating star-particles with in a globular cluster"
 
 
 ### THERE WILL BE THREE MAIN EXPERIMENT FOLDERS
-### 1. VARY PATTERN SPEED
-### 2. VARY BAR MASS
-### 4. VARY BAR LENGTH
-### 3. VARY INITIAL ANGLE 
+### 1. VARY BAR MASS
+### 2. VARY BAR LENGTH
+### 3. VARY BAR AXIS RATIO 
+### 4. VARY PATTERN SPEED
+### 5. VARY INITIAL ANGLE 
 
 # I will keep the bar axis ratio fixed and used a prolate ellipsoid instead of a triaxial shape model the bar
 
-outfname = "{:s}_barMass_{:d}_barLength_{:d}_barAngle_{:d}_barPatternSpeed_{:d}.hdf5"
+outfname = "{:s}_barMass_{:d}_barLength_{:d}_barAxisRatio_{:d}_barAngle_{:d}_barPatternSpeed_{:d}.hdf5"
 valid_variable_folder_names = ["vary_pattern_speed","vary_bar_mass","vary_bar_length","vary_initial_angle"]
 
 def main(
@@ -64,10 +65,11 @@ def main(
     # CURRENT OUTPUT FILE
     outdir = ph.paths['simulations'] + "StreamEvolutionInBarredPotential/" + MWpotential + "/" + barname + "/" + GCname + "/" + str(NP) + "/" + montecarlokey + "/" + variable_folder_name + "/"
     
-    barAngle = int(np.floor(1000*barpoly[0] * (180/np.pi)))
-    barPatternSpeed = int(np.floor(1000*barpoly[1]))
     barMass = int(barparams[0])
     barLength = int(np.floor(1000*barparams[1]))
+    barAxisRatio = int(np.floor(1000*barparams[1]/barparams[2]))
+    barAngle = int(np.floor(1000*barpoly[0] * (180/np.pi)))
+    barPatternSpeed = int(np.floor(1000*barpoly[1]))
     outname = outfname.format(GCname,barMass,barLength,barAngle,barPatternSpeed)
     os.makedirs(outdir,exist_ok=True)
     G=tstrippy.Parsers.potential_parameters.G

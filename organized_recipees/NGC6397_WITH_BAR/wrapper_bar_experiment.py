@@ -17,19 +17,22 @@ import datetime
 ##### THE RANGE OF PARAMETERS FOR THE WE WILL PROBE #####
 #########################################################
 
-# the bar pattern speeds
-omega_min, omega_max = 25,66
-omega_step = 0.25
-bar_pattern_speeds = np.arange(omega_min,omega_max+omega_step,omega_step)
-bar_pattern_speeds_m_kpc_s=np.array(1000*bar_pattern_speeds, dtype=int)
 
 # the bar length 
 
 
 # the bar mass
 
+# the bar axis ratio 
 
 # the bar angle
+
+# the bar pattern speed 
+# the bar pattern speeds
+omega_min, omega_max = 25,66
+omega_step = 0.25
+bar_pattern_speeds = np.arange(omega_min,omega_max+omega_step,omega_step)
+
 
 # The parameters of of the code 
 GCname              =   "NGC6397"
@@ -70,7 +73,7 @@ def wrapper(bar_pattern_speed_index, bar_angle_index, bar_mass_index, bar_length
 
 
     barpoly = [barpoly_ferrone_2023[0], bar_pattern_speeds[bar_pattern_speed_index]]
-    temp_base_name = "constant_cluster_initial_conditions_bar_pattern_speed_{:d}_m_kpc_s".format(bar_pattern_speeds_m_kpc_s[bar_pattern_speed_index])
+    temp_base_name = "constant_cluster_initial_conditions_bar_pattern_speed_{:d}_m_kpc_s".format(int(1000*bar_pattern_speeds[bar_pattern_speed_index]))
     
     starttime = datetime.datetime.now()
     sebp.main(

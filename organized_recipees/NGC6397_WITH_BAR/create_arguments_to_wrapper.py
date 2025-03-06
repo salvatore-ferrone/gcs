@@ -13,8 +13,8 @@ with open(fname,"w") as f:
     f.write("")
 
 # this needs to be consistent with what is in the script execute_constant_cluster_initial_conditions_vary_bar_pattern_speed.py
-import execute_constant_cluster_initial_conditions_vary_bar_pattern_speed as ECCICVBPS
-N_bar_pattern_speeds = ECCICVBPS.bar_pattern_speeds.shape[0]
+import wrapper_bar_experiment
+N_bar_pattern_speeds = wrapper_bar_experiment.bar_pattern_speeds.shape[0]
 
 # we pick the number of initial conditions we want to explore
 N_min_monte_carlo_indices = 0

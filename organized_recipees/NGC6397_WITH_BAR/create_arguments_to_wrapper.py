@@ -7,7 +7,7 @@ therefore, all the jobs will be independent and run in parallel on different pro
 import numpy as np 
 
 MAX_SIMULATION_CALL = 999 # guard for not exceeding the maximum number of simulations that can be run in parallel
-fname = "arguments_for_constant_cluster_initial_conditions_vary_bar_pattern_speed.txt"
+fname = "arguments.txt"
 # clear the file
 with open(fname,"w") as f:
     f.write("")

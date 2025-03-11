@@ -48,6 +48,7 @@ def main(
         barparams           =   [22968000000, 4, 1, 1],
         barpoly             =   [0.4363323129985824, 38],
         integrationtime     =   5e9*u.yr,
+        T0                  =   -5e9*u.yr,
         dt                  =   1e5*u.yr,
         NSKIP               =   int(10),
         temp_base_name      =   "constant_cluster_initial_conditions",
@@ -86,7 +87,6 @@ def main(
     unitT = u.s*(u.kpc/u.km)
     NSTEP = int(integrationtime/dt)
     dt=dt.to(unitT).value
-    T0=0
     integrationparameters = (T0,dt,NSTEP)    
     # load the position of the host cluster
     RA,DEC,Rsun,RV,mualpha,mu_delta,Mass,rh_m=cluster_initial_conditions

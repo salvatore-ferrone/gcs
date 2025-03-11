@@ -43,8 +43,8 @@ def load_perturbers(GCnames,GCorbits_potential,montecarloindex):
 if __name__ == "__main__" : 
 
     
-    NP                  =   sys.argv[1]
-    montecarloindex = 9
+    NP                  =   int(sys.argv[1])
+    montecarloindex     =   9
     GCname              =   "Pal5"
     GCnames             =   ["NGC104","NGC7078", "NGC2808", "NGC5139", "NGC5272"]
     montecarlokey       =   "monte-carlo-"+str(montecarloindex).zfill(3)

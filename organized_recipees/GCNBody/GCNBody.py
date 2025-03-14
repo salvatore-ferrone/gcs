@@ -44,9 +44,8 @@ if __name__ == "__main__" :
 
     
     NP                  =   int(sys.argv[1])
-    montecarloindex     =   9
+    montecarloindex     =   0
     GCname              =   "Pal5"
-    # GCnames             =   ["NGC104","NGC7078", "NGC2808", "NGC5139", "NGC5272"]
     montecarlokey       =   "monte-carlo-"+str(montecarloindex).zfill(3)
     internal_dynamics   =   "isotropic-plummer"
     GCorbits_potential  =   "pouliasis2017pii-GCNBody"
@@ -57,7 +56,13 @@ if __name__ == "__main__" :
     WRITESTREAM         =   True
     NSKIP               =   int(100)
 
+    # GCnames             =   ["NGC104","NGC7078", "NGC2808", "NGC5139", "NGC5272"] # if you want to pick specific perturbers
+    # LOAD ALL GLOBUALR CLUSTER NAMES 
+    GCnames=tstrippy.Parsers.baumgardtMWGCs().data['Cluster']
+    targedIndex = np.where(GCnames==GCname)[0][0]
+    GCnames = np.delete(GCnames, targedIndex)    
     # establish the integration units 
+
     unitV = u.km/u.s
     unitL = u.kpc
     unitM = u.Msun
@@ -95,10 +100,6 @@ if __name__ == "__main__" :
     ########### LOAD THE ARGUMENTS ################
     ###############################################
 
-    # LOAD ALL GLOBUALR CLUSTER NAMES 
-    GCnames=tstrippy.Parsers.baumgardtMWGCs().data['Cluster']
-    targedIndex = np.where(GCnames==GCname)[0][0]
-    GCnames = np.delete(GCnames, targedIndex)    
 
     # LOAD THE STATIC GALAXY
     staticgalaxy_params = tstrippy.Parsers.potential_parameters.pouliasis2017pii()

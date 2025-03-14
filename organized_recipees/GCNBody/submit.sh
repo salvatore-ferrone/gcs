@@ -1,10 +1,10 @@
 #!/bin/sh
-#SBATCH --output=GCNBody.out
-#SBATCH --error=GCNBody.err
-#SBATCH --job-name=GCNbody
+#SBATCH --output=GCNBody_000.out
+#SBATCH --error=GCNBody_000.err
+#SBATCH --job-name=GCNBody_000
 #SBATCH --partition=medium
 #SBATCH --time=1300
-#SBATCH --array=[1-160]
+#SBATCH --array=[1-97]
 
 
 ## make sure the conda environment is activated before running this script

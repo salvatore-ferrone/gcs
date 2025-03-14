@@ -44,7 +44,7 @@ if __name__ == "__main__" :
 
     
     NP                  =   int(sys.argv[1])
-    montecarloindex     =   0
+    montecarloindex     =   int(sys.argv[2])
     GCname              =   "Pal5"
     montecarlokey       =   "monte-carlo-"+str(montecarloindex).zfill(3)
     internal_dynamics   =   "isotropic-plummer"

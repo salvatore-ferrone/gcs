@@ -16,4 +16,5 @@ numberofparticles=$(echo $paramline | awk '{print $1}')
 montecarloindex=$(echo $paramline | awk '{print $2}')
 
 # Run script
-srun python3 GCNBody.py $numberofparticles
+echo "Running GCNBody with $numberofparticles particles and montecarlo index $montecarloindex"
+srun python3 GCNBody.py $numberofparticles $montecarloindex

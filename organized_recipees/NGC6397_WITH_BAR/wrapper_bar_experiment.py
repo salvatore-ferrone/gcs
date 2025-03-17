@@ -16,25 +16,32 @@ import datetime
 #########################################################
 ##### THE RANGE OF PARAMETERS FOR THE WE WILL PROBE #####
 #########################################################
-
-
 # the bar length 
-
-
+BARLENGTHS = np.array([3,3.4,3.5,3.6,3.9,4,4.5,5])
+n_bar_lengths = len(BARLENGTHS)
 # the bar mass
-
+bar_mass_peak = 1.6e10  # Peak value from your original selection
+bar_mass_width = 8e9    # Width parameter - adjust as needed
+num_points = 11         # Number of sampling points - adjust as needed
+BAR_MASSES = np.linspace(bar_mass_peak-bar_mass_width, bar_mass_peak+bar_mass_width, num_points)
+n_bar_masses = len(BAR_MASSES)
 # the bar axis ratio 
-
+AXIS_RATIOS = np.array([1/4,1/8,1/10])
+n_axis_ratios = len(AXIS_RATIOS)
 # the bar angle
-
+BAR_ANGLES = np.arange(20,35,1)*np.pi/180
+n_bar_angles = len(BAR_ANGLES)
 # the bar pattern speed 
-# the bar pattern speeds
 omega_min, omega_max = 25,66
 omega_step = 0.25
-bar_pattern_speeds = np.arange(omega_min,omega_max+omega_step,omega_step)
+PATTERN_SPEEDS = np.arange(omega_min,omega_max+omega_step,omega_step)
+npatternspeeds  = len(PATTERN_SPEEDS)
 
 
-# The parameters of of the code 
+
+
+
+# THE DEFAULT PARAMETERS
 GCname              =   "NGC6397"
 MWpotential         =   "pouliasis2017pii"
 internal_dynamics   =   "isotropic-plummer"
@@ -46,21 +53,40 @@ description         =   "Integrating star-particles with in a globular cluster i
 writestream         =   False  
 DOMULTIPROCESSING   =   False
 
-def wrapper(bar_pattern_speed_index, bar_angle_index, bar_mass_index, bar_length_index, montecarloindex, NP):
+def wrapper(GCname,montecarloindex, NP, bar_angle_index, bar_pattern_speed_index, bar_mass_index, bar_length_index, bar_axis_ratio_index):
     """
         Intended through parallelization with a slrum and the slurm job array
     """
 
     assert isinstance(bar_pattern_speed_index, int), "bar_pattern_speed_index must be an integer"
-    assert isinstance(monte_carlo_index, int), "monte_carlo_index must be an integer"
-    npatternspeeds=len(bar_pattern_speeds)
+    assert isinstance(montecarloindex, int), "monte_carlo_index must be an integer"
+
     assert bar_pattern_speed_index < npatternspeeds, "bar_pattern_speed_index must be less than the number of pattern speeds,\n {:d} was given and needs to be less than {:d}".format(bar_pattern_speed_index,npatternspeeds)
+    assert montecarloindex < 1000, "monte_carlo_index must be less than 1000, {:d} was given".format(montecarloindex)
+    assert bar_angle_index < n_bar_angles, "bar_angle_index must be less than the number of bar angles,\n {:d} was given and needs to be less than {:d}".format(bar_angle_index,n_bar_angles)
+    assert bar_mass_index < n_bar_masses, "bar_mass_index must be less than the number of bar masses,\n {:d} was given and needs to be less than {:d}".format(bar_mass_index,n_bar_masses)
+    assert bar_length_index < n_bar_lengths, "bar_length_index must be less than the number of bar lengths,\n {:d} was given and needs to be less than {:d}".format(bar_length_index,n_bar_lengths)
+    assert bar_axis_ratio_index < n_axis_ratios, "bar_axis_ratio_index must be less than the number of bar axis ratios,\n {:d} was given and needs to be less than {:d}".format(bar_axis_ratio_index,n_axis_ratios)
+    montecarlokey = "monte-carlo-"+str(montecarloindex).zfill(3)
     
-    montecarlokey = "monte-carlo-"+str(monte_carlo_index).zfill(3)
+    # set the bar parameters
+    barmass = BAR_MASSES[bar_mass_index]
+    barlength = BARLENGTHS[bar_length_index]
+    baraxisratio = AXIS_RATIOS[bar_axis_ratio_index]
+    barangle = BAR_ANGLES[bar_angle_index]
+    barpatternspeed = PATTERN_SPEEDS[bar_pattern_speed_index]
+
+    # shape
+    barparams = [barmass,barlength*baraxisratio,barlength*baraxisratio]
+    # rotation 
+    barpoly = [barangle, barpatternspeed]
+
+    temp_base_name = "{:s}-{:s}-NP-{:d}-mass-{:d}-length-{:d}-axisRatio-{:d}-angle-{:d}-patternSpeed-{:d}".format(
+        GCname,montecarlokey,NP,int(barmass),int(1000*barlength),int(1000*(1/baraxisratio)),int(1000*180*barangle/np.pi),int(1000*barpatternspeed))
     ###### GET THE INITIAL CONDITIONS OF THE CLUSTER IN PHASE SPACE ######
     # get the name of the master file of initial conditions
     initial_conditions_file_name = gcs.path_handler.MonteCarloObservables(GCname)
-    RA,DEC,Rsun,RV,mualpha,mu_delta,Mass,rh_m=gcs.extractors.MonteCarloObservables.extract_GC_observables(initial_conditions_file_name,monte_carlo_index)
+    RA,DEC,Rsun,RV,mualpha,mu_delta,Mass,rh_m=gcs.extractors.MonteCarloObservables.extract_GC_observables(initial_conditions_file_name,montecarloindex)
     cluster_initial_conditions=RA,DEC,Rsun,RV,mualpha,mu_delta,Mass,rh_m
 
     ###### MAKE THE PLUMMER SPHERE ######
@@ -71,9 +97,7 @@ def wrapper(bar_pattern_speed_index, bar_angle_index, bar_mass_index, bar_length
     print("Plummer sphere with {:d} particles created".format(NP))
 
 
-
-    barpoly = [barpoly_ferrone_2023[0], bar_pattern_speeds[bar_pattern_speed_index]]
-    temp_base_name = "constant_cluster_initial_conditions_bar_pattern_speed_{:d}_m_kpc_s".format(int(1000*bar_pattern_speeds[bar_pattern_speed_index]))
+    # temp_base_name = "{:d}_m_kpc_s".format(int(1000*bar_pattern_speeds[bar_pattern_speed_index]))
     
     starttime = datetime.datetime.now()
     sebp.main(
@@ -96,7 +120,7 @@ def wrapper(bar_pattern_speed_index, bar_angle_index, bar_mass_index, bar_length
 
     endtime = datetime.datetime.now()
     print("Elapsed time: ", endtime-starttime)
-    print("Done with monte carlo index {:d}".format(monte_carlo_index))
+    print("Done with monte carlo index {:d}".format(montecarloindex))
     
     return None
 
@@ -194,8 +218,13 @@ def wrapper(bar_pattern_speed_index, bar_angle_index, bar_mass_index, bar_length
 if __name__=="__main__":
     print(len(sys.argv), sys.argv, "arguments given")
 
-    barparams           =   [22968000000, 4, 1, 1]
-    barpoly_ferrone_2023=   [0.4363323129985824, 38]    
+    # SET THE CONSTANTS 
+    bar_angle_index = 5
+    bar_mass_index = 5
+    bar_length_index = 2
+    bar_axis_ratio_index = 0
+    # wrapper(bar_angle_index, bar_pattern_speed_index, bar_mass_index, bar_length_index, bar_axis_ratio_index, montecarloindex, NP)
+ 
     if len (sys.argv)==4:
         scriptname = sys.argv[0]
         montecarloindex=int(sys.argv[1])
@@ -205,7 +234,7 @@ if __name__=="__main__":
         print("Running with monte carlo index {:d}".format(montecarloindex))
         print("Running with pattern speed index {:d}".format(patternspeedindex))
         print("Running with NP {:d}".format(NP))
-        single_pattern_speed(montecarloindex,patternspeedindex,NP)
+        wrapper(montecarloindex,patternspeedindex,NP)
     else:
         print ("NOT ENOUGH ARGUMENTS GIVEN, ")
         for arg in sys.argv:

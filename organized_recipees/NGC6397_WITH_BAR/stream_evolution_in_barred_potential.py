@@ -53,7 +53,7 @@ def main(
         NSKIP               =   int(10),
         temp_base_name      =   "constant_cluster_initial_conditions",
         description         =   "Integrating star-particles with in a globular cluster in a galaxy with a bar. The cluster initial conditions were passed as an argument, and the particle initial conditions were passed as an argument. Therefore, these results can be compared to others where the bar properties are different.",
-        writestream         =   True,
+        writestream         =   False,
         variable_folder_name= "vary_pattern_speed"
           
 ):

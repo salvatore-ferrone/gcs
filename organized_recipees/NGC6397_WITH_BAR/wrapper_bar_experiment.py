@@ -235,15 +235,15 @@ if __name__=="__main__":
 
 
 
-        print("Running {:s} with the following parameters".format(scriptname))
-        print("GCname: {:s}".format(GCname))
-        print("montecarloindex: {:d}".format(montecarloindex))
-        print("NP: {:d}".format(NP))
-        print("bar_angle_index: {:d}".format(bar_angle_index))
-        print("bar_pattern_speed_index: {:d}".format(bar_pattern_speed_index))
-        print("bar_mass_index: {:d}".format(bar_mass_index))
-        print("bar_length_index: {:d}".format(bar_length_index))
-        print("bar_axis_ratio_index: {:d}".format(bar_axis_ratio_index))
+        # print("Running {:s} with the following parameters".format(scriptname))
+        # print("GCname: {:s}".format(GCname))
+        # print("montecarloindex: {:d}".format(montecarloindex))
+        # print("NP: {:d}".format(NP))
+        # print("bar_angle_index: {:d}".format(bar_angle_index))
+        # print("bar_pattern_speed_index: {:d}".format(bar_pattern_speed_index))
+        # print("bar_mass_index: {:d}".format(bar_mass_index))
+        # print("bar_length_index: {:d}".format(bar_length_index))
+        # print("bar_axis_ratio_index: {:d}".format(bar_axis_ratio_index))
 
         wrapper(GCname,montecarloindex, NP, bar_angle_index, bar_pattern_speed_index, bar_mass_index, bar_length_index, bar_axis_ratio_index)
     else:

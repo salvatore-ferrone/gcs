@@ -71,7 +71,7 @@ def main(
     barAxisRatio = int(np.floor(1000*barparams[1]/barparams[2]))
     barAngle = int(np.floor(1000*barpoly[0] * (180/np.pi)))
     barPatternSpeed = int(np.floor(1000*barpoly[1]))
-    outname = outfname.format(GCname,barMass,barLength,barAngle,barPatternSpeed)
+    outname = outfname.format(GCname,barMass,barLength,barAxisRatio,barAngle,barPatternSpeed)
     os.makedirs(outdir,exist_ok=True)
     G=tstrippy.Parsers.potential_parameters.G
     barparams_with_G = [G]+barparams
@@ -86,8 +86,9 @@ def main(
     # set the integration time.
     unitT = u.s*(u.kpc/u.km)
     NSTEP = int(integrationtime/dt)
-    dt=dt.to(unitT).value
-    integrationparameters = (T0,dt,NSTEP)    
+    timestep=dt.to(unitT).value
+    init_time = T0.to(unitT).value
+    integrationparameters = (init_time,timestep,NSTEP)    
     # load the position of the host cluster
     RA,DEC,Rsun,RV,mualpha,mu_delta,Mass,rh_m=cluster_initial_conditions
     x,y,z,vx,vy,vz = sky_to_galactocentric(RA,DEC,Rsun,RV,mualpha,mu_delta)
@@ -98,6 +99,8 @@ def main(
     integrator.setstaticgalaxy(*static_galaxy_adjusted)
     integrator.setintegrationparameters(*integrationparameters)
     integrator.setinitialkinematics(*initialkinematics)
+    print("barparams_with_G",barparams_with_G)
+    print("barpoly",barpoly)
     integrator.initgalacticbar(barname,barparams_with_G,barpoly)
     integrator.setbackwardorbit()
     xt,yt,zt,vxt,vyt,vzt = integrator.leapfrogintime(NSTEP,1)
@@ -127,7 +130,7 @@ def main(
     vxp,vyp,vzp=vxp+vxt[0],vyp+vyt[0],vzp+vzt[0]
 
     # adjust the integration time to set the initial time to the last time of the host
-    integrationparameters = (timesteps[0],dt,NSTEP)
+    integrationparameters = (timesteps[0],timestep,NSTEP)
     
     # perpare the integrator
     integrator = tstrippy.integrator

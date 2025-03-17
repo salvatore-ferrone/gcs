@@ -77,7 +77,7 @@ def wrapper(GCname,montecarloindex, NP, bar_angle_index, bar_pattern_speed_index
     barpatternspeed = PATTERN_SPEEDS[bar_pattern_speed_index]
 
     # shape
-    barparams = [barmass,barlength*baraxisratio,barlength*baraxisratio]
+    barparams = [barmass,barlength,barlength*baraxisratio,barlength*baraxisratio]
     # rotation 
     barpoly = [barangle, barpatternspeed]
 
@@ -218,23 +218,34 @@ def wrapper(GCname,montecarloindex, NP, bar_angle_index, bar_pattern_speed_index
 if __name__=="__main__":
     print(len(sys.argv), sys.argv, "arguments given")
 
-    # SET THE CONSTANTS 
-    bar_angle_index = 5
-    bar_mass_index = 5
-    bar_length_index = 2
-    bar_axis_ratio_index = 0
-    # wrapper(bar_angle_index, bar_pattern_speed_index, bar_mass_index, bar_length_index, bar_axis_ratio_index, montecarloindex, NP)
+
+    GCname = sys.argv[1]
+    montecarloindex = int(sys.argv[2])
+    NP = int(sys.argv[3])
+    bar_angle_index = int(sys.argv[4])
+    bar_pattern_speed_index = int(sys.argv[5])
+    bar_mass_index = int(sys.argv[6])
+    bar_length_index = int(sys.argv[7])
+    bar_axis_ratio_index = int(sys.argv[8])
+
+
  
-    if len (sys.argv)==4:
+    if len (sys.argv)==9:
         scriptname = sys.argv[0]
-        montecarloindex=int(sys.argv[1])
-        patternspeedindex=int(sys.argv[2])
-        NP = int(sys.argv[3])
-        print("Running with script name {:s}".format(scriptname))
-        print("Running with monte carlo index {:d}".format(montecarloindex))
-        print("Running with pattern speed index {:d}".format(patternspeedindex))
-        print("Running with NP {:d}".format(NP))
-        wrapper(montecarloindex,patternspeedindex,NP)
+
+
+
+        print("Running {:s} with the following parameters".format(scriptname))
+        print("GCname: {:s}".format(GCname))
+        print("montecarloindex: {:d}".format(montecarloindex))
+        print("NP: {:d}".format(NP))
+        print("bar_angle_index: {:d}".format(bar_angle_index))
+        print("bar_pattern_speed_index: {:d}".format(bar_pattern_speed_index))
+        print("bar_mass_index: {:d}".format(bar_mass_index))
+        print("bar_length_index: {:d}".format(bar_length_index))
+        print("bar_axis_ratio_index: {:d}".format(bar_axis_ratio_index))
+
+        wrapper(GCname,montecarloindex, NP, bar_angle_index, bar_pattern_speed_index, bar_mass_index, bar_length_index, bar_axis_ratio_index)
     else:
         print ("NOT ENOUGH ARGUMENTS GIVEN, ")
         for arg in sys.argv:

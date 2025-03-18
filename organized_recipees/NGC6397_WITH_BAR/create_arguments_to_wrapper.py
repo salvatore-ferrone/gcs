@@ -7,7 +7,8 @@ therefore, all the jobs will be independent and run in parallel on different pro
 import numpy as np 
 import wrapper_bar_experiment as wbe
 
-
+GCname = "NGC6397"
+variable_folder_name="vary_pattern_speed"
 
 MAX_SIMULATION_CALL = 999 # guard for not exceeding the maximum number of simulations that can be run in parallel
 fname = "arguments.txt"
@@ -29,14 +30,17 @@ PATTERN_SPEED_INDEX_MOST_PROB = np.argmin(np.abs(wbe.PATTERN_SPEEDS-pattern_spee
 
 
 # number of particles
-NPs_start,NPs_nsims,NPs_step = 1e5/5,5,1
-NPs = np.arange(NPs_start,NPs_start+NPs_nsims+NPs_step,NPs_step,dtype=int)
+NP = 1e5
+NPs_nsims = 4
+NPs_start = NP/NPs_nsims
+NPs_step = 1
+if np.mod(NPs_nsims,2) == 0:
+    NPs = np.arange(NPs_start-NPs_nsims//2 + NPs_step,NPs_start+NPs_nsims//2+NPs_step,NPs_step,dtype=int)
+else:
+    NPs = np.arange(NPs_start-NPs_nsims//2 ,NPs_start+NPs_nsims//2+NPs_step,NPs_step,dtype=int)
 
 # monte carlo 
-montecarloindex = 0 # we will only run one monte carlo index right now 
-
-GCname = "NGC6397"
-
+montecarloindex = 1 # we will only run one monte carlo index right now 
 
 N_SIMULATIONS = len(NPs)*wbe.npatternspeeds
 
@@ -55,7 +59,7 @@ with open(fname,"w") as f:
 
 for i in range(len(NPs)):
     for j in range(wbe.npatternspeeds):
-        call_string = "{:s} {:d} {:d} {:d} {:d} {:d} {:d} {:d}".format(GCname,montecarloindex, NPs[i], ANGLE_INDEX_MOST_PROB, j, MASS_INDEX_MOST_PROB, LENGTH_INDEX_MOST_PROB, AXIS_RATIO_INDEX_MOST_PROB)
+        call_string = "{:s} {:s} {:d} {:d} {:d} {:d} {:d} {:d} {:d}".format(variable_folder_name,GCname,montecarloindex, NPs[i], ANGLE_INDEX_MOST_PROB, j, MASS_INDEX_MOST_PROB, LENGTH_INDEX_MOST_PROB, AXIS_RATIO_INDEX_MOST_PROB)
         with open(fname,"a") as f:
             f.write(call_string + "\n")
 

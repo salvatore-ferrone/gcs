@@ -35,12 +35,13 @@ description = "Integrating star-particles with in a globular cluster"
 # I will keep the bar axis ratio fixed and used a prolate ellipsoid instead of a triaxial shape model the bar
 
 outfname = "{:s}_barMass_{:d}_barLength_{:d}_barAxisRatio_{:d}_barAngle_{:d}_barPatternSpeed_{:d}.hdf5"
-valid_variable_folder_names = ["vary_pattern_speed","vary_bar_mass","vary_bar_length","vary_initial_angle"]
+valid_variable_folder_names = ["vary_bar_mass","vary_bar_length","barAxisRatio","vary_initial_angle","vary_pattern_speed"]
 
 def main(
         cluster_initial_conditions,
         particle_initial_conditions,
         montecarlokey,  
+        variable_folder_name,
         GCname              =   "NGC3201",
         MWpotential         =   "pouliasis2017pii",
         internal_dynamics   =   "isotropic-plummer",
@@ -54,7 +55,6 @@ def main(
         temp_base_name      =   "constant_cluster_initial_conditions",
         description         =   "Integrating star-particles with in a globular cluster in a galaxy with a bar. The cluster initial conditions were passed as an argument, and the particle initial conditions were passed as an argument. Therefore, these results can be compared to others where the bar properties are different.",
         writestream         =   False,
-        variable_folder_name= "vary_pattern_speed"
           
 ):
     if variable_folder_name not in valid_variable_folder_names:

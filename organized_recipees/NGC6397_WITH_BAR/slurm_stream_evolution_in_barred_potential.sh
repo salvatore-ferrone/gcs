@@ -12,14 +12,15 @@
 
 paramfile="arguments.txt"
 paramline=$(sed -n "$((SLURM_ARRAY_TASK_ID))p" $paramfile)
-GCname=$(echo $paramline | awk '{print $1}')
-montecarloindex=$(echo $paramline | awk '{print $2}')
-numberofparticles=$(echo $paramline | awk '{print $3}')
-barangleindex=$(echo $paramline | awk '{print $4}')
-barpatternspeedindex=$(echo $paramline | awk '{print $5}')
-barmassindex=$(echo $paramline | awk '{print $6}')
-barlengthindex=$(echo $paramline | awk '{print $7}')
-baraxisratioindex=$(echo $paramline | awk '{print $8}')
+variable_folder_name=$(echo $paramline | awk '{print $1}')
+GCname=$(echo $paramline | awk '{print $2}')
+montecarloindex=$(echo $paramline | awk '{print $3}')
+numberofparticles=$(echo $paramline | awk '{print $4}')
+barangleindex=$(echo $paramline | awk '{print $5}')
+barpatternspeedindex=$(echo $paramline | awk '{print $6}')
+barmassindex=$(echo $paramline | awk '{print $7}')
+barlengthindex=$(echo $paramline | awk '{print $8}')
+baraxisratioindex=$(echo $paramline | awk '{print $9}')
 
 
 # Run script

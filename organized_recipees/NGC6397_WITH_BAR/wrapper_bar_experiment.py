@@ -53,7 +53,7 @@ description         =   "Integrating star-particles with in a globular cluster i
 writestream         =   False  
 DOMULTIPROCESSING   =   False
 
-def wrapper(GCname,montecarloindex, NP, bar_angle_index, bar_pattern_speed_index, bar_mass_index, bar_length_index, bar_axis_ratio_index):
+def wrapper(variable_folder_name, GCname, montecarloindex, NP, bar_angle_index, bar_pattern_speed_index, bar_mass_index, bar_length_index, bar_axis_ratio_index):
     """
         Intended through parallelization with a slrum and the slurm job array
     """
@@ -115,7 +115,8 @@ def wrapper(GCname,montecarloindex, NP, bar_angle_index, bar_pattern_speed_index
         NSKIP=NSKIP,
         temp_base_name=temp_base_name,
         description=description,
-        writestream=writestream)
+        writestream=writestream,
+        variable_folder_name=variable_folder_name)
 
 
     endtime = datetime.datetime.now()
@@ -218,19 +219,19 @@ def wrapper(GCname,montecarloindex, NP, bar_angle_index, bar_pattern_speed_index
 if __name__=="__main__":
     print(len(sys.argv), sys.argv, "arguments given")
 
-
-    GCname = sys.argv[1]
-    montecarloindex = int(sys.argv[2])
-    NP = int(sys.argv[3])
-    bar_angle_index = int(sys.argv[4])
-    bar_pattern_speed_index = int(sys.argv[5])
-    bar_mass_index = int(sys.argv[6])
-    bar_length_index = int(sys.argv[7])
-    bar_axis_ratio_index = int(sys.argv[8])
+    variable_folder_name = sys.argv[1]
+    GCname = sys.argv[2]
+    montecarloindex = int(sys.argv[3])
+    NP = int(sys.argv[4])
+    bar_angle_index = int(sys.argv[5])
+    bar_pattern_speed_index = int(sys.argv[6])
+    bar_mass_index = int(sys.argv[7])
+    bar_length_index = int(sys.argv[8])
+    bar_axis_ratio_index = int(sys.argv[9])
 
 
  
-    if len (sys.argv)==9:
+    if len (sys.argv)==10:
         scriptname = sys.argv[0]
 
 
@@ -245,7 +246,7 @@ if __name__=="__main__":
         # print("bar_length_index: {:d}".format(bar_length_index))
         # print("bar_axis_ratio_index: {:d}".format(bar_axis_ratio_index))
 
-        wrapper(GCname,montecarloindex, NP, bar_angle_index, bar_pattern_speed_index, bar_mass_index, bar_length_index, bar_axis_ratio_index)
+        wrapper(variable_folder_name,GCname,montecarloindex, NP, bar_angle_index, bar_pattern_speed_index, bar_mass_index, bar_length_index, bar_axis_ratio_index)
     else:
         print ("NOT ENOUGH ARGUMENTS GIVEN, ")
         for arg in sys.argv:

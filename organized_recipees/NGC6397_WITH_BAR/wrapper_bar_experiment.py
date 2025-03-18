@@ -217,7 +217,6 @@ def wrapper(variable_folder_name, GCname, montecarloindex, NP, bar_angle_index, 
 
 
 if __name__=="__main__":
-    print(len(sys.argv), sys.argv, "arguments given")
 
     variable_folder_name = sys.argv[1]
     GCname = sys.argv[2]

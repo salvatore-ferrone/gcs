@@ -1,10 +1,10 @@
 #!/bin/sh
-#SBATCH --output=ptrnspd.out
-#SBATCH --error=ptrnspd.err
-#SBATCH --job-name=ptrnspd
+#SBATCH --output=ptrnspd1.out
+#SBATCH --error=ptrnspd1.err
+#SBATCH --job-name=ptrnspd1
 #SBATCH --partition=long
 #SBATCH --time=7100
-#SBATCH --array=[1-990]
+#SBATCH --array=[1-660]
 
 
 ## make sure the conda environment is activated before running this script
@@ -24,5 +24,5 @@ baraxisratioindex=$(echo $paramline | awk '{print $9}')
 
 
 # Run script
-srun python3 wrapper_bar_experiment.py $GCname $montecarloindex $numberofparticles $barangleindex $barpatternspeedindex $barmassindex $barlengthindex $baraxisratioindex
+srun python3 wrapper_bar_experiment.py $variable_folder_name $GCname $montecarloindex $numberofparticles $barangleindex $barpatternspeedindex $barmassindex $barlengthindex $baraxisratioindex
 

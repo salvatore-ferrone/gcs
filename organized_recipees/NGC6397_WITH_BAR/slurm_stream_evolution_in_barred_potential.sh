@@ -1,7 +1,7 @@
 #!/bin/sh
-#SBATCH --output=ptrnspd1.out
-#SBATCH --error=ptrnspd1.err
-#SBATCH --job-name=ptrnspd1
+#SBATCH --output=massLen0.out
+#SBATCH --error=massLen0.err
+#SBATCH --job-name=massLen0
 #SBATCH --partition=long
 #SBATCH --time=7100
 #SBATCH --array=[1-660]

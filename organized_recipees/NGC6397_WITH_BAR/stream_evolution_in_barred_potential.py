@@ -35,7 +35,12 @@ description = "Integrating star-particles with in a globular cluster"
 # I will keep the bar axis ratio fixed and used a prolate ellipsoid instead of a triaxial shape model the bar
 
 outfname = "{:s}_barMass_{:d}_barLength_{:d}_barAxisRatio_{:d}_barAngle_{:d}_barPatternSpeed_{:d}.hdf5"
-valid_variable_folder_names = ["vary_bar_mass","vary_bar_length","barAxisRatio","vary_initial_angle","vary_pattern_speed"]
+valid_variable_folder_names = ["vary_bar_mass","vary_bar_length","vary_bar_axis_ratio","vary_initial_angle","vary_pattern_speed"]
+
+
+def make_out_dir(MWpotential,barname,GCname,NP,montecarlokey,variable_folder_name):
+    return  ph.paths['simulations'] + "StreamEvolutionInBarredPotential/" + MWpotential + "/" + barname + "/" + GCname + "/" + str(NP) + "/" + montecarlokey + "/" + variable_folder_name + "/"
+
 
 def main(
         cluster_initial_conditions,
@@ -64,7 +69,7 @@ def main(
 
     NP = len(particle_initial_conditions[0]) # rederive since it is an input argument 
     # CURRENT OUTPUT FILE
-    outdir = ph.paths['simulations'] + "StreamEvolutionInBarredPotential/" + MWpotential + "/" + barname + "/" + GCname + "/" + str(NP) + "/" + montecarlokey + "/" + variable_folder_name + "/"
+    outdir = make_out_dir(MWpotential,barname,GCname,NP,montecarlokey,variable_folder_name)
     
     barMass = int(barparams[0])
     barLength = int(np.floor(1000*barparams[1]))

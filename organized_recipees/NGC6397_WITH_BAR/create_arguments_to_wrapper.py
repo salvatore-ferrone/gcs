@@ -8,7 +8,7 @@ import numpy as np
 import wrapper_bar_experiment as wbe
 
 GCname = "NGC6397"
-variable_folder_name="vary_pattern_speed"
+
 
 MAX_SIMULATION_CALL = 999 # guard for not exceeding the maximum number of simulations that can be run in parallel
 fname = "arguments.txt"
@@ -56,7 +56,7 @@ print("Up date the sbatch array with the number of simulations")
 with open(fname,"w") as f:
     f.write("")
 
-
+variable_folder_name="vary_bar_mass" 
 for i in range(len(NPs)):
     for j in range(wbe.n_bar_masses):
         bar_mass_index = j
@@ -65,7 +65,7 @@ for i in range(len(NPs)):
             f.write(call_string + "\n")
 
 
-
+variable_folder_name="vary_bar_length"
 for i in range(len(NPs)):
     for j in range(wbe.n_bar_lengths):
         bar_length_index = j

@@ -3,20 +3,21 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python=3.9.20
-  - numpy==1.22
-  - gcc==11.2.0
-  - gfortran
-  - setuptools=68.2
-  - astropy==5.0
-  - matplotlib==3.5
-  - jupyterlab==4.2  
-  - pyyaml==6.0.1
-  - h5py==3.11.0
+  - python>=3.9,<3.12
+  - numpy>=1.20
+  - astropy>=4.0
+  - pyyaml>=5.1
+  - gfortran>=11  # Critical for running the compiled code
+  - pip
+  - meson 
+  - pytest
+  - gcc
+  - matplotlib>=3.5
+  - jupyterlab>=4
+  - h5py=3.11.0
   - ipykernel
-  - pip==24.2
   - scipy 
+  - pip>=24.2
   - pip:
-    - -e ../tstrippy/
     - -e .
 

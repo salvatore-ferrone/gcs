@@ -28,8 +28,8 @@ README = "The reviewer wanted a more massive Palomar 5. This script is the answe
 SIZE_GRID = 5
 N_MASS_SAMPLING = SIZE_GRID
 N_RADIUS_SAMPLING = SIZE_GRID # square grid
-MASS_GRID = np.logspace(4,5.2,N_MASS_SAMPLING) # in Msun
-RADIUS_GRID = np.logspace(np.log10(2),np.log10(30),N_RADIUS_SAMPLING)/1000 # in kpc
+MASS_GRID = np.logspace(4,4.8, N_MASS_SAMPLING) # in Msun
+RADIUS_GRID = np.logspace(np.log10(2),np.log10(35),N_RADIUS_SAMPLING)/1000 # in kpc
 DONTCOMPUTE=False
 
 def main(NP,MASS,HALF_MASS_RADIUS,montecarloindex):
@@ -44,11 +44,10 @@ def main(NP,MASS,HALF_MASS_RADIUS,montecarloindex):
     T0                  =   -5e9*u.yr
     integrationtime     =   5e9*u.yr
     dt                  =   1e4*u.yr
-    NSKIP               =   int(10000)
+    NSKIP               =   int(100)
 
     assert isinstance(NP,int), "NP must be an integer but was {:}".format(type(NP))
     
-    text_append_filename = "_mass_{:2d}_radius_{:2d}".format(MASS_INDEX,RADIUS_INDEX)
 
     attributes = {
         "README":README,
@@ -62,15 +61,15 @@ def main(NP,MASS,HALF_MASS_RADIUS,montecarloindex):
         "GCorbits_potential":GCorbits_potential,
         "MWpotential":MWpotential,
         "MASS":MASS.value,
-        "HALF_MASS_RADIUS":HALF_MASS_RADIUS.value
+        "HALF_MASS_RADIUS":HALF_MASS_RADIUS.value,
+        "mass_radius_grid_mass":MASS_GRID,
+        "mass_radius_grid_radius":RADIUS_GRID,
     }
     
     ##### i/o files ####
 
-    STRINGMASS = "{:d}".format(int(MASS.value)).zfill(3)
-    STRINGRADIUS = "{:d}".format(int(HALF_MASS_RADIUS.value)).zfill(3)
-    outfilename=ph.StreamMassRadius(GCname,NP,GCorbits_potential,internal_dynamics,montecarlokey,MASS_INDEX,RADIUS_INDEX)
-    snapshotfilename = ph.StreamShapShotsMassRadius(GCname,NP,GCorbits_potential,internal_dynamics,montecarlokey,MASS_INDEX,RADIUS_INDEX)
+    outfilename=ph.StreamMassRadius(GCname,NP,GCorbits_potential,internal_dynamics,montecarlokey,int(MASS.value),int(1000*HALF_MASS_RADIUS.value))
+    snapshotfilename = ph.StreamShapShotsMassRadius(GCname,NP,GCorbits_potential,internal_dynamics,montecarlokey,int(MASS.value),int(1000*HALF_MASS_RADIUS.value))
     cond = False
     if os.path.exists(snapshotfilename):
         print(snapshotfilename, "Already exists. \n Skipping!")

@@ -28,7 +28,7 @@ def StreamMassRadius(GCname,NP,potential_env,internal_dynamics,montecarlokey,Mas
     outname = GCname + "-Stream-" + montecarlokey + "_mass_{:s}_radius_{:s}.hdf5".format(str(Mass).zfill(3),str(radius).zfill(3))
     return _Stream(GCname,NP,potential_env,internal_dynamics) + outname
 
-def StreamShapShotsMassRadius(GCname,NP,potential_env,internal_dynamics,montecarlokey,Mass,radius):
+def StreamSnapShotsMassRadius(GCname,NP,potential_env,internal_dynamics,montecarlokey,Mass,radius):
     assert isinstance(Mass,int)
     assert isinstance(radius,int)
     # RADIUS IN PC and MASS IN MSUN

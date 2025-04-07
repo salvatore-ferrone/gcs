@@ -1,6 +1,6 @@
 #!/bin/sh
-#SBATCH --output=stack_%A_%a.out
-#SBATCH --error=stack_%A_%a.err
+#SBATCH --output=out/stack_%A_%a.out
+#SBATCH --error=err/stack_%A_%a.err
 #SBATCH --job-name=stack
 #SBATCH --partition=medium
 #SBATCH --time=1300

@@ -129,12 +129,12 @@ def stack_tesc(fnames,NPs,time_of_interest=0):
             snapshottime[i]=f['time_stamps'][target_index]
     return tesc, snapshottime
 
-
 def extract_and_stack_all_phase_space(outfile,time_stamps,valid_fnames,valid_NPs):
     """
     The bottle neck for sure of the code 
     """
-    for i in range(200):
+    ntimestamps=len(time_stamps)
+    for i in range(ntimestamps):
         if i%50==0:
             print("Extracting phase space for time stamp ",i," of ",len(time_stamps))
             dt=datetime.datetime.now()-GLOBAL_START_TIME
@@ -145,6 +145,72 @@ def extract_and_stack_all_phase_space(outfile,time_stamps,valid_fnames,valid_NPs
         phase_space,_=stack_phase_space(valid_fnames,valid_NPs,time_of_interest=time_of_interest)
         outfile.create_dataset("StreamSnapShots/{:d}".format(i),data=phase_space)    
 
+
+def extract_and_stack_all_phase_space_efficient(outfile, time_stamps, valid_fnames, valid_NPs):
+    """
+    Efficient version that loads all data into memory at once to avoid repeated file I/O.
+    """
+    print("Loading all data from files into memory...")
+    start_time = datetime.datetime.now()
+    
+    # Calculate indices for placing data
+    cummulative_NPs = np.cumsum(valid_NPs)
+    cummulative_NPs = np.insert(cummulative_NPs, 0, 0)
+    total_particles = valid_NPs.sum()
+    ntimestamps = len(time_stamps)
+    
+    # Dictionary to store all file data: {file_index: file_data}
+    all_data = {}
+    file_time_indices = {}
+    
+    # Open all files once and load data into memory
+    for i, fname in enumerate(valid_fnames):
+        with h5py.File(fname, "r") as f:
+            # Get the file's timestamps
+            file_timestamps = f['time_stamps'][:]
+            
+            # For each timestamp in our target list, find the closest match in this file
+            file_indices = {}
+            for t_idx, t in enumerate(time_stamps):
+                target_index = np.argmin(np.abs(file_timestamps - t))
+                file_indices[t_idx] = target_index
+            
+            file_time_indices[i] = file_indices
+            
+            # Load all stream snapshots for this file
+            file_data = {}
+            for t_idx, file_t_idx in file_indices.items():
+                file_data[t_idx] = f["StreamSnapShots"][str(file_t_idx)][:]
+            
+            all_data[i] = file_data
+            dt = datetime.datetime.now() - GLOBAL_START_TIME
+            dt = dt.total_seconds()
+            print(dt, " s")
+            print(f"Loaded data from {fname} in {(datetime.datetime.now() - start_time).total_seconds():.2f} seconds")
+
+    
+    print(f"All data loaded in {(datetime.datetime.now() - start_time).total_seconds():.2f} seconds")
+    print(f"Processing {ntimestamps} timestamps for {total_particles} particles...")
+    
+    # Now process each timestamp and write to the output file
+    for t_idx in range(ntimestamps):
+        if t_idx % 50 == 0:
+            dt = datetime.datetime.now() - start_time
+            print(f"Processing timestamp {t_idx} of {ntimestamps} ({dt.total_seconds():.2f} s)")
+        
+        # Allocate the combined array for this timestamp
+        combined_data = np.zeros((6, total_particles))
+        
+        # Fill in data from each file
+        for file_idx, file_data in all_data.items():
+            start_idx = cummulative_NPs[file_idx]
+            end_idx = cummulative_NPs[file_idx + 1]
+            combined_data[:, start_idx:end_idx] = file_data[t_idx]
+        
+        # Write this timestamp's data to the output file
+        outfile.create_dataset(f"StreamSnapShots/{t_idx}", data=combined_data)
+    
+    print(f"Total processing time: {(datetime.datetime.now() - start_time).total_seconds():.2f} seconds")
 
 def main(montecarlovalue,radiusindex,massindex):
     RADIUS=int(np.floor(1000*vpp.RADIUS_GRID[radiusindex]))
@@ -222,8 +288,12 @@ def main(montecarlovalue,radiusindex,massindex):
     dt=starttime-GLOBAL_START_TIME
     dt=dt.total_seconds()
     print(dt,"Start stacking phase space ")
-    extract_and_stack_all_phase_space(outfile,time_stamps,valid_fnames,valid_NPs)
+    # extract_and_stack_all_phase_space(outfile,time_stamps,valid_fnames,valid_NPs)
+    extract_and_stack_all_phase_space_efficient(outfile,time_stamps,valid_fnames,valid_NPs)
+
     endtime=datetime.datetime.now()
+
+
     print("Time taken to stack phase space: ", endtime-starttime)
     # add the following attributes
     attributes["extraction_time"] = (endtime-starttime).total_seconds()

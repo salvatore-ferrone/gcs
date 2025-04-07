@@ -6,13 +6,9 @@
 #SBATCH --time=1300
 #SBATCH --array=[1-776]
 
-# Load modules
-module purge
-module load python
 
 # Activate your conda environment
 source /data/sferrone/miniconda3/etc/profile.d/conda.sh
-conda init
 conda activate gcs
 
 
@@ -24,4 +20,4 @@ particles=$(echo $paramline | awk '{print $3}')
 
 
 # Run script
-srun python3 plummer_pal5_mass_radius_grid.py $mass $radius $particles
+srun python3 varyPlummerParams.py $mass $radius $particles

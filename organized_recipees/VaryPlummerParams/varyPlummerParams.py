@@ -32,19 +32,22 @@ MASS_GRID = np.logspace(4,4.8, N_MASS_SAMPLING) # in Msun
 RADIUS_GRID = np.logspace(np.log10(2),np.log10(30),N_RADIUS_SAMPLING)/1000 # in kpc
 DONTCOMPUTE=False
 
+
+# data params 
+GCname              =   "Pal5"
+internal_dynamics   =   "isotropic-plummer_mass_radius_grid"
+GCorbits_potential  =   "pouliasis2017pii-GCNBody"
+MWpotential         =   "pouliasis2017pii"
+T0                  =   -5e9*u.yr
+integrationtime     =   5e9*u.yr
+dt                  =   1e4*u.yr
+NSKIP               =   int(100)
+
 def main(NP,MASS,HALF_MASS_RADIUS,montecarloindex):
     MASS                =   MASS_GRID[MASS_INDEX]*u.Msun
     HALF_MASS_RADIUS    =   RADIUS_GRID[RADIUS_INDEX]*u.kpc
     # NP                  =   int(10000)
-    GCname              =   "Pal5"
     montecarlokey       =   "monte-carlo-"+str(montecarloindex).zfill(3)
-    internal_dynamics   =   "isotropic-plummer_mass_radius_grid"
-    GCorbits_potential  =   "pouliasis2017pii-GCNBody"
-    MWpotential         =   "pouliasis2017pii"
-    T0                  =   -5e9*u.yr
-    integrationtime     =   5e9*u.yr
-    dt                  =   1e4*u.yr
-    NSKIP               =   int(100)
 
     assert isinstance(NP,int), "NP must be an integer but was {:}".format(type(NP))
     

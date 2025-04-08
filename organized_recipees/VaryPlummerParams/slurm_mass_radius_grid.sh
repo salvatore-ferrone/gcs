@@ -1,6 +1,6 @@
 #!/bin/sh
-#SBATCH --output=mass_radius_grid.out
-#SBATCH --error=mass_radius_grid.err
+#SBATCH --output=out/mass_radius_grid.out
+#SBATCH --error=err/mass_radius_grid.err
 #SBATCH --job-name=mass_radius_grid
 #SBATCH --partition=medium
 #SBATCH --time=1300

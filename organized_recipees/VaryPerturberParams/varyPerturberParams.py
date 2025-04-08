@@ -152,7 +152,7 @@ def main(NP,MASS,HALF_MASS_RADIUS,MASS_PERTURBER,RADIUS_PERTURBER,montecarloinde
         initialkinematics = (xp+xHost[0],yp+yHost[0],zp+zHost[0],vxp+vxHost[0],vyp+vyHost[0],vzp+vzHost[0])
         
         # get the perturbers, only those that have close encounters
-        perturber_names=np.concatenate((VARIABLE_PERTURBER,perturber_names),dtype=str)
+        perturber_names= VARIABLE_PERTURBER + perturber_names
         perturbers  = load_perturbers(perturber_names,GCorbits_potential,montecarloindex)
         # replace the perturber with the one we are interested in
         ts,xs,ys,zs,Masses,r_plums = perturbers

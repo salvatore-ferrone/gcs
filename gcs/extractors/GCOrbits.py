@@ -23,7 +23,7 @@ def initial_simulation_coordinates(filename,montecarlokey):
 
 
 def extract_orbits_from_all_GCS(GCnames,potential,montecarlokey):
-    assert(isinstance(GCnames,list))
+    assert(isinstance(GCnames,(list,tuple,np.ndarray))), "GCnames should be a list, tuple or numpy array but was "+str(type(GCnames))
     assert(isinstance(montecarlokey,str))
     assert(isinstance(potential,str))
     

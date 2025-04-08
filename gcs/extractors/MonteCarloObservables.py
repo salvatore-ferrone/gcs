@@ -1,6 +1,7 @@
 import h5py
 import gcs.path_handler as ph
 from astropy import units as u
+import numpy as np 
 
 
 
@@ -20,7 +21,7 @@ def extract_GC_observablesPre2025(filename,montecarloindex):
     return  RA,DEC,Rsun,RV,mualpha,mu_delta,Mass,rh_m
 
 def extract_all_GC_observablesPre2025(GCnames,montecarloindex):
-    assert isinstance(GCnames,list), "GCnames must be a list but instead was: "+str(type(GCnames))
+    assert isinstance(GCnames,(list,tuple,np.ndarray)), "GCnames must be a list but instead was: "+str(type(GCnames))
     assert isinstance(montecarloindex,int), "montecarlokey must be a string but instead was: "+str(type(montecarloindex))
     Masses,rh_mes,RAes,DECes,Rsunes,RVes,mualphaes,mu_deltaes=[],[],[],[],[],[],[],[]
     for i in range(len(GCnames)):

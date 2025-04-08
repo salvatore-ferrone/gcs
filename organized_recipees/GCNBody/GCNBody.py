@@ -49,6 +49,7 @@ if __name__ == "__main__" :
     montecarlokey       =   "monte-carlo-"+str(montecarloindex).zfill(3)
     internal_dynamics   =   "isotropic-plummer"
     GCorbits_potential  =   "pouliasis2017pii-GCNBody"
+    stream_potential    =   "pouliasis2017pii-NGC7078" # do stream_potential if not using all GCS
     MWpotential         =   "pouliasis2017pii"
     integrationTime     =   5e9*u.yr
     T0                  =   -5e9*u.yr
@@ -56,11 +57,12 @@ if __name__ == "__main__" :
     WRITESTREAM         =   True
     NSKIP               =   int(100)
 
-    # GCnames             =   ["NGC104","NGC7078", "NGC2808", "NGC5139", "NGC5272"] # if you want to pick specific perturbers
+    ### PICK A SET OF CLUSTERS 
+    GCnames             =   [ "NGC7078", "NGC5272"] 
     # LOAD ALL GLOBUALR CLUSTER NAMES 
-    GCnames=tstrippy.Parsers.baumgardtMWGCs().data['Cluster']
-    targedIndex = np.where(GCnames==GCname)[0][0]
-    GCnames = np.delete(GCnames, targedIndex)    
+    # GCnames=tstrippy.Parsers.baumgardtMWGCs().data['Cluster']
+    # targedIndex = np.where(GCnames==GCname)[0][0]
+    # GCnames = np.delete(GCnames, targedIndex)    
     # establish the integration units 
 
     unitV = u.km/u.s
@@ -75,6 +77,7 @@ if __name__ == "__main__" :
         "montecarlokey":montecarlokey,
         "internal_dynamics":internal_dynamics,
         "GCorbits_potential":GCorbits_potential,
+        "stream_potential":stream_potential,
         "MWpotential":MWpotential,
         "NP":NP,
         "integrationTime":integrationTime.value,
@@ -83,8 +86,8 @@ if __name__ == "__main__" :
         "NSKIP":NSKIP,
     }
     
-    outfilename=ph.Stream(GCname,NP,GCorbits_potential,internal_dynamics,montecarlokey)
-    snapshotfilename = ph.StreamSnapShots(GCname,NP,GCorbits_potential,internal_dynamics,montecarlokey)
+    outfilename=ph.Stream(GCname,NP,stream_potential,internal_dynamics,montecarlokey)
+    snapshotfilename = ph.StreamSnapShots(GCname,NP,stream_potential,internal_dynamics,montecarlokey)
     cond = False
     if os.path.exists(snapshotfilename):
         print(snapshotfilename, "Already exists. \n Skipping!")
@@ -95,7 +98,7 @@ if __name__ == "__main__" :
     if cond:
         sys.exit(0)
 
-    tempdir=ph._TemporaryStreamSnapShots(GCorbits_potential,GCname,NP,internal_dynamics,montecarlokey)
+    tempdir=ph._TemporaryStreamSnapShots(stream_potential,GCname,NP,internal_dynamics,montecarlokey)
     ###############################################
     ########### LOAD THE ARGUMENTS ################
     ###############################################

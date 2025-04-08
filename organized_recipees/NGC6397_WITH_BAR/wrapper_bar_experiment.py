@@ -2,6 +2,8 @@
 execute the constant cluster initial conditions
 from stream_evolution_in_barred_potential.py
 
+This script also contains all the parameters that set out to study.
+
 """
 
 import stream_evolution_in_barred_potential as sebp
@@ -131,7 +133,6 @@ def wrapper(variable_folder_name, GCname, montecarloindex, NP, bar_angle_index, 
     print("Plummer sphere with {:d} particles created".format(NP))
 
 
-    # temp_base_name = "{:d}_m_kpc_s".format(int(1000*bar_pattern_speeds[bar_pattern_speed_index]))
     
     starttime = datetime.datetime.now()
     sebp.main(

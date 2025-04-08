@@ -44,7 +44,8 @@ integrationtime     =   5e9*u.yr
 dt                  =   1e4*u.yr
 NSKIP               =   int(100)
 GCnames             =   [ "NGC7078", "NGC5272"]
-    # GCnames    = load_targetted_gcs(GCname,MWpotential,montecarlokey)
+writestreamsnapshots=   False
+# GCnames             = load_targetted_gcs(GCname,MWpotential,montecarlokey)
 
 
 def main(NP,MASS,HALF_MASS_RADIUS,montecarloindex):
@@ -145,8 +146,9 @@ def main(NP,MASS,HALF_MASS_RADIUS,montecarloindex):
         integrator.setinitialkinematics(*initialkinematics)
         integrator.inithostperturber(*inithostperturber)
         integrator.initperturbers(*perturbers)
-        integrator.initwritestream(NSKIP,GCname,tempdir)
-        print("Writing binary files to", tempdir)
+        if writestreamsnapshots:
+            integrator.initwritestream(NSKIP,GCname,tempdir)
+            print("Writing binary files to", tempdir)
         ###############################################
         ########### PERFORM THE INTEGRATION ###########
         ###############################################
@@ -172,9 +174,10 @@ def main(NP,MASS,HALF_MASS_RADIUS,montecarloindex):
         ################################################
         ############## SAVE THE SNAP SHOTS #############
         ################################################
-        snapshottimesampling            =   tsampling[::NSKIP]
-        gcs.writers.Stream.StreamSnapShots(snapshotfilename,snapshottimesampling,tesc,attributes,tempdir)
-        print(snapshotfilename, "saved")
+        if writestreamsnapshots:
+            snapshottimesampling            =   tsampling[::NSKIP]
+            gcs.writers.Stream.StreamSnapShots(snapshotfilename,snapshottimesampling,tesc,attributes,tempdir)
+            print(snapshotfilename, "saved")
     
         
 

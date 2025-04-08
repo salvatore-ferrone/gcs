@@ -4,6 +4,9 @@ from stream_evolution_in_barred_potential.py
 
 This script also contains all the parameters that set out to study.
 
+
+python wrapper_bar_experiment.py variable_folder_name GCname montecarloindex NP bar_angle_index bar_pattern_speed_index bar_mass_index bar_length_index bar_axis_ratio_index
+
 """
 
 import stream_evolution_in_barred_potential as sebp

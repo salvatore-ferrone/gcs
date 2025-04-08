@@ -53,6 +53,32 @@ description         =   "Integrating star-particles with in a globular cluster i
 writestream         =   False  
 DOMULTIPROCESSING   =   False
 
+def set_bar_parameters(bar_mass_index, bar_length_index, bar_axis_ratio_index, bar_angle_index, bar_pattern_speed_index):
+    """
+    Set the bar parameters based on the given indices.
+    """
+    barmass = BAR_MASSES[bar_mass_index]
+    barlength = BARLENGTHS[bar_length_index]
+    baraxisratio = AXIS_RATIOS[bar_axis_ratio_index]
+    barangle = BAR_ANGLES[bar_angle_index]
+    barpatternspeed = PATTERN_SPEEDS[bar_pattern_speed_index]
+    barpatternspeed = barpatternspeed.to(u.kpc/u.yr).value    
+    return barmass, barlength, baraxisratio, barangle, barpatternspeed
+
+def package_barparams(barmass, barlength, baraxisratio):
+    """
+    and at the proper format for tstrippy
+    """
+    barparams = [barmass,barlength,barlength*baraxisratio,barlength*baraxisratio]
+    return barparams
+
+def package_barpoly(barangle, barpatternspeed):
+    """
+    and at the proper format for tstrippy, besides G which will be appended after 
+    """
+    barpoly = [barangle, barpatternspeed]
+    return barpoly
+
 def wrapper(variable_folder_name, GCname, montecarloindex, NP, bar_angle_index, bar_pattern_speed_index, bar_mass_index, bar_length_index, bar_axis_ratio_index):
     """
         Intended through parallelization with a slrum and the slurm job array
@@ -69,17 +95,11 @@ def wrapper(variable_folder_name, GCname, montecarloindex, NP, bar_angle_index, 
     assert bar_axis_ratio_index < n_axis_ratios, "bar_axis_ratio_index must be less than the number of bar axis ratios,\n {:d} was given and needs to be less than {:d}".format(bar_axis_ratio_index,n_axis_ratios)
     montecarlokey = "monte-carlo-"+str(montecarloindex).zfill(3)
     
-    # set the bar parameters
-    barmass = BAR_MASSES[bar_mass_index]
-    barlength = BARLENGTHS[bar_length_index]
-    baraxisratio = AXIS_RATIOS[bar_axis_ratio_index]
-    barangle = BAR_ANGLES[bar_angle_index]
-    barpatternspeed = PATTERN_SPEEDS[bar_pattern_speed_index]
-
+    barmass, barlength, baraxisratio, barangle, barpatternspeed = set_bar_parameters(bar_mass_index, bar_length_index, bar_axis_ratio_index, bar_angle_index, bar_pattern_speed_index)
     # shape
-    barparams = [barmass,barlength,barlength*baraxisratio,barlength*baraxisratio]
+    barparams= package_barparams(barmass, barlength, baraxisratio)
     # rotation 
-    barpoly = [barangle, barpatternspeed]
+    barpoly = package_barpoly(barangle, barpatternspeed)
 
     temp_base_name = "{:s}-{:s}-NP-{:d}-mass-{:d}-length-{:d}-axisRatio-{:d}-angle-{:d}-patternSpeed-{:d}".format(
         GCname,montecarlokey,NP,int(barmass),int(1000*barlength),int(1000*(1/baraxisratio)),int(1000*180*barangle/np.pi),int(1000*barpatternspeed))

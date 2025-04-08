@@ -41,6 +41,16 @@ valid_variable_folder_names = ["vary_bar_mass","vary_bar_length","vary_bar_axis_
 def make_out_dir(MWpotential,barname,GCname,NP,montecarlokey,variable_folder_name):
     return  ph.paths['simulations'] + "StreamEvolutionInBarredPotential/" + MWpotential + "/" + barname + "/" + GCname + "/" + str(NP) + "/" + montecarlokey + "/" + variable_folder_name + "/"
 
+def make_out_fname(GCname,barparams,barpoly):
+    """
+    The input is given in the same units as for tstrippy
+    """
+    barMass = int(barparams[0])
+    barLength = int(np.floor(1000*barparams[1]))
+    barAxisRatio = int(np.floor(1000*barparams[1]/barparams[2]))
+    barAngle = int(np.floor(1000*barpoly[0] * (180/np.pi)))
+    barPatternSpeed = int(np.floor(1000*barpoly[1]))
+    return outfname.format(GCname,barMass,barLength,barAxisRatio,barAngle,barPatternSpeed)    
 
 def main(
         cluster_initial_conditions,
@@ -65,21 +75,18 @@ def main(
     if variable_folder_name not in valid_variable_folder_names:
         raise ValueError("variable_folder_name must be one of the following: "+str(valid_variable_folder_names))
 
-
-
-    NP = len(particle_initial_conditions[0]) # rederive since it is an input argument 
+    # rederive the number of particles since it's an input parameter
+    NP = len(particle_initial_conditions[0]) 
+    
     # CURRENT OUTPUT FILE
     outdir = make_out_dir(MWpotential,barname,GCname,NP,montecarlokey,variable_folder_name)
-    
-    barMass = int(barparams[0])
-    barLength = int(np.floor(1000*barparams[1]))
-    barAxisRatio = int(np.floor(1000*barparams[1]/barparams[2]))
-    barAngle = int(np.floor(1000*barpoly[0] * (180/np.pi)))
-    barPatternSpeed = int(np.floor(1000*barpoly[1]))
-    outname = outfname.format(GCname,barMass,barLength,barAxisRatio,barAngle,barPatternSpeed)
+    outname = make_out_fname(GCname,barparams,barpoly)
     os.makedirs(outdir,exist_ok=True)
+
+    # append the gravitational constant 
     G=tstrippy.Parsers.potential_parameters.G
     barparams_with_G = [G]+barparams
+    
     ################################################
     #### 1. ORBIT of the HOST GLOBULAR CLUSTER #####
     ################################################

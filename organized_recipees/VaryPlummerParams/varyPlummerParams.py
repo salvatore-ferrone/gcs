@@ -37,11 +37,15 @@ DONTCOMPUTE=False
 GCname              =   "Pal5"
 internal_dynamics   =   "isotropic-plummer_mass_radius_grid"
 GCorbits_potential  =   "pouliasis2017pii-GCNBody"
+stream_potential    =   "pouliasis2017pii-NGC7078"
 MWpotential         =   "pouliasis2017pii"
 T0                  =   -5e9*u.yr
 integrationtime     =   5e9*u.yr
 dt                  =   1e4*u.yr
 NSKIP               =   int(100)
+GCnames             =   [ "NGC7078", "NGC5272"]
+    # GCnames    = load_targetted_gcs(GCname,MWpotential,montecarlokey)
+
 
 def main(NP,MASS,HALF_MASS_RADIUS,montecarloindex):
     MASS                =   MASS_GRID[MASS_INDEX]*u.Msun
@@ -62,6 +66,7 @@ def main(NP,MASS,HALF_MASS_RADIUS,montecarloindex):
         "montecarlokey":montecarlokey,
         "internal_dynamics":internal_dynamics,
         "GCorbits_potential":GCorbits_potential,
+        "stream_potential":stream_potential,
         "MWpotential":MWpotential,
         "MASS":MASS.value,
         "HALF_MASS_RADIUS":HALF_MASS_RADIUS.value,
@@ -71,8 +76,8 @@ def main(NP,MASS,HALF_MASS_RADIUS,montecarloindex):
     
     ##### i/o files ####
 
-    outfilename=ph.StreamMassRadius(GCname,NP,GCorbits_potential,internal_dynamics,montecarlokey,int(MASS.value),int(1000*HALF_MASS_RADIUS.value))
-    snapshotfilename = ph.StreamShapShotsMassRadius(GCname,NP,GCorbits_potential,internal_dynamics,montecarlokey,int(MASS.value),int(1000*HALF_MASS_RADIUS.value))
+    outfilename=ph.StreamMassRadius(GCname,NP,stream_potential,internal_dynamics,montecarlokey,int(MASS.value),int(1000*HALF_MASS_RADIUS.value))
+    snapshotfilename = ph.StreamShapShotsMassRadius(GCname,NP,stream_potential,internal_dynamics,montecarlokey,int(MASS.value),int(1000*HALF_MASS_RADIUS.value))
     cond = False
     if os.path.exists(snapshotfilename):
         print(snapshotfilename, "Already exists. \n Skipping!")
@@ -82,7 +87,7 @@ def main(NP,MASS,HALF_MASS_RADIUS,montecarloindex):
         cond = True
     if cond:
         sys.exit(0)
-    tempdir=ph._TemporaryStreamSnapShotsMassRadiusGrid(GCorbits_potential,GCname,NP,internal_dynamics,montecarlokey,MASS_INDEX,RADIUS_INDEX)
+    tempdir=ph._TemporaryStreamSnapShotsMassRadiusGrid(stream_potential,GCname,NP,internal_dynamics,montecarlokey,MASS_INDEX,RADIUS_INDEX)
 
     if DONTCOMPUTE == True:
         print("DONTCOMPUTE is set to True. Exiting")
@@ -129,8 +134,6 @@ def main(NP,MASS,HALF_MASS_RADIUS,montecarloindex):
         initialkinematics = (xp+xHost[0],yp+yHost[0],zp+zHost[0],vxp+vxHost[0],vyp+vyHost[0],vzp+vzHost[0])
         
         # get the perturbers, only those that have close encounters
-        # GCnames     = load_GCnames_except_for_the_target(GCname)
-        GCnames    = load_targetted_gcs(GCname,MWpotential,montecarlokey)
         perturbers  = load_perturbers(GCnames,GCorbits_potential,montecarloindex)
         
         ###############################################

@@ -1,17 +1,14 @@
 """
 This script is in response to the reviewer comments for the paper Ferrone et al. 2025.
 
-particularly in modeling the internal dynamics of the globular cluster in the Milky Way potential.
-
-The reviewer wants to see a sensitivity analysis to the internal dynamics and for changing the 
- mass and radius of palomar 5 
+We want to investigate if the gap would be more present by changing the mass and size of the perturbing cluster.
 
 """
 
 author = "Salvatore Ferrone"
 author_affiliation = "Sapienza University of Rome"
 author_email = "salvatore.ferrone@uniroma1.it"
-description = "modeling a cluster with varying mass and size "
+description = "Modeling a cluster by varying the mass and size of the perturbing cluster"
 import gcs
 from gcs import path_handler as ph
 from astropy import units as u
@@ -21,7 +18,8 @@ import os
 import tstrippy
 import csv
 import numpy as np 
-README = "The reviewer wanted a more massive Palomar 5. This script is the answer to that request. The script is a copy of the one in recipees/execute_GCNBody_Palomar5.py with the only difference being the mass of the Palomar 5 cluster. The mass of the Palomar 5 cluster is set to XXX Msun."
+
+README = "We want to know what happens if we change the Mass and Size of the Perturbing cluster"
 
 
 # MASS GRID AND RADIUS GRID
@@ -43,20 +41,21 @@ T0                  =   -5e9*u.yr
 integrationtime     =   5e9*u.yr
 dt                  =   1e4*u.yr
 NSKIP               =   int(100)
-GCnames             =   [ "NGC7078", "NGC5272"]
+VARIABLE_PERTURBER  =   ["NGC7078"]
+perturber_names     =   ["NGC5272"]
 writestreamsnapshots=   False
-# GCnames             = load_targetted_gcs(GCname,MWpotential,montecarlokey)
 
 
-def main(NP,MASS,HALF_MASS_RADIUS,montecarloindex):
+
+def main(NP,MASS,HALF_MASS_RADIUS,MASS_PERTURBER,RADIUS_PERTURBER,montecarloindex):
     MASS                =   MASS_GRID[MASS_INDEX]*u.Msun
     HALF_MASS_RADIUS    =   RADIUS_GRID[RADIUS_INDEX]*u.kpc
-    # NP                  =   int(10000)
     montecarlokey       =   "monte-carlo-"+str(montecarloindex).zfill(3)
 
     assert isinstance(NP,int), "NP must be an integer but was {:}".format(type(NP))
-    
-
+    assert isinstance(MASS_PERTURBER,float), "MASS_PERTURBER must be an integer but was {:}".format(type(MASS_PERTURBER))
+    assert isinstance(HALF_MASS_RADIUS,float), "HALF_MASS_RADIUS must be a float but was {:}".format(type(HALF_MASS_RADIUS))
+    assert isinstance(MASS_PERTURBER,float), "MASS_RADIUS must be a float but was {:}".format(type(MASS_PERTURBER))
     attributes = {
         "README":README,
         "NP":NP,
@@ -76,7 +75,6 @@ def main(NP,MASS,HALF_MASS_RADIUS,montecarloindex):
     }
     
     ##### i/o files ####
-
     outfilename=ph.StreamMassRadius(GCname,NP,stream_potential,internal_dynamics,montecarlokey,int(MASS.value),int(1000*HALF_MASS_RADIUS.value))
     snapshotfilename = ph.StreamShapShotsMassRadius(GCname,NP,stream_potential,internal_dynamics,montecarlokey,int(MASS.value),int(1000*HALF_MASS_RADIUS.value))
     cond = False
@@ -94,7 +92,6 @@ def main(NP,MASS,HALF_MASS_RADIUS,montecarloindex):
         print("DONTCOMPUTE is set to True. Exiting")
         print("outfilename",outfilename)
         print("snapshotfilename",snapshotfilename)
-
     else:
 
         #### SET TIME STEPS ####
@@ -135,8 +132,14 @@ def main(NP,MASS,HALF_MASS_RADIUS,montecarloindex):
         initialkinematics = (xp+xHost[0],yp+yHost[0],zp+zHost[0],vxp+vxHost[0],vyp+vyHost[0],vzp+vzHost[0])
         
         # get the perturbers, only those that have close encounters
-        perturbers  = load_perturbers(GCnames,GCorbits_potential,montecarloindex)
-        
+        perturber_names=np.concatenate((VARIABLE_PERTURBER,perturber_names),dtype=str)
+        perturbers  = load_perturbers(perturber_names,GCorbits_potential,montecarloindex)
+        # replace the perturber with the one we are interested in
+        ts,xs,ys,zs,Masses,r_plums = perturbers
+        Masses[0]= MASS_PERTURBER
+        r_plums[0] = RADIUS_PERTURBER
+        perturbers = ts,xs,ys,zs,Masses,r_plums
+
         ###############################################
         ########### INITIALIZE THE INTEGRATOR #########
         ###############################################
@@ -165,8 +168,8 @@ def main(NP,MASS,HALF_MASS_RADIUS,montecarloindex):
         ################################################
         ############ THE SAVIOR OF THE DATA ############
         ################################################
-        attributes["GCnames"]                   =   GCnames
-        attributes["computation_time"]          =   (computation_time.seconds)
+        attributes["perturber_names"]            =  perturber_names
+        attributes["computation_time"]          =   computation_time.seconds
         attributes['perturber_masses']          =   perturbers[4]
         attributes['peturber_plummer_radii']    =   perturbers[5]
         gcs.writers.Stream.stream(outfilename,stream_final,tesc,attributes)
@@ -178,8 +181,8 @@ def main(NP,MASS,HALF_MASS_RADIUS,montecarloindex):
             snapshottimesampling            =   tsampling[::NSKIP]
             gcs.writers.Stream.StreamSnapShots(snapshotfilename,snapshottimesampling,tesc,attributes,tempdir)
             print(snapshotfilename, "saved")
-    
-        
+
+
 
 def load_GCnames_except_for_the_target(GCname):
     GCnames =list(tstrippy.Parsers.baumgardtMWGCs().data['Cluster'][:])
@@ -218,12 +221,32 @@ def load_targetted_gcs(GCname,MWpotential,montecarlokey):
 
 if __name__ == "__main__" : 
 
-    MASS_INDEX = int(sys.argv[1]) 
-    RADIUS_INDEX = int(sys.argv[2])
-    NP = int(sys.argv[3])
-    assert len(sys.argv) == 4, "Usage: python3 plummer_pal5_mass_radius_grid.py MASS HALF_MASS_RADIUS NP"
+    # keep the same, since for the moment I'm just launching one case 
     montecarloindex=9
-    main(NP,MASS_INDEX,RADIUS_INDEX,montecarloindex)
+    
+    assert len(sys.argv) == 4, "Usage: python3 varyPerturberParams.py NP INTERNAL_DYNAMICS_INDEX PERTURBER_INDEX"
+    NP = int(sys.argv[1])
+
+    INTERNAL_DYNAMICS_INDEX = sys.argv[2]
+    nmass = 5
+    nradius = 5
+    assert INTERNAL_DYNAMICS_INDEX < nmass*nradius, "input must be less than 25"
+    MASS_INDEX = INTERNAL_DYNAMICS_INDEX // nradius
+    RADIUS_INDEX = INTERNAL_DYNAMICS_INDEX % nradius
+
+    # open the file for the 
+    masses,radii=np.loadtxt("sub_halo_mass_radius.txt",dtype=float)
+    PERTURBER_INDEX = int(sys.argv[3])
+
+    assert PERTURBER_INDEX < len(masses), "input must be less than the number of masses {:d}".format(len(masses))
+
+    MASS_PERTURBER = masses[PERTURBER_INDEX]
+    RADIUS_PERTURBER = radii[PERTURBER_INDEX]
+
+    MASS = MASS_GRID[MASS_INDEX]
+    HALF_MASS_RADIUS = RADIUS_GRID[RADIUS_INDEX]
+    
+    main(NP,MASS,HALF_MASS_RADIUS,MASS_PERTURBER,RADIUS_PERTURBER,montecarloindex)
     print("Done with",MASS_INDEX,RADIUS_INDEX,NP)
 
 

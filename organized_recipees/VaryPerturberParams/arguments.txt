@@ -1,4 +1,4 @@
-# internal_index perturber_index n_particles
+# n_particles internal_index perturber_index
 16663 0 0 
 16663 0 1 
 16663 0 2 

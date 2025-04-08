@@ -28,7 +28,7 @@ README = "The reviewer wanted a more massive Palomar 5. This script is the answe
 SIZE_GRID = 5
 N_MASS_SAMPLING = SIZE_GRID
 N_RADIUS_SAMPLING = SIZE_GRID # square grid
-MASS_GRID = np.logspace(4,4.8, N_MASS_SAMPLING) # in Msun
+MASS_GRID = np.logspace(4,5.2, N_MASS_SAMPLING) # in Msun
 RADIUS_GRID = np.logspace(np.log10(2),np.log10(30),N_RADIUS_SAMPLING)/1000 # in kpc
 DONTCOMPUTE=False
 

@@ -73,7 +73,7 @@ def main(
           
 ):
     if variable_folder_name not in valid_variable_folder_names:
-        raise ValueError("variable_folder_name must be one of the following: "+str(valid_variable_folder_names))
+        raise ValueError("variable_folder_name was {:s} but must be one of the following: ".format(variable_folder_name)+str(valid_variable_folder_names))
 
     # rederive the number of particles since it's an input parameter
     NP = len(particle_initial_conditions[0]) 

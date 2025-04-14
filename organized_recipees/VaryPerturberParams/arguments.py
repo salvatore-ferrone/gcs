@@ -14,7 +14,7 @@ N_perturbers = mass_radius.shape[0]
 # WE ARE ALSO ITERATING OVER THE PARTICLES
 # compute the number of particle batches 
 DIVISOR = GAURD//(N_perturbers*N_internal) 
-TOTAL = 1e5
+TOTAL = 1e2
 STEP=1
 NPs = np.arange(TOTAL//DIVISOR - DIVISOR//2  ,
                 TOTAL//DIVISOR + DIVISOR//2 ,

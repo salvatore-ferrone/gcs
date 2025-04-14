@@ -28,7 +28,7 @@ N_MASS_SAMPLING = SIZE_GRID
 N_RADIUS_SAMPLING = SIZE_GRID # square grid
 MASS_GRID = np.logspace(4,5.2, N_MASS_SAMPLING) # in Msun
 RADIUS_GRID = np.logspace(np.log10(2),np.log10(30),N_RADIUS_SAMPLING)/1000 # in kpc
-DONTCOMPUTE=False
+DONTCOMPUTE=True
 
 
 # data params 
@@ -47,8 +47,7 @@ writestreamsnapshots=   False
 
 
 
-
-def main(NP,MASS,HALF_MASS_RADIUS,MASS_PERTURBER,RADIUS_PERTURBER,montecarloindex,
+def main(NP,HostMass,HostHalfMassRadius,PerturberMass,PerturberRadius,montecarloindex,
          GCname              =   "Pal5",
          internal_dynamics   =   "isotropic-plummer_mass_radius_grid",
          GCorbits_potential  =   "pouliasis2017pii-GCNBody",
@@ -57,18 +56,18 @@ def main(NP,MASS,HALF_MASS_RADIUS,MASS_PERTURBER,RADIUS_PERTURBER,montecarloinde
          T0                  =   -5e9*u.yr,
          integrationtime     =   5e9*u.yr,
          dt                  =   1e4*u.yr,
-         NSKIP               =   int(100),
+         NSKIP               =   int(1000),
          VARIABLE_PERTURBER  =   ["NGC7078"],
          perturber_names     =   ["NGC5272"],
          writestreamsnapshots=   False         
          ):
 
     assert isinstance(NP,int), "NP must be an integer but was {:}".format(type(NP))
-    assert isinstance(MASS,float), "MASS must be a float but was {:}".format(type(MASS))    
-    assert isinstance(MASS_PERTURBER,float), "MASS_PERTURBER must be an integer but was {:}".format(type(MASS_PERTURBER))
-    assert isinstance(HALF_MASS_RADIUS,float), "HALF_MASS_RADIUS must be a float but was {:}".format(type(HALF_MASS_RADIUS))
-    assert isinstance(MASS_PERTURBER,float), "MASS_RADIUS must be a float but was {:}".format(type(MASS_PERTURBER))
-    assert isinstance(RADIUS_PERTURBER,float), "RADIUS_PERTURBER must be a float but was {:}".format(type(RADIUS_PERTURBER))
+    assert isinstance(HostMass,float), "HostMass must be a float but was {:}".format(type(HostMass))    
+    assert isinstance(PerturberMass,float), "PerturberMass must be an integer but was {:}".format(type(PerturberMass))
+    assert isinstance(HostHalfMassRadius,float), "HostHalfMassRadius must be a float but was {:}".format(type(HostHalfMassRadius))
+    assert isinstance(PerturberMass,float), "MASS_RADIUS must be a float but was {:}".format(type(PerturberMass))
+    assert isinstance(PerturberRadius,float), "PerturberRadius must be a float but was {:}".format(type(PerturberRadius))
     assert isinstance(montecarloindex,int), "montecarloindex must be an integer but was {:}".format(type(montecarloindex))
     
     montecarlokey       =   "monte-carlo-"+str(montecarloindex).zfill(3)
@@ -85,8 +84,10 @@ def main(NP,MASS,HALF_MASS_RADIUS,MASS_PERTURBER,RADIUS_PERTURBER,montecarloinde
         "GCorbits_potential":GCorbits_potential,
         "stream_potential":stream_potential,
         "MWpotential":MWpotential,
-        "MASS":MASS,
-        "HALF_MASS_RADIUS":HALF_MASS_RADIUS,
+        "PerturberMass":PerturberMass,
+        "PerturberRadius":PerturberRadius,
+        "HostMass":HostMass,
+        "HostHalfMassRadius":HostHalfMassRadius,
         "mass_radius_grid_mass":MASS_GRID,
         "mass_radius_grid_radius":RADIUS_GRID,
         "script_name":__file__,
@@ -95,8 +96,27 @@ def main(NP,MASS,HALF_MASS_RADIUS,MASS_PERTURBER,RADIUS_PERTURBER,montecarloinde
     for key in attributes:
         print(key,attributes[key])
     ##### i/o files ####
-    outfilename=ph.StreamMassRadius(GCname,NP,stream_potential,internal_dynamics,montecarlokey,int(MASS),int(1000*HALF_MASS_RADIUS))
-    snapshotfilename = ph.StreamSnapShotsMassRadius(GCname,NP,stream_potential,internal_dynamics,montecarlokey,int(MASS),int(1000*HALF_MASS_RADIUS))
+    outfilename=ph.StreamMassRadiusVaryPerturber(GCname=GCname,
+                                     NP=NP,
+                                     potential_env=stream_potential,
+                                     internal_dynamics=internal_dynamics,
+                                     montecarlokey=montecarlokey,
+                                     HostMass=int(HostMass),
+                                     HostRadius=int(1000*HostHalfMassRadius),
+                                     PerturberName=VARIABLE_PERTURBER[0],
+                                     PerturberMass=int(PerturberMass),
+                                     PerturberRadius=int(1000*PerturberRadius))
+    # snapshotfilename = ph.StreamSnapShotsMassRadius(GCname,NP,stream_potential,internal_dynamics,montecarlokey,int(HostMass),int(1000*HostHalfMassRadius))
+    snapshotfilename = ph.StreamSnapShotsMassRadiusVaryPerturber(GCname=GCname,
+                                     NP=NP,
+                                     potential_env=stream_potential,
+                                     internal_dynamics=internal_dynamics,
+                                     montecarlokey=montecarlokey,
+                                     HostMass=int(HostMass),
+                                     HostRadius=int(1000*HostHalfMassRadius),
+                                     PerturberName=VARIABLE_PERTURBER[0],
+                                     PerturberMass=int(PerturberMass),
+                                     PerturberRadius=int(1000*PerturberRadius))
     cond = False
     if os.path.exists(snapshotfilename):
         print(snapshotfilename, "Already exists. \n Skipping!")
@@ -140,24 +160,24 @@ def main(NP,MASS,HALF_MASS_RADIUS,MASS_PERTURBER,RADIUS_PERTURBER,montecarloinde
         G = MWparams[0]
         ## make a new sampling of the plummer sphere for the new mass
 
-        xp,yp,zp,vxp,vyp,vzp = tstrippy.ergodic.isotropicplummer(G,MASS,HALF_MASS_RADIUS,NP)
-        rplummer= gcs.misc.half_mass_to_plummer(HALF_MASS_RADIUS)
+        xp,yp,zp,vxp,vyp,vzp = tstrippy.ergodic.isotropicplummer(G,HostMass,HostHalfMassRadius,NP)
+        rplummer= gcs.misc.half_mass_to_plummer(HostHalfMassRadius)
 
         # Extract the orbit  
         orbit_file_name                             =   ph.GC_orbits(GCorbits_potential,GCname)
         tH,xH,yH,zH,vxH,vyH,vzH                     =   gcs.extractors.GCOrbits.extract_whole_orbit(orbit_file_name,montecarlokey)    
         xHost,yHost,zHost,vxHost,vyHost,vzHost      =   gcs.misc.interpolate_finer_grid(tsampling,tH,xH,yH,zH,vxH,vyH,vzH)
-        inithostperturber = (tsampling,xHost,yHost,zHost,vxHost,vyHost,vzHost,MASS,rplummer)
+        inithostperturber = (tsampling,xHost,yHost,zHost,vxHost,vyHost,vzHost,HostMass,rplummer)
         # place the particle positions 
         initialkinematics = (xp+xHost[0],yp+yHost[0],zp+zHost[0],vxp+vxHost[0],vyp+vyHost[0],vzp+vzHost[0])
         
         # get the perturbers, only those that have close encounters
-        perturber_names= VARIABLE_PERTURBER + perturber_names
+        perturber_names= VARIABLE_PERTURBER + perturber_names # concatenate lists 
         perturbers  = load_perturbers(perturber_names,GCorbits_potential,montecarloindex)
         # replace the perturber with the one we are interested in
         ts,xs,ys,zs,Masses,r_plums = perturbers
-        Masses[0]= MASS_PERTURBER
-        r_plums[0] = RADIUS_PERTURBER
+        Masses[0]= PerturberMass
+        r_plums[0] = PerturberRadius
         perturbers = ts,xs,ys,zs,Masses,r_plums
 
         ###############################################
@@ -258,20 +278,20 @@ if __name__ == "__main__" :
     assert INTERNAL_DYNAMICS_INDEX < nmass*nradius, "input must be less than 25"
     MASS_INDEX = INTERNAL_DYNAMICS_INDEX // nradius
     RADIUS_INDEX = INTERNAL_DYNAMICS_INDEX % nradius
-    MASS = MASS_GRID[MASS_INDEX]
-    HALF_MASS_RADIUS = RADIUS_GRID[RADIUS_INDEX]
+    HostMass = MASS_GRID[MASS_INDEX]
+    HostHalfMassRadius = RADIUS_GRID[RADIUS_INDEX]
     
     ### THE PERTURBER MASS AND RADIUS
     sub_halo_mass_radius=np.loadtxt("sub_halo_mass_radius.txt",dtype=float)
     assert PERTURBER_INDEX < sub_halo_mass_radius.shape[0], "input must be less than the number of masses {:d}".format(len(masses))
 
-    MASS_PERTURBER = sub_halo_mass_radius[PERTURBER_INDEX,0]
-    RADIUS_PERTURBER = sub_halo_mass_radius[PERTURBER_INDEX,1]
+    PerturberMass = sub_halo_mass_radius[PERTURBER_INDEX,0]
+    PerturberRadius = sub_halo_mass_radius[PERTURBER_INDEX,1]
 
     # CONVERT TO PC
-    RADIUS_PERTURBER = RADIUS_PERTURBER/1000
+    PerturberRadius = PerturberRadius/1000
     
     print("starting main")
-    main(NP,MASS,HALF_MASS_RADIUS,MASS_PERTURBER,RADIUS_PERTURBER,montecarloindex)
+    main(NP,HostMass,HostHalfMassRadius,PerturberMass,PerturberRadius,montecarloindex)
     print("Done with",MASS_INDEX,RADIUS_INDEX,NP)
 

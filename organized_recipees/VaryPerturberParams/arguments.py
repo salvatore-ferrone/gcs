@@ -17,8 +17,8 @@ DIVISOR = GAURD//(N_perturbers*N_internal)
 TOTAL = 1e5
 STEP=1
 NPs = np.arange(TOTAL//DIVISOR - DIVISOR//2  ,
-                        TOTAL//DIVISOR + DIVISOR//2 ,
-                        STEP,dtype=int)
+                TOTAL//DIVISOR + DIVISOR//2 ,
+                STEP,dtype=int)
 
 N_particle_batches = len(NPs)
 

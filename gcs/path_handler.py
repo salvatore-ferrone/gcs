@@ -36,7 +36,7 @@ def StreamMassRadiusVaryPerturber(GCname,NP,potential_env,internal_dynamics,mont
     assert isinstance(internal_dynamics,str), "internal_dynamics should be a string but was {:s}".format(type(internal_dynamics))
     assert isinstance(montecarlokey,str), "montecarlokey should be a string but was {:s}".format(type(montecarlokey))
     # RADIUS IN PC and MASS IN MSUN
-    outname = GCname + "-Stream-" + montecarlokey + "_mass_{:s}_radius_{:s}_{:s}_perturbermass_{:s}_perturberradius_{:s}.hdf5".format(str(HostMass).zfill(3),str(HostRadius).zfill(3),PerturberName,str(PerturberMass).zfill(3),str(PerturberRadius).zfill(3))
+    outname = GCname + "-Stream-" + montecarlokey + "_hostMass_{:s}_hostRadius_{:s}_{:s}_perturberMass_{:s}_perturberRadius_{:s}.hdf5".format(str(HostMass).zfill(3),str(HostRadius).zfill(3),PerturberName,str(PerturberMass).zfill(3),str(PerturberRadius).zfill(3))
     return _Stream(GCname,NP,potential_env,internal_dynamics) + outname
 
 def StreamSnapShotsMassRadiusVaryPerturber(GCname,NP,potential_env,internal_dynamics,montecarlokey,HostMass,HostRadius,PerturberName,PerturberMass,PerturberRadius):
@@ -54,7 +54,7 @@ def StreamSnapShotsMassRadiusVaryPerturber(GCname,NP,potential_env,internal_dyna
     assert isinstance(internal_dynamics,str), "internal_dynamics should be a string but was {:s}".format(type(internal_dynamics))
     assert isinstance(montecarlokey,str), "montecarlokey should be a string but was {:s}".format(type(montecarlokey))
     # RADIUS IN PC and MASS IN MSUN
-    outname = GCname + "-StreamSnapShots-" + montecarlokey + "_mass_{:s}_radius_{:s}_{:s}_perturbermass_{:s}_perturberradius_{:s}.hdf5".format(str(HostMass).zfill(3),str(HostRadius).zfill(3),PerturberName,str(PerturberMass).zfill(3),str(PerturberRadius).zfill(3))
+    outname = GCname + "-StreamSnapShots-" + montecarlokey + "_hostMass_{:s}_hostRadius_{:s}_{:s}_perturberMass_{:s}_perturberRadius_{:s}.hdf5".format(str(HostMass).zfill(3),str(HostRadius).zfill(3),PerturberName,str(PerturberMass).zfill(3),str(PerturberRadius).zfill(3))
     return _StreamSnapShots(GCname,NP,potential_env,internal_dynamics) + outname
 
 

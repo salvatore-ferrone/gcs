@@ -21,7 +21,29 @@ paths_file_path = current_script_directory / 'paths.yaml'
 with open(paths_file_path, 'r') as file:
     paths = yaml.safe_load(file)
 
+def StreamMassRadiusVaryPerturber(GCname,NP,potential_env,internal_dynamics,montecarlokey,HostMass,HostRadius,PerturberName,PerturberMass,PerturberRadius):
+    """
+    An experiment for varying one single perturber and the mass and radius of the host cluster
+    """
+    assert isinstance(HostMass,int), "HostMass should be an integer but was {:s}".format(type(HostMass))
+    assert isinstance(HostRadius,int), "HostRadius should be an integer but was {:s}".format(type(HostRadius))
+    assert isinstance(PerturberMass,int), "PerturberMass should be an integer but was {:s}".format(type(PerturberMass))
+    assert isinstance(PerturberRadius,int), "PerturberRadius should be an integer but was {:s}".format(type(PerturberRadius))
+    assert isinstance(PerturberName,str), "PerturberName should be a string but was {:s}".format(type(PerturberName))
+    assert isinstance(GCname,str), "GCname should be a string but was {:s}".format(type(GCname))
+    assert isinstance(NP,int), "NP should be an integer but was {:s}".format(type(NP))
+    assert isinstance(potential_env,str), "potential_env should be a string but was {:s}".format(type(potential_env))
+    assert isinstance(internal_dynamics,str), "internal_dynamics should be a string but was {:s}".format(type(internal_dynamics))
+    assert isinstance(montecarlokey,str), "montecarlokey should be a string but was {:s}".format(type(montecarlokey))
+    # RADIUS IN PC and MASS IN MSUN
+    outname = GCname + "-Stream-" + montecarlokey + "_mass_{:s}_radius_{:s}_{:s}_perturbermass_{:s}_perturberradius_{:s}.hdf5".format(str(HostMass).zfill(3),str(HostRadius).zfill(3),PerturberName,str(PerturberMass).zfill(3),str(PerturberRadius).zfill(3))
+    return _Stream(GCname,NP,potential_env,internal_dynamics) + outname
+
+
 def StreamMassRadius(GCname,NP,potential_env,internal_dynamics,montecarlokey,Mass,radius):
+    """
+    An experiment for varying the mass and radius of the host cluster
+    """
     assert isinstance(Mass,int)
     assert isinstance(radius,int)
     # RADIUS IN PC and MASS IN MSUN

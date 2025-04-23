@@ -24,16 +24,17 @@ N_particle_batches = len(NPs)
 
 outputfile="arguments.txt"
 
-with open(outputfile,"w") as f:
-    f.write("# n_particles internal_index perturber_index\n")
+if __name__ == "__main__":
+    with open(outputfile,"w") as f:
+        f.write("# n_particles internal_index perturber_index\n")
 
 
-N_batches = len(NPs)*N_internal*N_perturbers
-for i in range(N_particle_batches):
-    for j in range(N_internal):
-        for k in range(N_perturbers):
-            with open(outputfile,"a") as f:
-                f.write( "{:d} {:d} {:d} \n".format(NPs[i],j,k) )
+    N_batches = len(NPs)*N_internal*N_perturbers
+    for i in range(N_particle_batches):
+        for j in range(N_internal):
+            for k in range(N_perturbers):
+                with open(outputfile,"a") as f:
+                    f.write( "{:d} {:d} {:d} \n".format(NPs[i],j,k) )
 
-print("can run ",N_batches," simulations at once")
-# loop over perturber index 
+    print("can run ",N_batches," simulations at once")
+    # loop over perturber index 

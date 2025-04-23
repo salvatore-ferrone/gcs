@@ -241,8 +241,6 @@ def main(montecarlovalue,radiusindex,massindex):
         time_stamps=f['time_stamps'][:]
         # extract the attributes
         attributes=dict(f.attrs)
-        # print the keys 
-        print(f['StreamSnapShots']['5000'].shape)
         for key in f.keys():
             print(key, f[key])
             main_keys.append(key)

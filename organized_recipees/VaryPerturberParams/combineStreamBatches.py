@@ -57,7 +57,7 @@ def get_stream_file_names_for_each_NP(GCname, NPs,
                                         internal_dynamics=internal_dynamics,
                                         montecarlokey=montecarlokey,
                                         HostMass=int(HostMass),
-                                        HostRadius=int(1000*HostHalfMassRadius),
+                                        HostRadius=int(HostHalfMassRadius),
                                         PerturberName=PerturberName,
                                         PerturberMass=int(PerturberMass),
                                         PerturberRadius=int(PerturberRadius))
@@ -87,7 +87,7 @@ def main(montecarloindex,hostRadiusIndex,hostMassIndex,perturberIndex):
         internal_dynamics=vpp.internal_dynamics,
         montecarlokey=montecarlokey,
         HostMass=HostMass,
-        HostHalfMassRadius=HostHalfMassRadius,
+        HostHalfMassRadius=int(1000*HostHalfMassRadius),
         PerturberName=vpp.VARIABLE_PERTURBER[0],
         PerturberMass=PerturberMass,
         PerturberRadius=PerturberRadius
@@ -111,7 +111,7 @@ def main(montecarloindex,hostRadiusIndex,hostMassIndex,perturberIndex):
                                         internal_dynamics=vpp.internal_dynamics,
                                         montecarlokey=montecarlokey,
                                         HostMass=int(HostMass),
-                                        HostRadius=int(HostHalfMassRadius),
+                                        HostRadius=int(1000*HostHalfMassRadius),
                                         PerturberName=vpp.VARIABLE_PERTURBER[0],
                                         PerturberMass=int(PerturberMass),
                                         PerturberRadius=int(PerturberRadius))
@@ -140,6 +140,7 @@ def main(montecarloindex,hostRadiusIndex,hostMassIndex,perturberIndex):
         attributes["date"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     print("DONE: ",outfilename)
+    return outfilename
 
 if __name__ == "__main__":
     # Get the command line arguments
@@ -157,15 +158,21 @@ if __name__ == "__main__":
     n_host_radius=vpp.RADIUS_GRID.shape[0]
     n_host_mass=vpp.MASS_GRID.shape[0]
 
-    args = []
+    outnames = []
     for i in range(n_host_radius):
         for j in range(n_host_mass):
             for k in range(N_perturber_configs):
-                args.append((montecarloindex, i, j, k))
 
-    pool = mp.Pool(processes=mp.cpu_count())
-    pool.starmap(main, args)
-    pool.close()
-    pool.join()
+                outfilename=main(montecarloindex, i, j, k)
+                outnames.append(outfilename)
+    # pool = mp.Pool(processes=mp.cpu_count())
+    # pool.starmap(main, args)
+    # pool.close()
+    # pool.join()
     # Uncomment the line below to run the main function directly
-    # main(montecarloindex=montecarloindex, hostRadiusIndex=hostRadiusIndex, hostMassIndex=hostMassIndex, perturberIndex=perturberIndex)
+
+    # save into a text file
+    with open("outnames.txt", "w") as f:
+        for name in outnames:
+            f.write(name + "\n")
+    print("All done!")

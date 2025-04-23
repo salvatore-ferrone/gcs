@@ -24,12 +24,13 @@ N_particle_batches = len(NPs)
 
 outputfile="arguments.txt"
 
+N_batches = len(NPs)*N_internal*N_perturbers
+
 if __name__ == "__main__":
     with open(outputfile,"w") as f:
         f.write("# n_particles internal_index perturber_index\n")
 
 
-    N_batches = len(NPs)*N_internal*N_perturbers
     for i in range(N_particle_batches):
         for j in range(N_internal):
             for k in range(N_perturbers):
